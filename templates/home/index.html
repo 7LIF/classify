@@ -1,0 +1,15 @@
+<div metal:use-macro="load: ../layout/_layout.html">
+    <div metal:fill-slot="content" tal:omit-tag="True">
+        
+        <h1>Cursos, instrutores e outras coisas...</h1>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        
+        <ul>
+            <li>${course1}</li>
+            <li>${course2}</li>
+            <li>${course3}</li>
+        </ul>
+    
+    </div>
+</div>

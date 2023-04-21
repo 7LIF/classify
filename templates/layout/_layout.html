@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futura página de entrada na Courseca</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head> 
+<body>
+    <h1>Site da Courseca</h1>
+    
+    <div>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+    </div>
+    
+    <div metal:define-slot="content" tal:omit-tag="True">
+        Sem conteúdo
+    </div>
+    
+    <footer>
+        Volte sempre. Contacte-nos-através de:
+        <ul>
+            <li>twitter: @courseca</li>
+            <li>facebook: facebook.com/Courseca</li>
+            <li>email: info@courseca.edu</li>
+        </ul>
+    </footer>
+</body>
+</html>

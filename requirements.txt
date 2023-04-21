@@ -1,1 +1,16 @@
+
 fastapi
+uvicorn[standard]
+docopt
+chameleon
+fastapi-chameleon
+
+
+
+sqlalchemy==1.4.*
+passlib
+argon2_cffi
+python-jose[cryptography]
+itsdangerous
+aiohttp
+aiofiles
