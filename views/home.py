@@ -16,9 +16,31 @@ async def index(course1: str = 'N/D'):
     }
 
 
-
-@router.get('/about')
+@router.get('/home/pricing')
 @template()
-async def about():
+async def pricing():
+    return {
+    }
+
+
+
+@router.get('/home/aboutUs')
+@template()
+async def aboutUs():
+    return {
+    }
+
+
+
+@router.get('/home/contactUs')
+@template()
+async def contactUs():
+    return {
+    }
+
+
+@router.get('/home/faq')
+@template()
+async def faq():
     return {
     }

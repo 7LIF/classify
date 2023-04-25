@@ -6,12 +6,6 @@ from fastapi_chameleon import template
 router = APIRouter()
 
 
-@router.get('/account')
-async def account():
-    return {
-    }
-
-
 @router.get('/account/register')
 async def register():
     return {
@@ -24,8 +18,50 @@ async def login():
     }
 
 
+@router.get('/account/dashboard')
+async def dashboard():
+    return {
+    }
+
+
+@router.get('/account/profileSettings')
+async def profileSettings():
+    return {
+    }
+
+
+@router.get('/account/myAds')
+async def myAds():
+    return {
+    }
+
+
+@router.get('/account/favoritesAds')
+async def favoritesAds():
+    return {
+    }
+
+
 @router.get('/account/postAd')
 async def postAd():
+    return {
+    }
+
+
+@router.get('/account/bookmarkedAds')
+async def bookmarkedAds():
+    return {
+    }
+
+
+@router.get('/account/messages')
+async def messages():
+    return {
+    }
+
+
+@router.get('/account/invoce')
+async def invoce():
     return {
     }
 
@@ -34,4 +70,3 @@ async def postAd():
 async def deleteAccount():
     return {
     }
-
