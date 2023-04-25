@@ -6,7 +6,7 @@ from fastapi_chameleon import template
 router = APIRouter()
 
 
-@router.get('/saleAds')
-async def saleAds():
+@router.get('/viewAds')
+async def viewAds():
     return {
     }

@@ -13,7 +13,7 @@ import uvicorn
 from views import (
     account,
     home,
-    saleAds,
+    viewAds,
 )
 
 
@@ -68,7 +68,7 @@ def config_templates():
 
 def config_routes():
     app.mount("/static", StaticFiles(directory="static"), name="static")
-    for view in [home, saleAds, account]:
+    for view in [home, viewAds, account]:
         app.include_router(view.router)
 
 

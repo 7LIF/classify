@@ -1,17 +1,165 @@
 <div metal:use-macro="load: ../layout/_layout.html">
-    <div metal:fill-slot="content" tal:omit-tag="True">
-        
+	<div metal:fill-slot="content" tal:omit-tag="True">
 
 
 
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-6 col-md-6 col-12">
+						<div class="breadcrumbs-content">
+							<h1 class="page-title">Configurações de Perfil</h1>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-12">
+						<ul class="breadcrumb-nav">
+							<li><a href="index.html">Página Principal</a></li>
+							<li>Configurações de Perfil</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<section class="dashboard section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-4 col-12">
+						<div class="dashboard-sidebar">
+							<div class="user-image">
+								<img src="assets/images/dashboard/user-image.jpg" alt="#" />
+								<h3>
+									Liliana Mateus
+									<span><a href="javascript:void(0)">@LiliMateus94</a></span>
+								</h3>
+							</div>
+							<div class="dashboard-menu">
+								<ul>
+									<li>
+										<a href="/templates/account/dashboard.html"><i class="lni lni-dashboard"></i> Perfil</a>
+									</li>
+									<li>
+										<a class="active" href="profile-settings.html"><i class="lni lni-pencil-alt"></i> Editar Perfil</a>
+									</li>
+									<li>
+										<a href="my-items.html"><i class="lni lni-bolt-alt"></i> Meus Anúncios</a>
+									</li>
+									<li>
+										<a href="favourite-items.html"><i class="lni lni-heart"></i> Favoritos</a>
+									</li>
+									<li>
+										<a href="post-item.html"><i class="lni lni-circle-plus"></i> Postar Anúncios</a>
+									</li>
+									<li>
+										<a href="messages.html"><i class="lni lni-envelope"></i> Mensagens</a>
+									</li>
+									<li>
+										<a href="delete-account.html"><i class="lni lni-trash"></i> Fechar conta</a>
+									</li>
+									<li>
+										<a href="invoice.html" ><i class="lni lni-printer"></i> Histórico de Compras</a>
+									</li>
+								</ul>
+								<div class="button">
+									<a class="btn" href="javascript:void(0)">Sair</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-8 col-12">
+						<div class="main-content">
+							<div class="dashboard-block mt-0 profile-settings-block">
+								<h3 class="block-title">Configurações de Perfil</h3>
+								<div class="inner-block">
+									<div class="image">
+										<img src="assets/images/dashboard/user-image.jpg" alt="#" />
+									</div>
+									<form class="profile-setting-form" method="post" action="#">
+										<div class="row">
+											<div class="col-lg-6 col-12">
+												<div class="form-group">
+													<label>Nome*</label>
+													<input name="first-name" type="text" placeholder="Liliana"/>
+												</div>
+											</div>
+											<div class="col-lg-6 col-12">
+												<div class="form-group">
+													<label>Apelido*</label>
+													<input name="last-name" type="text" placeholder="Mateus"/>
+												</div>
+											</div>
+											<div class="col-lg-6 col-12">
+												<div class="form-group">
+													<label>Username*</label>
+													<input name="usernames" type="text" placeholder="LiliMateus94"/>
+												</div>
+											</div>
+											<div class="col-lg-6 col-12">
+												<div class="form-group">
+													<label>Email*</label>
+													<input name="email" type="email" placeholder="lilimateus94@gmail.com"/>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group upload-image">
+													<label>Imagem de Perfil*</label>
+													<input name="profile-image" type="file" placeholder="Upload Image"/>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group message">
+													<label>*</label>
+													<textarea name="message" placeholder="Enter about yourself"></textarea>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group button mb-0">
+													<button type="submit" class="btn">Atualizar Perfil</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+
+							<div class="dashboard-block password-change-block">
+								<h3 class="block-title">Alterar a Palavra-passe</h3>
+								<div class="inner-block">
+									<form class="default-form-style" method="post" action="#">
+										<div class="row">
+											<div class="col-12">
+												<div class="form-group">
+													<label>Palavra-passe atual*</label>
+													<input name="Palavra-passe Atual" type="password" placeholder="Digite a sua palavra-passe atual"/>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group">
+													<label>Nova palavra-passe*</label>
+													<input name="new-password" type="password" placeholder="Digite a nova palavra-passe"/>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group">
+													<label>Digite novamente a palavra-passe*</label>
+													<input name="retype-password" type="password" placeholder="Digite novamente a palavra-passe"/>
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="form-group button mb-0">
+													<button type="submit" class="btn">Atualizar Palavra-passe</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
 
-
-
-
-
-
-
-
-    </div>
+	</div>
 </div>

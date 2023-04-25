@@ -12,6 +12,11 @@ async def account():
     }
 
 
+@router.get('/account/register')
+async def register():
+    return {
+    }
+
 
 @router.get('/account/login')
 async def login():
@@ -19,8 +24,14 @@ async def login():
     }
 
 
-
-@router.get('/account/register')
-async def register():
+@router.get('/account/postAd')
+async def postAd():
     return {
     }
+
+
+@router.get('/account/deleteAccount')
+async def deleteAccount():
+    return {
+    }
+
