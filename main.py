@@ -2,8 +2,6 @@
 ################# startup and configuration file #################
 ##################################################################
 
-import os 
-from pathlib import Path
 from fastapi import FastAPI
 from fastapi_chameleon import global_init
 from fastapi.staticfiles import StaticFiles
@@ -13,7 +11,8 @@ import uvicorn
 from views import (
     account,
     home,
-    viewAds,
+    post,
+    error404,
 )
 
 
@@ -59,16 +58,12 @@ def config():
     
     
 def config_templates():
-    dev_mode = True
-    BASE_DIR = Path(__file__).resolve().parent
-    template_folder = str(BASE_DIR / 'templates')
-    print(f'template_folder={template_folder}')
-    global_init(template_folder, auto_reload=dev_mode)
+    global_init('templates')
 
 
 def config_routes():
     app.mount("/static", StaticFiles(directory="static"), name="static")
-    for view in [home, viewAds, account]:
+    for view in [home, post, account, error404]:
         app.include_router(view.router)
 
 

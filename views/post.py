@@ -6,21 +6,21 @@ from fastapi_chameleon import template
 router = APIRouter()
 
 
-@router.get('/viewAds/viewAdsGrid')
-async def viewAdsGrid():
+@router.get('/post/postGrid')
+async def postGrid():
     return {
     }
 
 
 
-@router.get('/viewAds/viewAdsListing')
-async def viewAdsListing():
+@router.get('/post/postListing')
+async def postListing():
     return {
     }
 
 
 
-@router.get('/viewAds/viewAdsDetails')
-async def viewAdsDetails():
+@router.get('/post/postDetails')
+async def postDetails():
     return {
     }
