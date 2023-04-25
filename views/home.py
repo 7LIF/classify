@@ -15,8 +15,14 @@ async def index(course1: str = 'N/D'):
         'course3': 'Pesca de Grande Porte',
     }
 
+@router.get('/howWorks')
+@template()
+async def howWorks():
+    return {
+    }
 
-@router.get('/home/pricing')
+
+@router.get('/pricing')
 @template()
 async def pricing():
     return {
@@ -24,7 +30,7 @@ async def pricing():
 
 
 
-@router.get('/home/aboutUs')
+@router.get('/aboutUs')
 @template()
 async def aboutUs():
     return {
@@ -32,14 +38,14 @@ async def aboutUs():
 
 
 
-@router.get('/home/contactUs')
+@router.get('/contactUs')
 @template()
 async def contactUs():
     return {
     }
 
 
-@router.get('/home/faq')
+@router.get('/faq')
 @template()
 async def faq():
     return {

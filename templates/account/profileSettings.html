@@ -1,4 +1,4 @@
-<div metal:use-macro="load: ../layout/_layout.html">
+<div metal:use-macro="load: ../shared/_layout.html">
 	<div metal:fill-slot="content" tal:omit-tag="True">
 
 
@@ -13,7 +13,7 @@
 					</div>
 					<div class="col-lg-6 col-md-6 col-12">
 						<ul class="breadcrumb-nav">
-							<li><a href="index.html">Página Principal</a></li>
+							<li><a href="/">Página Principal</a></li>
 							<li>Configurações de Perfil</li>
 						</ul>
 					</div>
@@ -36,7 +36,7 @@
 							<div class="dashboard-menu">
 								<ul>
 									<li>
-										<a href="/templates/account/dashboard.html"><i class="lni lni-dashboard"></i> Perfil</a>
+										<a href="/account/dashboard"><i class="lni lni-dashboard"></i> Perfil</a>
 									</li>
 									<li>
 										<a class="active" href="profile-settings.html"><i class="lni lni-pencil-alt"></i> Editar Perfil</a>

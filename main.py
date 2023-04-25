@@ -1,7 +1,6 @@
 ##################################################################
 ################# startup and configuration file #################
 ##################################################################
-
 from fastapi import FastAPI
 from fastapi_chameleon import global_init
 from fastapi.staticfiles import StaticFiles
@@ -53,6 +52,7 @@ def start_uvicorn():
 
 
 def config():
+    print("[+] Configuring server")
     config_templates()
     config_routes()
     

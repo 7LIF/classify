@@ -70,3 +70,9 @@ async def invoce():
 async def deleteAccount():
     return {
     }
+
+
+@router.get('/account/mailSuccess')
+async def mailSuccess():
+    return {
+    }
