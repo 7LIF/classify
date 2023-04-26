@@ -7,6 +7,7 @@ router = APIRouter()
 
 
 @router.get('/post/postGrid')
+@template()
 async def postGrid():
     return {
     }
@@ -14,6 +15,7 @@ async def postGrid():
 
 
 @router.get('/post/postListing')
+@template()
 async def postListing():
     return {
     }
@@ -21,6 +23,7 @@ async def postListing():
 
 
 @router.get('/post/postDetails')
+@template()
 async def postDetails():
     return {
     }
