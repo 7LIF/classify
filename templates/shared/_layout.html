@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     
-    <!-- ========================= CSS here ========================= -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/assets/css/LineIcons.2.0.css" />
     <link rel="stylesheet" href="/static/assets/css/animate.css" />
@@ -24,25 +24,21 @@
     <link rel="stylesheet" href="/static/assets/css/glightbox.min.css" />
     <link rel="stylesheet" href="/static/assets/css/main.css" />
 
-    <!-- ========================= JS here ========================= -->
+    <!-- JS -->
     <script src="/static/assets/js/bootstrap.min.js"></script>
     <script src="/static/assets/js/count-up.min.js"></script>
     <script src="/static/assets/js/wow.min.js"></script>
     <script src="/static/assets/js/tiny-slider.js"></script>
     <script src="/static/assets/js/glightbox.min.js"></script>
     <script src="/static/assets/js/main.js"></script>
+
+    <!-- Import css to other pages -->
+    <__css_scripts__ metal:define-slot="additional_css" tal:omit-tag="True">
+    </__css_scripts__>
     
 </head>
     
 <body>
-    <!--[if lte IE 9]>
-        <p class="browserupgrade">
-        You are using an <strong>outdated</strong> browser. Please
-        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-        your experience and security.
-        </p>
-    <![endif]-->
-    
     <!-- Preloader -->
     <div class="preloader">
         <div class="preloader-inner">
@@ -52,7 +48,7 @@
             </div>
         </div>
     </div>
-    <!-- /End Preloader -->
+    <!--/ End Preloader -->
 
     <!-- Start Header Area -->
     <header class="header navbar-area">
@@ -91,7 +87,8 @@
                                             <li class="nav-item"><a href="/post/postDetails">Ad Details</a></li>
                                         </ul>
                                     </li>
-
+                                    <!--/ End NavBar Button Home -->
+                                    <!-- Start NavBar Button Pages -->
                                     <li class="nav-item">
                                         <a class=" dd-menu collapsed" href="javascript:void(0)"
                                             data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
@@ -108,10 +105,10 @@
                                             <li class="nav-item"><a href="/contactUs">Contact Us</a></li>
                                             <li class="nav-item"><a href="/faq">FAQ</a></li>
                                             <li class="nav-item"><a href="/error404">Error Page</a></li>
-                                            <li class="nav-item"><a href="/account/mailSuccess">Mail Success</a>
+                                            <li class="nav-item"><a href="/account/mailSuccess">Mail Success</a></li>
                                         </ul>
                                     </li>
-
+                                    <!--/ End NavBar Button Pages -->
 
                                     <li class="nav-item">
                                         <a class=" dd-menu collapsed" href="javascript:void(0)"
@@ -131,7 +128,7 @@
                                             <li class="nav-item"><a href="/account/invoce">Invoice</a></li>
                                         </ul>
                                     </li>
-
+                                </ul>
                             </div> <!-- navbar collapse -->
                             <div class="login-button">
                                 <ul>
@@ -152,7 +149,7 @@
             </div> <!-- row -->
         </div> <!-- container -->
     </header>
-    <!-- End Header Area -->
+    <!--/ End Header Area -->
    
  
 
@@ -291,12 +288,11 @@
                                     <li><a href="javascript:void(0)">Política de Privacidade</a></li>
                                     <li><a href="/post/postListing">Procura Avançada</a></li>
                                     <li><a href="javascript:void(0)">Mapa do Site</a></li>
-                                    <li><a href="javascript:void(0)">Informação</a></li>
                                 </ul>
-                                <p class="copyright-text">Adaptado de 
+                                <p class="copyright-text">&copy; <strong><span>Classify</span></strong> 2023. Todos os Direitos Reservados. Adaptado de 
                                     <a href="https://graygrids.com/" rel="nofollow" target="_blank">GrayGrids</a>
                                     por 
-                                    <a href="https://github.com/7LIF" rel="nofollow" target="_blank">Mariana Alberto</a>
+                                    <a href="https://github.com/7LIF" rel="nofollow" target="_blank">Mariana Alberto</a>.
                                 </p>
                             </div>
                         </div>

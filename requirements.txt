@@ -4,7 +4,7 @@ uvicorn[standard]
 docopt
 chameleon
 fastapi-chameleon
-
+aiofiles
 
 
 sqlalchemy==1.4.*
@@ -13,4 +13,3 @@ argon2_cffi
 python-jose[cryptography]
 itsdangerous
 aiohttp
-aiofiles
