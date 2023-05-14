@@ -1,5 +1,6 @@
 <div metal:use-macro="load: ../shared/_layout.html">
-	<div metal:fill-slot="content" tal:omit-tag="True">
+	<__content__ metal:fill-slot="content" tal:omit-tag="True">
+
 		<div class="breadcrumbs">
 			<div class="container">
 				<div class="row align-items-center">
@@ -160,5 +161,6 @@
 				</div>
 			</div>
 		</section>
-	</div>
+
+	</__content__>
 </div>

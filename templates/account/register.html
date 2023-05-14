@@ -1,8 +1,5 @@
 <div metal:use-macro="load: ../shared/_layout.html">
-	<div metal:fill-slot="content" tal:omit-tag="True">
-
-
-
+	<__content__ metal:fill-slot="content" tal:omit-tag="True">
 
 		<div class="breadcrumbs">
 			<div class="container">
@@ -27,70 +24,72 @@
 				<div class="row">
 					<div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
 						<div class="form-head">
-							<h4 class="title">Registration</h4>
-							<form action="#!" method="post">
+							<h4 class="title">Criar Conta</h4>
+							<form action="/account/register" method="POST" class="account-form">
 								<div class="socila-login">
 									<ul>
 										<li>
 											<a href="javascript:void(0)" class="facebook">
-                                                <i class="lni lni-facebook-original"></i>
-                                                Import From Facebook
+												<i class="lni lni-facebook-original"></i>
+                                                Registar com o Facebook
                                             </a>
 										</li>
 										<li>
 											<a href="javascript:void(0)" class="google">
                                                 <i class="lni lni-google"></i>
-                                                Import From Google
+                                                Registar com o Google
                                             </a>
                                         </li>
 									</ul>
 								</div>
 								<div class="alt-option">
-									<span>Or</span>
+									<span>Ou</span>
+								</div>
+								<div tal:condition="error" class="error-msg">${error_msg}</div>
+								<div class="form-group">
+									<label class="form-label" for="name">Nome*</label>
+									<input type="text" name="name" class="form-control form-control-lg" required 
+                                        value="${name}">
 								</div>
 								<div class="form-group">
-									<label>Name</label>
-									<input name="password" type="text" />
+									<label class="form-label" for="email">Email*</label>
+									<input type="email" name="email" class="form-control form-control-lg" required
+                                        value="${email}">
 								</div>
 								<div class="form-group">
-									<label>Email</label>
-									<input name="email" type="email" />
+									<label class="form-label" for="password">Palavra-passe*</label>
+									<input type="password" name="password" class="form-control form-control-lg" required
+                                        value="${password}">
 								</div>
 								<div class="form-group">
-									<label>Password</label>
-									<input name="password" type="password" />
-								</div>
-								<div class="form-group">
-									<label>Confirm Password</label>
-									<input name="password" type="password" />
+									<label class="form-label" for="repeat-password">Confirme a palavra-passe*</label>
+									<input type="password" id="repeat_password" class="form-control form-control-lg" required>
 								</div>
 								<div class="check-and-pass">
 									<div class="row align-items-center">
 										<div class="col-12">
 											<div class="form-check">
-												<input type="checkbox" class="form-check-input width-auto" id="exampleCheck1"/>
-												<label class="form-check-label">Agree to our
-													<a href="javascript:void(0)">Terms and Conditions</a>
-                                                </label>
+												<input class="form-check-input width-auto" id="exampleCheck1" type="checkbox" value="" required 
+													${checked}>
+												<label class="form-check-label">
+													Li e aceito os 
+													<a href="#!" class="text-body"><u>Termos e Condições </u></a> 
+													e confirmo que tenho mais de 16 anos de idade.*</label>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="button">
-									<button type="submit" class="btn">Registration</button>
+									<button type="submit" class="btn">Criar Conta</button>
 								</div>
-								<p class="outer-link">
-									Already have an account? 
-                                    <a href="login.html"> Login Now</a>
+								<p class="outer-link">Já tem uma conta? <a href="/account/login"><u> Iniciar Sessão</u></a>
 								</p>
 							</form>
 						</div>
 					</div>
 				</div>
 			</div>
-		</section>
-        
-        
+		</section>      
 
-	</div>
+	</__content__>
 </div>

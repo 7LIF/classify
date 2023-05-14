@@ -23,6 +23,25 @@ def main():
     start_uvicorn()
 
 
+def config():
+    print("[+] Configuring server")
+    config_routes()
+    print("[+] ...routes configured")
+    config_templates()
+    print("[+] ...templates configured")
+    print("[+] ...done configuring server")
+    
+        
+def config_templates():
+    global_init('templates')
+
+
+def config_routes():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+    for view in [home, post, account, error404]:
+        app.include_router(view.router)
+
+
 def start_uvicorn():
     import uvicorn
     from docopt import docopt
@@ -47,32 +66,14 @@ def start_uvicorn():
         reload = args['--reload'],
         reload_includes = [
             '*.py',
+            '*.js',
+            '*.html',
+            '*.css',
         ]
     )
-
-
-def config():
-    print("[+] Configuring server")
-    config_routes()
-    print("[+] ...routes configured")
-    config_templates()
-    print("[+] ...templates configured")
-    print("[+] ...done configuring server")
-    
-    
-    
-def config_templates():
-    global_init('templates')
-
-
-def config_routes():
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-    for view in [home, post, account, error404]:
-        app.include_router(view.router)
 
 
 if __name__ == '__main__':
     main()
 else:
     config()
-    

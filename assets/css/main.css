@@ -4077,11 +4077,11 @@ blockquote .shape {
 }
 
 .browse-cities {
-    background-color: #f9f9f9
+    background-color: #f9f9f9;
 }
 
 .browse-cities .section-title {
-    margin-bottom: 50px
+    margin-bottom: 50px;
 }
 
 .browse-cities .single-city {
@@ -8676,3 +8676,6 @@ blockquote .shape {
     background: #5830e0;
     border-color: transparent
 }
+
+
+

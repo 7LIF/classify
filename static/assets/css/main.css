@@ -4077,6 +4077,7 @@ blockquote .shape {
 }
 
 .browse-cities {
+    padding-top: 200px;
     background-color: #f9f9f9
 }
 
@@ -8679,4 +8680,31 @@ blockquote .shape {
     color: #fff;
     background: #5830e0;
     border-color: transparent
+}
+
+
+
+/*
+.error-msg{
+    color: rgba(165, 1, 1, 0.678);
+    font-weight: bold;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 30px;
+    text-align: center;
+    font-family: jost, sans-serif;
+}
+*/
+
+.error-msg{
+
+    background: #f73c67;
+    padding: 5px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 30px;
+    text-align: center;
 }

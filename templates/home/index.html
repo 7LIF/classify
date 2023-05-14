@@ -1,818 +1,680 @@
 <div metal:use-macro="load: ../shared/_layout.html">
-    <div metal:fill-slot="content" tal:omit-tag="True">
-        
+	<__content__ metal:fill-slot="content" tal:omit-tag="True">
+
+		<!-- Start Hero Area -->
+		<section class="hero-area overlay">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1 col-md-12 col-12">
+						<div class="hero-text text-center">
+
+							<!-- Start Hero Text -->
+							<div class="section-heading">
+								<h2 class="wow fadeInUp" data-wow-delay=".3s">Bem-vindo ao Classify</h2>
+								<p class="wow fadeInUp" data-wow-delay=".5s">
+									Aqui pode comprar e vender tudo, usados ou novos. <br>
+									Desde carros, smartphones, computadores, propriedades, empregos e muito
+									mais.
+								</p>
+							</div>
+
+							<!-- Start Search Form -->
+							<div class="search-form wow fadeInUp" data-wow-delay=".7s">
+								<div class="row">
+
+									<div class="col-lg-4 col-md-4 col-12 p-0">
+										<div class="search-input">
+											<label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
+											<input type="text" name="keyword" id="keyword" placeholder="O que
+												procura?">
+										</div>
+									</div>
+
+									<div class="col-lg-3 col-md-3 col-12 p-0">
+										<div class="search-input">
+											<label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
+											<select name="category" id="category">
+												<option value="none" selected disabled>Categorias</option>
+												<option value="none">Todas as Categorias</option>
+												<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
+													<option value="none">${category.category_name}</option>
+												</__repeat__>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-lg-3 col-md-3 col-12 p-0">
+										<div class="search-input">
+											<label for="location"><i class="lni lni-map-marker theme-color"></i></label>
+											<select name="location" id="location">
+												<option value="none" selected disabled>Localização</option>
+												<option value="none">Todas as Localizações</option>
+												<__repeat__ tal:repeat="location location_district" tal:omit-tag="True">
+												<option value="none">${location.district_name}</option>
+												</__repeat__>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-12 p-0">
+										<div class="search-btn button">
+											<button class="btn"><i class="lni lni-search-alt"></i> Pesquisar</button>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- End Search Form -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Hero Area -->
 
 
-        <!-- Start Hero Area -->
-        <section class="hero-area overlay">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
-                        <div class="hero-text text-center">
-                            
-                            <!-- Start Hero Text -->
-                            <div class="section-heading">
-                                <h2 class="wow fadeInUp" data-wow-delay=".3s">Bem-vindo ao Classify</h2>
-                                <p class="wow fadeInUp" data-wow-delay=".5s">
-                                    Aqui pode comprar e vender tudo, usados ou novos. <br>
-                                    Desde carros, smartphones, computadores, propriedades, empregos e muito mais.
-                                </p>
-                            </div>
-
-                            <!-- Start Search Form -->
-                            <div class="search-form wow fadeInUp" data-wow-delay=".7s">
-                                <div class="row">
-
-                                    <div class="col-lg-4 col-md-4 col-12 p-0">
-                                        <div class="search-input">
-                                            <label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-                                            <input type="text" name="keyword" id="keyword" placeholder="O que procura?">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-lg-3 col-md-3 col-12 p-0">
-                                        <div class="search-input">
-                                            <label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-                                            <select name="category" id="category">
-                                                <option value="none" selected disabled>Categorias</option>
-                                                <option value="none">Todas as Categorias</option>
-                                                <option value="none">Carros</option>
-                                                <option value="none">Electrónicos</option>
-                                                <option value="none">Smartphones</option>
-                                                <option value="none">Mobília</option>
-                                                <option value="none">Fashion</option>
-                                                <option value="none">Empregos</option>
-                                                <option value="none">Imóveis</option>
-                                                <option value="none">Animais</option>
-                                                <option value="none">Educação</option>
-                                                <option value="none">Matrimónio</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-md-3 col-12 p-0">
-                                        <div class="search-input">
-                                            <label for="location"><i class="lni lni-map-marker theme-color"></i></label>
-                                            <select name="location" id="location">
-                                                <option value="none" selected disabled>Localização</option>
-                                                <option value="none">Todas as Localizações</option>
-                                                <option value="none">Viana do Castelo</option>
-                                                <option value="none">Braga</option>
-                                                <option value="none">Vila Real</option>
-                                                <option value="none">Bragança</option>
-                                                <option value="none">Porto</option>
-                                                <option value="none">Aveiro</option>
-                                                <option value="none">Viseu</option>
-                                                <option value="none">Guarda</option>
-                                                <option value="none">Coimbra</option>
-                                                <option value="none">Castelo Branco</option>
-                                                <option value="none">Leiria</option>
-                                                <option value="none">Santarém</option>
-                                                <option value="none">Portalegre</option>
-                                                <option value="none">Lisboa</option>
-                                                <option value="none">Santarém</option>
-                                                <option value="none">Évora</option>
-                                                <option value="none">Setúbal</option>
-                                                <option value="none">Beja</option>
-                                                <option value="none">Faro</option>
-                                                <option value="none">Madeira</option>
-                                                <option value="none">Açores</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-2 col-md-2 col-12 p-0">
-                                        <div class="search-btn button">
-                                            <button class="btn"><i class="lni lni-search-alt"></i> Pesquisar</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- End Search Form -->
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End Hero Area -->
+		<!-- Start Categories Area -->
+		<section class="categories">
+			<div class="container">
+				<div class="cat-inner">
+					<div class="row">
+						<div class="col-12 p-0">
+							<div class="category-slider">
+								<!-- Start Repeat Categories (Loop For) -->
+								<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
+									<!-- Start Single Category -->
+									<a href="${category.weblink}" class="single-cat">
+										<div class="icon">
+											<img src="/static/assets/images/categories/${category.icon}" alt="#">
+										</div>
+										<h3>${category.category_name}</h3>
+										<h5 class="total">${category.count_items_category}</h5>
+									</a>
+									<!--/ End Single Category -->
+								</__repeat__>
+								<!--/ End Repeat Categories (Loop For) -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /End Categories Area -->
 
 
-        <!-- Start Categories Area -->
-        <section class="categories">
-            <div class="container">
-                <div class="cat-inner">
-                    <div class="row">
-                        <div class="col-12 p-0">
-                            <div class="category-slider">
-                                                                            
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/car.svg" alt="#">
-                                    </div>
-                                    <h3>Carros</h3>
-                                    <h5 class="total">35</h5>
-                                </a>
-                                <!-- End Single Category -->
+		<!-- Start Browse by Cities -->
+		<section class="browse-cities section">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="section-title">
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Browse By Cities</h2>
+							<p class="wow fadeInUp" data-wow-delay=".6s">
+								There are many variations of passages of Lorem
+								Ipsum available, but the majority have suffered alteration in some form.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row ">
+					<div class="col-lg-4 col-md-4 col-12">
+						<div class="single-city wow fadeInUp" data-wow-delay=".2s">
+							<a href="category.html" class="info-box">
+								<div class="image">
+									<img src="/static/assets/images/cities/img1.jpg" alt="#">
+								</div>
+								<div class="content">
+									<h4 class="name">
+										New York City
+										<span>155 Ads</span>
+									</h4>
+								</div>
+								<div class="more-btn">
+									<i class="lni lni-circle-plus"></i>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-12">
+						<div class="single-city wow fadeInUp" data-wow-delay=".4s">
+							<a href="category.html" class="info-box">
+								<div class="image">
+									<img src="/static/assets/images/cities/img2.jpg" alt="#">
+								</div>
+								<div class="content">
+									<h4 class="name">
+										Philadelphia
+										<span>288 Ads</span>
+									</h4>
+								</div>
+								<div class="more-btn">
+									<i class="lni lni-circle-plus"></i>
+								</div>
+							</a>
+						</div>
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/laptop.svg" alt="#">
-                                    </div>
-                                    <h3>Eletrónicos</h3>
-                                    <h5 class="total">22</h5>
-                                </a>
-                                <!-- End Single Category -->
-                                                                            
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/matrimony.svg" alt="#">
-                                    </div>
-                                    <h3>Matrimónio</h3>
-                                    <h5 class="total">55</h5>
-                                </a>
-                                <!-- End Single Category -->
+					</div>
+					<div class="col-lg-4 col-md-4 col-12">
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/furniture.svg" alt="#">
-                                    </div>
-                                    <h3>Mobiliário</h3>
-                                    <h5 class="total">21</h5>
-                                </a>
-                                <!-- End Single Category -->
+						<div class="single-city wow fadeInUp" data-wow-delay=".6s">
+							<a href="category.html" class="info-box">
+								<div class="image">
+									<img src="/static/assets/images/cities/img3.jpg" alt="#">
+								</div>
+								<div class="content">
+									<h4 class="name">
+										Los Angeles
+										<span>95 Ads</span>
+									</h4>
+								</div>
+								<div class="more-btn">
+									<i class="lni lni-circle-plus"></i>
+								</div>
+							</a>
+						</div>
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/jobs.svg" alt="#">
-                                    </div>
-                                    <h3>Empregos</h3>
-                                    <h5 class="total">44</h5>
-                                </a>
-                                <!-- End Single Category -->
+					</div>
+					<div class="col-lg-6 col-md-6 col-12">
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/real-estate.svg" alt="#">
-                                    </div>
-                                    <h3>Imobiliário</h3>
-                                    <h5 class="total">65</h5>
-                                </a>
-                                <!-- End Single Category -->
+						<div class="single-city wow fadeInUp" data-wow-delay=".2s">
+							<a href="category.html" class="info-box">
+								<div class="image">
+									<img src="/static/assets/images/cities/img4.jpg" alt="#">
+								</div>
+								<div class="content">
+									<h4 class="name">
+										San Francisco
+										<span>355 Ads</span>
+									</h4>
+								</div>
+								<div class="more-btn">
+									<i class="lni lni-circle-plus"></i>
+								</div>
+							</a>
+						</div>
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/laptop.svg" alt="#">
-                                    </div>
-                                    <h3>PCs & Tablets</h3>
-                                    <h5 class="total">35</h5>
-                                </a>
-                                <!-- End Single Category -->
+					</div>
+					<div class="col-lg-6 col-md-6 col-12">
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/hospital.svg" alt="#">
-                                    </div>
-                                    <h3>Saúde & Beleza</h3>
-                                    <h5 class="total">22</h5>
-                                </a>
-                                <!-- End Single Category -->
+						<div class="single-city wow fadeInUp" data-wow-delay=".4s">
+							<a href="category.html" class="info-box">
+								<div class="image">
+									<img src="/static/assets/images/cities/img5.jpg" alt="#">
+								</div>
+								<div class="content">
+									<h4 class="name">
+										Newe Orleans
+										<span>76 Ads</span>
+									</h4>
+								</div>
+								<div class="more-btn">
+									<i class="lni lni-circle-plus"></i>
+								</div>
+							</a>
+						</div>
 
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/tshirt.svg" alt="#">
-                                    </div>
-                                    <h3>Moda</h3>
-                                    <h5 class="total">25</h5>
-                                </a>
-                                <!-- End Single Category -->
-
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/education.svg" alt="#">
-                                    </div>
-                                    <h3>Educação</h3>
-                                    <h5 class="total">42</h5>
-                                </a>
-                                <!-- End Single Category -->
-
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/controller.svg" alt="#">
-                                    </div>
-                                    <h3>Gamimg</h3>
-                                    <h5 class="total">32</h5>
-                                </a>
-                                <!-- End Single Category -->
-                                                                            
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/travel.svg" alt="#">
-                                    </div>
-                                    <h3>Malas</h3>
-                                    <h5 class="total">15</h5>
-                                </a>
-                                <!-- End Single Category -->
-
-                                <!-- Start Single Category -->
-                                <a href="category.html" class="single-cat">
-                                    <div class="icon">
-                                        <img src="/static/assets/images/categories/watch.svg" alt="#">
-                                    </div>
-                                    <h3>Relógios</h3>
-                                    <h5 class="total">65</h5>
-                                </a>
-                                <!-- End Single Category -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- /End Categories Area -->
-
-
-        <!-- Start Items Grid Area -->
-        <section class="items-grid section custom-padding">
-            <div class="container">
-                
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title">
-                            <h2 class="wow fadeInUp" data-wow-delay=".4s">Latest Products</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">
-                                There are many variations of passages of Lorem
-                                Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="single-head">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".2s">
-                                
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img1.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-1.jpg" alt="#">
-                                                <span>Smith jeko</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                </div>
-                                                                            
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Mobile Phones</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">Apple Iphone X</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 1 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(35)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Feb 18, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$200.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- End Single Grid -->
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".4s">
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img2.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-2.jpg" alt="#">
-                                                <span>Alex Jui</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Real Estate</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">Amazing Room for Rent</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 2 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(20)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> Dallas, Washington</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Jan 7, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$450.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ End Single Grid -->
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".6s">
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img3.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-3.jpg" alt="#">
-                                                <span>Devid Milan</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                    <p class="item-position"><i class="lni lni-bolt"></i> Featured</p>
-                                </div>
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Mobile Phones</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">Canon SX Powershot D-SLR</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 3 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(55)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Mar 18, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$700.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ End Single Grid -->
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".2s">
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img4.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-4.jpg" alt="#">
-                                                <span>Jesia Jully</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Vehicles</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">BMW 5 Series GT Car</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 4 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(35)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Apr 12, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$1000.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ End Single Grid -->
-                        </div>
-                                                                    
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".4s">
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img5.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-5.jpg" alt="#">
-                                                <span>Thomas Deco</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                    <p class="item-position"><i class="lni lni-bolt"></i> Featured</p>
-                                </div>
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Apple</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">Apple Macbook Pro 13 Inch</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 5 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(35)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> Louis, Missouri, US</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> May 25, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$550.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ End Single Grid -->
-                        </div>
-                            
-                        <div class="col-lg-4 col-md-6 col-12">                                         
-                        <!-- Start Single Grid -->
-                            <div class="single-grid wow fadeInUp" data-wow-delay=".6s">
-                                <div class="image">
-                                    <a href="item-details.html" class="thumbnail"><img src="/static/assets/images/items-grid/img6.jpg" alt="#"></a>
-                                    <div class="author">
-                                        <div class="author-image">
-                                            <a href="javascript:void(0)"><img src="/static/assets/images/items-grid/author-6.jpg" alt="#">
-                                                <span>Jonson zack</span>
-                                            </a>
-                                        </div>
-                                        <p class="sale">For Sale</p>
-                                    </div>
-                                </div>
-
-                                <div class="content">
-                                    <div class="top-content">
-                                        <a href="javascript:void(0)" class="tag">Restaurant</a>
-                                        <h3 class="title">
-                                            <a href="item-details.html">Cream Restaurant</a>
-                                        </h3>
-                                        <p class="update-time">Last Updated: 7 hours ago</p>
-                                        <ul class="rating">
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><i class="lni lni-star-filled"></i></li>
-                                            <li><a href="javascript:void(0)">(20)</a></li>
-                                        </ul>
-                                        <ul class="info-list">
-                                            <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                            <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Feb 18, 2023</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="bottom-content">
-                                        <p class="price">Start From: <span>$500.00</span></p>
-                                        <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ End Single Grid -->
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!--/ End Items Grid Area -->
-
-        <!-- Start Why Choose Area -->
-        <section class="why-choose section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title">
-                            <h2 class="wow fadeInUp" data-wow-delay=".4s">Why Choose Us</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">
-                                There are many variations of passages of Lorem
-                                Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="choose-content">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".2s">
-                                        <i class="lni lni-book"></i>
-                                        <h4>Fully Documented</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!-- End Single List -->
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".4s">
-                                        <i class="lni lni-leaf"></i>
-                                        <h4>Clean & Modern Design</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!-- End Single List -->
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".6s">
-                                        <i class="lni lni-cog"></i>
-                                        <h4>Completely Customizable</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!-- End Single List -->
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".2s">
-                                        <i class="lni lni-pointer-up"></i>
-                                        <h4>User Friendly</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!-- End Single List -->
-                               </div>
-                               <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".4s">
-                                        <i class="lni lni-layout"></i>
-                                        <h4>Awesome Layout</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!-- End Single List -->
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <!-- Start Single List -->
-                                    <div class="single-list wow fadeInUp" data-wow-delay=".6s">
-                                        <i class="lni lni-laptop-phone"></i>
-                                        <h4>Fully Responsive</h4>
-                                        <p>
-                                            Buy and sell everything from used cars to mobile 
-                                            phones and computer or search for property.
-                                        </p>
-                                    </div>
-                                    <!--/ End Single List -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--/ End Why Choose Area -->
-
-        <!-- Start Call Action Area -->
-        <section class="call-action overlay section">
-            <div class="container">
-                <div class="row ">
-                    <div class="col-lg-8 offset-lg-2 col-12">
-                        <div class="inner">
-                            <div class="content">
-                                <h2 class="wow fadeInUp" data-wow-delay=".4s">
-                                    Currently You are using free<br>
-                                    Lite version of ClassiGrids
-                                </h2>
-                                <p class="wow fadeInUp" data-wow-delay=".6s">
-                                    Please, purchase full version of the template to get all pages,<br>
-                                    features and commercial license.
-                                </p>
-                                <div class="button wow fadeInUp" data-wow-delay=".8s">
-                                    <a href="javascript:void(0)" class="btn">Purchase Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--/ End Call Action Area -->
-
-        <!-- Start Pricing Table Area -->
-        <section class="pricing-table section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title">
-                            <h2 class="wow fadeInUp" data-wow-delay=".4s">Pricing Plan</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">
-                                There are many variations of passages of Lorem
-                                Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Single Table -->
-                        <div class="single-table wow fadeInUp" data-wow-delay=".2s">
-                            <!-- Table Head -->
-                            <div class="table-head">
-                                <div class="price">
-                                    <h2 class="amount">$00<span class="duration">/ Month</span></h2>
-                                </div>
-                                <h4 class="title">Free</h4>
-                            </div>
-                            <!-- End Table Head -->
-                            <!-- Table List -->
-                            <ul class="table-list">
-                                <li>One Listing</li>
-                                <li>Contact Display</li>
-                                <li>Image Gallery</li>
-                                <li>30 Days Availablity</li>
-                                <li>Non-Featured</li>
-                                <li>Business Tagline</li>
-                            </ul>
-                            <!-- End Table List -->
-                            <!-- Table Bottom -->
-                            <div class="button">
-                                <a class="btn" href="javascript:void(0)">Select Plan</a>
-                            </div>
-                            <!-- End Table Bottom -->
-                        </div>
-                        <!-- End Single Table-->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Single Table -->
-                        <div class="single-table wow fadeInUp" data-wow-delay=".4s">
-                            <!-- Table Head -->
-                            <div class="table-head">
-                                <div class="price">
-                                    <h2 class="amount">$59<span class="duration">/ Month</span></h2>
-                                </div>
-                                <h4 class="title">Standard</h4>
-                            </div>
-                            <!-- End Table Head -->
-                            <!-- Table List -->
-                            <ul class="table-list">
-                                <li>One Listing</li>
-                                <li>Contact Display</li>
-                                <li>Image Gallery</li>
-                                <li>60 Days Availablity</li>
-                                <li>Non-Featured</li>
-                                <li>Business Tagline</li>
-                            </ul>
-                            <!-- End Table List -->
-                            <!-- Table Bottom -->
-                            <div class="button">
-                                <a class="btn" href="javascript:void(0)">Select Plan</a>
-                            </div>
-                            <!-- End Table Bottom -->
-                        </div>
-                        <!-- End Single Table-->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                    <!-- Single Table -->
-                        <div class="single-table wow fadeInUp" data-wow-delay=".6s">
-                            <!-- Table Head -->
-                            <div class="table-head">
-                                <div class="price">
-                                    <h2 class="amount">$99<span class="duration">/ Month</span></h2>
-                                </div>
-                                <h4 class="title">Premium</h4>
-                            </div>
-                            <!-- End Table Head -->
-                            <!-- Table List -->
-                            <ul class="table-list">
-                                <li>One Listing</li>
-                                <li>Contact Display</li>
-                                <li>Image Gallery</li>
-                                <li>90 Days Availablity</li>
-                                <li>Non-Featured</li>
-                                <li>Business Tagline</li>
-                            </ul>
-                            <!-- End Table List -->
-                            <!-- Table Bottom -->
-                            <div class="button">
-                                <a class="btn" href="javascript:void(0)">Select Plan</a>
-                            </div>
-                            <!-- End Table Bottom -->
-                        </div>
-                    <!-- End Single Table-->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--/ End Pricing Table Area -->
-
-        <!-- Start How Works Area -->
-        <section class="how-works section" style="background-color: #fff;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section-title">
-                            <h2 class="wow fadeInUp" data-wow-delay=".4s">How it Works</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">
-                                There are many variations of passages of Lorem
-                                Ipsum available, but the majority have suffered alteration in some form.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <!-- Start Single Work -->
-                        <div class="single-work wow fadeInUp" data-wow-delay=".2s">
-                            <span class="serial">01</span>
-                            <h3>Create Account</h3>
-                            <p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor incididunt labore.</p>
-                        </div>
-                        <!--/ End Single Work -->
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <!-- Start Single Work -->
-                        <div class="single-work wow fadeInUp" data-wow-delay=".4s">
-                            <span class="serial">02</span>
-                            <h3>Post Your Ads</h3>
-                            <p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor incididunt labore.</p>
-                        </div>
-                        <!--/ End Single Work -->
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <!-- Start Single Work -->
-                        <div class="single-work wow fadeInUp" data-wow-delay=".6s">
-                            <span class="serial">03</span>
-                            <h3>Sell Your Item</h3>
-                            <p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor incididunt labore.</p>
-                        </div>
-                        <!--/ End Single Work -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--/ End How Works Area -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Browse by Cities -->
 
 
 
-    </div>
+		<!-- Start Our Achievement -->
+		<section class="our-achievement section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-12">
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".2s">
+							<h3 class="counter"><span id="secondo1" class="countup" cup-end="1250">1250</span>+</h3>
+							<p>Regular Ads</p>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-12">
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".4s">
+							<h3 class="counter"><span id="secondo2" class="countup" cup-end="350">350</span>+</h3>
+							<p>Locations</p>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-12">
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
+							<h3 class="counter"><span id="secondo3" class="countup" cup-end="2500">2500</span>+</h3>
+							<p>Reguler Members</p>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-12">
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
+							<h3 class="counter"><span id="secondo3" class="countup" cup-end="250">250</span>+</h3>
+							<p>Premium Ads</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Our Achievement -->
+
+
+		
+		<!-- Start Trending Ads -->
+		<section class="items-tab section">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="section-title">
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Trending Ads</h2>
+							<p class="wow fadeInUp" data-wow-delay=".6s">
+								There are many variations of passages of Lorem
+								Ipsum available, but the majority have suffered alteration in some form.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<nav>
+							<div class="nav nav-tabs" id="nav-tab" role="tablist">
+								<button class="nav-link active" id="nav-latest-tab" data-bs-toggle="tab"
+									data-bs-target="#nav-latest" type="button" role="tab"
+									aria-controls="nav-latest" aria-selected="true">Últimos Anúncios</button>
+								<button class="nav-link" id="nav-popular-tab" data-bs-toggle="tab"
+									data-bs-target="#nav-popular" type="button" role="tab"
+									aria-controls="nav-popular" aria-selected="false">Anúncios Populares</button>
+								<button class="nav-link" id="nav-random-tab" data-bs-toggle="tab"
+									data-bs-target="#nav-random" type="button" role="tab"
+									aria-controls="nav-random" aria-selected="false">Anúncios Aleatórios</button>
+							</div>
+						</nav>
+						<div class="tab-content" id="nav-tabContent">
+							<!-- Start Latest Adds -->
+							<div class="tab-pane fade show active" id="nav-latest" role="tabpanel" aria-labelledby="nav-latest-tab">
+								<div class="row">
+									<!-- Start Repeat Latest Adds (Loop For) -->
+									<__repeat__ tal:repeat="item latest_items" tal:omit-tag="True">
+										<div class="col-lg-3 col-md-4 col-12">
+											<div class="single-item-grid">
+												<div class="image">
+													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
+													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
+													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+												</div>
+												<div class="content">
+													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<h3 class="title">
+														<a href="${item.weblink}">${item.post_title}</a>
+													</h3>
+													<p class="location">
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+													</p>
+													<ul class="info">
+														<li class="price">${item.price}€</li>
+														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</__repeat__>
+									<!--/ End Repeat Latest Adds (Loop For) -->
+								</div>
+							</div>
+							<!--/ End Latest Adds -->
+
+							<!-- Start Popular Adds -->
+							<div class="tab-pane fade" id="nav-popular" role="tabpanel"
+								aria-labelledby="nav-popular-tab">
+								<div class="row">
+									<!-- Start Repeat Popular Adds (Loop For) -->
+									<__repeat__ tal:repeat="item popular_items" tal:omit-tag="True">
+										<div class="col-lg-3 col-md-4 col-12">
+											<div class="single-item-grid">
+												<div class="image">
+													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
+													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
+													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+												</div>
+												<div class="content">
+													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<h3 class="title">
+														<a href="${item.weblink}">${item.post_title}</a>
+													</h3>
+													<p class="location">
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+													</p>
+													<ul class="info">
+														<li class="price">${item.price}€</li>
+														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</__repeat__>
+									<!--/ End Repeat Popular Adds (Loop For) -->
+								</div>
+							</div>
+							<!--/ End Popular Adds -->
+
+							<!-- Start Random Adds -->
+							<div class="tab-pane fade" id="nav-random" role="tabpanel" aria-labelledby="nav-random-tab">
+								<div class="row">
+									<!-- Start Repeat Random Adds (Loop For) -->
+									<__repeat__ tal:repeat="item random_items" tal:omit-tag="True">
+										<div class="col-lg-3 col-md-4 col-12">
+											<div class="single-item-grid">
+												<div class="image">
+													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
+													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
+													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+												</div>
+												<div class="content">
+													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<h3 class="title">
+														<a href="${item.weblink}">${item.post_title}</a>
+													</h3>
+													<p class="location">
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+													</p>
+													<ul class="info">
+														<li class="price">${item.price}€</li>
+														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</__repeat__>
+									<!--/ End Repeat Random Adds (Loop For) -->
+								</div>
+							</div>
+							<!--/ End Random Adds -->	
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Trending Ads -->
+
+
+
+		<!-- Start Call Action Area -->
+		<section class="call-action overlay section">
+			<div class="container">
+				<div class="row ">
+					<div class="col-lg-8 offset-lg-2 col-12">
+						<div class="inner">
+							<div class="content">
+								<h2 class="wow fadeInUp" data-wow-delay=".4s">
+									Do you have something to sell?
+								</h2>
+								<p class="wow fadeInUp" data-wow-delay=".6s">
+									Post your ad for free on ClassiGrids
+								</p>
+								<div class="button wow fadeInUp" data-wow-delay=".8s">
+									<a href="javascript:void(0)" class="btn">Post an ad now</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Call Action Area -->
+
+
+
+		<!-- Start How Works Area -->
+		<section class="how-works section" style="background-color: #fff;">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="section-title">
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">How it Works</h2>
+							<p class="wow fadeInUp" data-wow-delay=".6s">
+								There are many variations of passages of Lorem
+								Ipsum available, but the majority have suffered alteration in some form.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-12">
+						<!-- Start Single Work -->
+						<div class="single-work wow fadeInUp" data-wow-delay=".2s">
+							<span class="serial">01</span>
+							<h3>Create Account</h3>
+							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
+								incididunt labore.</p>
+						</div>
+						<!--/ End Single Work -->
+					</div>
+					<div class="col-lg-4 col-md-4 col-12">
+						<!-- Start Single Work -->
+						<div class="single-work wow fadeInUp" data-wow-delay=".4s">
+							<span class="serial">02</span>
+							<h3>Post Your Ads</h3>
+							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
+								incididunt labore.</p>
+						</div>
+						<!--/ End Single Work -->
+					</div>
+					<div class="col-lg-4 col-md-4 col-12">
+						<!-- Start Single Work -->
+						<div class="single-work wow fadeInUp" data-wow-delay=".6s">
+							<span class="serial">03</span>
+							<h3>Sell Your Item</h3>
+							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
+								incididunt labore.</p>
+						</div>
+						<!--/ End Single Work -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End How Works Area -->
+
+				<!-- Start Pricing Table Area -->
+				<section class="pricing-table section">
+					<div class="container">
+						<div class="row">
+							<div class="col-12">
+								<div class="section-title">
+									<h2 class="wow fadeInUp" data-wow-delay=".4s">Pricing Plan</h2>
+									<p class="wow fadeInUp" data-wow-delay=".6s">
+										There are many variations of passages of Lorem
+										Ipsum available, but the majority have suffered alteration in some form.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-4 col-md-6 col-12">
+								<!-- Single Table -->
+								<div class="single-table wow fadeInUp" data-wow-delay=".2s">
+									<!-- Table Head -->
+									<div class="table-head">
+										<div class="price">
+											<h2 class="amount">$00<span class="duration">/ Month</span></h2>
+										</div>
+										<h4 class="title">Free</h4>
+									</div>
+									<!-- End Table Head -->
+									<!-- Table List -->
+									<ul class="table-list">
+										<li>One Listing</li>
+										<li>Contact Display</li>
+										<li>Image Gallery</li>
+										<li>30 Days Availablity</li>
+										<li>Non-Featured</li>
+										<li>Business Tagline</li>
+									</ul>
+									<!-- End Table List -->
+									<!-- Table Bottom -->
+									<div class="button">
+										<a class="btn" href="javascript:void(0)">Select Plan</a>
+									</div>
+									<!-- End Table Bottom -->
+								</div>
+								<!-- End Single Table-->
+							</div>
+							<div class="col-lg-4 col-md-6 col-12">
+								<!-- Single Table -->
+								<div class="single-table wow fadeInUp" data-wow-delay=".4s">
+									<!-- Table Head -->
+									<div class="table-head">
+										<div class="price">
+											<h2 class="amount">$59<span class="duration">/ Month</span></h2>
+										</div>
+										<h4 class="title">Standard</h4>
+									</div>
+									<!-- End Table Head -->
+									<!-- Table List -->
+									<ul class="table-list">
+										<li>One Listing</li>
+										<li>Contact Display</li>
+										<li>Image Gallery</li>
+										<li>60 Days Availablity</li>
+										<li>Non-Featured</li>
+										<li>Business Tagline</li>
+									</ul>
+									<!-- End Table List -->
+									<!-- Table Bottom -->
+									<div class="button">
+										<a class="btn" href="javascript:void(0)">Select Plan</a>
+									</div>
+									<!-- End Table Bottom -->
+								</div>
+								<!-- End Single Table-->
+							</div>
+							<div class="col-lg-4 col-md-6 col-12">
+								<!-- Single Table -->
+								<div class="single-table wow fadeInUp" data-wow-delay=".6s">
+									<!-- Table Head -->
+									<div class="table-head">
+										<div class="price">
+											<h2 class="amount">$99<span class="duration">/ Month</span></h2>
+										</div>
+										<h4 class="title">Premium</h4>
+									</div>
+									<!-- End Table Head -->
+									<!-- Table List -->
+									<ul class="table-list">
+										<li>One Listing</li>
+										<li>Contact Display</li>
+										<li>Image Gallery</li>
+										<li>90 Days Availablity</li>
+										<li>Non-Featured</li>
+										<li>Business Tagline</li>
+									</ul>
+									<!-- End Table List -->
+									<!-- Table Bottom -->
+									<div class="button">
+										<a class="btn" href="javascript:void(0)">Select Plan</a>
+									</div>
+									<!-- End Table Bottom -->
+								</div>
+								<!-- End Single Table-->
+							</div>
+						</div>
+					</div>
+				</section>
+				<!--/ End Pricing Table Area -->
+
+		<!-- Start Why Choose Area -->
+		<section class="why-choose section">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="section-title">
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Why Choose Us</h2>
+							<p class="wow fadeInUp" data-wow-delay=".6s">
+								There are many variations of passages of Lorem
+								Ipsum available, but the majority have suffered alteration in some form.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="choose-content">
+							<div class="row">
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".2s">
+										<i class="lni lni-book"></i>
+										<h4>Fully Documented</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!-- End Single List -->
+								</div>
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".4s">
+										<i class="lni lni-leaf"></i>
+										<h4>Clean & Modern Design</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!-- End Single List -->
+								</div>
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".6s">
+										<i class="lni lni-cog"></i>
+										<h4>Completely Customizable</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!-- End Single List -->
+								</div>
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".2s">
+										<i class="lni lni-pointer-up"></i>
+										<h4>User Friendly</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!-- End Single List -->
+								</div>
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".4s">
+										<i class="lni lni-layout"></i>
+										<h4>Awesome Layout</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!-- End Single List -->
+								</div>
+								<div class="col-lg-4 col-md-6 col-12">
+									<!-- Start Single List -->
+									<div class="single-list wow fadeInUp" data-wow-delay=".6s">
+										<i class="lni lni-laptop-phone"></i>
+										<h4>Fully Responsive</h4>
+										<p>
+											Buy and sell everything from used cars to mobile
+											phones and computer or search for property.
+										</p>
+									</div>
+									<!--/ End Single List -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ End Why Choose Area -->
+
+	</__content__>
 </div>

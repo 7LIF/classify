@@ -1,5 +1,5 @@
 <div metal:use-macro="load: ../shared/_layout.html">
-    <div metal:fill-slot="content" tal:omit-tag="True">
+    <__content__ metal:fill-slot="content" tal:omit-tag="True">
 
         <main id = "main">
             <!-- Start Breadcrumbs -->
@@ -288,7 +288,7 @@
                 </div>
             </section>
             <!--/ End Pricing Table Area -->
-
         </main>
-    </div>
+
+    </__content__>
 </div>
