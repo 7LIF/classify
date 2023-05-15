@@ -39,6 +39,12 @@ def get_auth_from_cookie(request: Request) -> int | None:
     return int(user_id) if user_id.isdigit() else None
 
 
+
+def delete_auth_cookie(response: Response):
+    response.delete_cookie(AUTH_COOKIE_NAME)
+
+
+
 def hash_cookie_value(cookie_value: str) -> str:
     return sha512(f'{cookie_value}{SECRET_KEY}'.encode('utf-8')).hexdigest()
 
