@@ -6,16 +6,19 @@ __all__ = (
 
 
 from typing import Any
+from common.fastapi_utils import global_request
+from common.auth import get_auth_from_cookie
 
 
 
 class ViewModel(dict):
     def __init__(self, *args, **kargs):
+        user_id = get_auth_from_cookie(global_request.get())
         all = {
             'error': None,
             'error_msg': None,
-            'user_id': None,
-            'is_logged_in': False,
+            'user_id': user_id,
+            'is_logged_in': user_id is not None,
         }
         all.update(kargs)
         super().__init__(self, *args, **all) 
@@ -27,13 +30,13 @@ class ViewModel(dict):
         self[name] = value
 
 
-def base_viewmodel():
-    return {
-        'error': None,
-        'error_msg': None,
-        'user_id': None,
-        'is_logged_in': False,
-    }
+#def base_viewmodel():
+#    return {
+#        'error': None,
+#        'error_msg': None,
+#        'user_id': None,
+#        'is_logged_in': False,
+#    }
     
     
 def base_viewmodel_with(update_data: dict) -> dict:

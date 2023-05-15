@@ -82,7 +82,7 @@
                                             aria-label="Toggle navigation">Anúncios
                                         </a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="/post/postGrid">Ad Grid</a></li>
+                                            <li class="nav-item"><a href="/post">Ad Grid</a></li>
                                             <li class="nav-item"><a href="/post/postListing">Ad Listing</a></li>
                                             <li class="nav-item"><a href="/post/postDetails">Ad Details</a></li>
                                         </ul>
@@ -96,13 +96,11 @@
                                             aria-label="Toggle navigation">Páginas
                                         </a>
                                         <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item"><a href="/aboutUs">About Us</a></li>
-                                            <li class="nav-item"><a href="/post/postDetails">Ads Details</a></li>
-                                            <li class="nav-item"><a href="/account/postAd">Ads Post</a></li>
+                                            <li class="nav-item"><a href="/about">About Us</a></li>
                                             <li class="nav-item"><a href="/pricing">Pricing Table</a></li>
                                             <li class="nav-item"><a href="/account/register">Sign Up</a></li>
                                             <li class="nav-item"><a href="/account/login">Sign In</a></li>
-                                            <li class="nav-item"><a href="/contactUs">Contact Us</a></li>
+                                            <li class="nav-item"><a href="/contact">Contact Us</a></li>
                                             <li class="nav-item"><a href="/faq">FAQ</a></li>
                                             <li class="nav-item"><a href="/error404">Error Page</a></li>
                                             <li class="nav-item"><a href="/account/mailSuccess">Mail Success</a></li>
@@ -117,12 +115,11 @@
                                             aria-label="Toggle navigation">Dashboard(mostrar->login)
                                         </a>
                                         <ul class="sub-menu collapse" id="submenu-1-5">
-                                            <li class="nav-item"><a href="/account/dashboard">Account Overview</a></li>
+                                            <li class="nav-item"><a href="/account">Account Overview</a></li>
                                             <li class="nav-item"><a href="/account/profileSettings">My Profile</a></li>
                                             <li class="nav-item"><a href="/account/myAds">My Ads</a></li>
                                             <li class="nav-item"><a href="/account/favoritesAds">Favorite Ads</a></li>
                                             <li class="nav-item"><a href="/account/postAd">Ad post</a></li>
-                                            <li class="nav-item"><a href="/account/bookmarkedAds">Bookmarked Ad</a></li>
                                             <li class="nav-item"><a href="/account/messages">Messages</a></li>
                                             <li class="nav-item"><a href="/account/deleteAccount">Close account</a></li>
                                             <li class="nav-item"><a href="/account/invoice">Invoice</a></li>
@@ -133,10 +130,12 @@
                             <div class="login-button">
                                 <ul>
                                     <li>
-                                        <a href="/account/login"><i class="lni lni-enter"></i> Login</a>
+                                        <a tal:condition="not is_logged_in" href="/account/login"><i class="lni lni-enter"></i> Entrar</a>
+                                        <a tal:condition="is_logged_in" href="/account/logout"><i class="lni lni-enter"></i> Sair</a>
                                     </li>
                                     <li>
-                                        <a href="/account/register"><i class="lni lni-user"></i> Register</a>
+                                        <a tal:condition="not is_logged_in" href="/account/register"><i class="lni lni-user"></i> Registo Gratuito</a>
+                                        <a tal:condition="is_logged_in" href="/account"><i class="lni lni-user"></i> Minha Conta</a>
                                     </li>
                                 </ul>
                             </div>
@@ -233,7 +232,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul>
-                                        <li><a href="/aboutUs">Sobre Nós</a></li>
+                                        <li><a href="/about">Sobre Nós</a></li>
                                         <li><a href="/account/login">Login</a></li>
                                     </ul>
                                 </div>

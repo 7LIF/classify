@@ -5,7 +5,7 @@ all = (
 
 
 from hashlib import sha512
-from fastapi import Response
+from fastapi import Request, Response
 
 
 AUTH_COOKIE_NAME = 'user_id'
@@ -23,6 +23,20 @@ def set_auth_cookie(response: Response, user_id: int):
         samesite = 'lax',
         max_age= SESSION_COOKIE_MAX_AGE,
     )
+
+
+def get_auth_from_cookie(request: Request) -> int | None:
+    if not (cookie_value := request.cookies.get(AUTH_COOKIE_NAME)):
+        return None
+    parts = cookie_value.split(':')
+    if len(parts) != 2:
+        return None
+    user_id, hash_value = parts
+    hash_check_value = hash_cookie_value(user_id)
+    if hash_value != hash_check_value:
+        print("Warning: hash mismatch. Invalid cookie value!")
+        return None
+    return int(user_id) if user_id.isdigit() else None
 
 
 def hash_cookie_value(cookie_value: str) -> str:

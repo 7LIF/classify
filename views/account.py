@@ -11,7 +11,6 @@ from fastapi import (
     responses,
     status,
 )
-from starlette.requests import Request
 from fastapi_chameleon import template
 from services import user_service, category_service, location_service
 from common.common import (
@@ -47,8 +46,14 @@ router = APIRouter()
 @router.get('/account')
 @template()
 async def account():
-    return {
-    }
+    return account_viewmodel()
+    
+def account_viewmodel():
+        return ViewModel(
+        error = None,
+        # 'error_msg': 'There was an error with your data. Please try again.'
+    )
+
 
 
 ################################################################################
@@ -81,7 +86,6 @@ async def post_register(request: Request):
 
     if vm.error:
         return vm
-    
     
     response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
     
@@ -162,12 +166,12 @@ def logout_viewmodel():
 ##      Define a route and View model for the dashboard page and all pages submenus
 ################################################################################
 
-@router.get('/account/dashboard')
+@router.get('/account')
 @template()
-async def dashboard():
-    return dashboard_viewmodel()
+async def account():
+    return account_viewmodel()
     
-def dashboard_viewmodel():
+def account_viewmodel():
         return ViewModel(
         error = None,
         # 'error_msg': 'There was an error with your data. Please try again.'
@@ -257,6 +261,19 @@ async def invoice():
     return invoice_viewmodel()
     
 def invoice_viewmodel():
+        return ViewModel(
+        error = None,
+        # 'error_msg': 'There was an error with your data. Please try again.'
+    )
+        
+        
+        
+@router.get('/account/mailSuccess')
+@template()
+async def mailSuccess():
+    return mailSuccess_viewmodel()
+    
+def mailSuccess_viewmodel():
         return ViewModel(
         error = None,
         # 'error_msg': 'There was an error with your data. Please try again.'
