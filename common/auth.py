@@ -3,6 +3,7 @@
 ################################################################################
 
 all = (
+    'get_current_user',
     'set_auth_cookie',
     'get_auth_from_cookie',
     'delete_auth_cookie',
@@ -17,6 +18,11 @@ all = (
 
 from hashlib import sha512
 from fastapi import Request, Response
+from data.models import User
+from common.fastapi_utils import global_request
+from services import user_service
+from services.user_service import get_user_by_id
+
 
 
 ################################################################################
@@ -26,6 +32,15 @@ from fastapi import Request, Response
 AUTH_COOKIE_NAME = 'user_id'
 SESSION_COOKIE_MAX_AGE = 86400_00          # 86400 seconds =~ 1 day // 86400_00 seconds =~ 100 days
 SECRET_KEY = '8e10d234a1f8eb6f9dd6dfc3a325a0613ad2e620e5b8844cb011470492422bee'
+
+
+
+
+
+def get_current_user() -> User | None:
+    if user_id := get_auth_from_cookie(global_request.get()):
+        return user_service.get_user_by_id(user_id)
+    return None
 
 
 

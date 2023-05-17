@@ -12,6 +12,31 @@ _users = []
 
 
 
+
+def create_account(
+    name: str,
+    email_addr: str,
+    password: str,
+):
+    user = User(
+        randrange(10_000, 100_000),  # id
+        name,
+        email_addr,
+        hash_password(password),
+    )
+    _users.append(user)
+    return user
+
+
+
+
+
+def get_user_by_id(user_id: int) -> User | None:
+    return find_in(_users, lambda user: user.id == user_id)
+
+
+
+
 def get_user_by_email(email_addr: str) -> User | None:
     if not is_valid_email(email_addr):
         raise ValueError(f'Endereço de email {email_addr} inválido!')
@@ -30,20 +55,11 @@ def authenticate_user_by_email(email_addr: str, password: str) -> User | None:
 
 
 
+def password_matches(user: User, password: str) -> bool:
+    return user.password == hash_password(password)
 
-def create_account(
-    name: str,
-    email_addr: str,
-    password: str,
-):
-    user = User(
-        randrange(10_000, 100_000),  # id
-        name,
-        email_addr,
-        hash_password(password),
-    )
-    _users.append(user)
-    return user
+
+
 
 
 def get_testimonials(count: int) -> List[Testimonial]:
