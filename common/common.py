@@ -1,3 +1,7 @@
+################################################################################
+##      Specifies the public interface of this module
+################################################################################
+
 __all__ = (
     'MIN_DATE',
     'is_valid_name',
@@ -9,15 +13,21 @@ __all__ = (
 )
 
 
+################################################################################
+##      Importing necessary modules
+################################################################################
+
 from datetime import date
 import re
 from typing import Any, Iterable
 
 
 
+################################################################################
+##      Constants
+################################################################################
+
 MIN_DATE = date.fromisoformat('1920-01-01')
-
-
 
 
 
@@ -30,8 +40,6 @@ def make_test_regex_fn(regex: str):
     def test_regex_fn(value: str) -> bool:
         return bool(re.fullmatch(compiled_regex, value))
     return test_regex_fn
-
-
 
 
 
@@ -48,7 +56,7 @@ is_valid_email = make_test_regex_fn(
 )
 
 
-is_valid_password = make_test_regex_fn(   
+is_valid_password = make_test_regex_fn(
     r'[0-9a-zA-Z$#?!.]{3,10}'      # for testing purposes
     # r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#$%&?!(){}/:;<>.,-_]).{6,16}$'
 )
@@ -59,7 +67,7 @@ def is_valid_iso_date(iso_date: str) -> bool:
         date.fromisoformat(iso_date)
     except ValueError:
         return False
-    else:  # no exception:
+    else:
         return True
 
 
@@ -70,4 +78,3 @@ def is_valid_birth_date(birth_date: str) -> bool:
 
 def find_in(iterable: Iterable, predicate) -> Any | None:
     return next((obj for obj in iterable if predicate(obj)), None)
-

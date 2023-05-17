@@ -1,10 +1,24 @@
-# Import necessary modules and functions
+################################################################################
+##      Importing necessary modules
+################################################################################
+
 from fastapi import APIRouter
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
 
+
+
+################################################################################
+##      Create an instance of the router
+################################################################################
+
 router = APIRouter()
 
+
+
+################################################################################
+##      Define a route for the error404 page
+################################################################################
 
 @router.get('/error404')
 @template()

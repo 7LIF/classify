@@ -1,12 +1,24 @@
-# Import necessary modules and functions
-from fastapi import APIRouter, Request
+################################################################################
+##      Importing necessary modules
+################################################################################
+from fastapi import APIRouter
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
-from fastapi_chameleon import template
+from services import item_service
 
+
+
+################################################################################
+##      Create an instance of the router
+################################################################################
 
 router = APIRouter()
 
+
+
+################################################################################
+##      Define a route for the post page
+################################################################################
 
 @router.get('/post')
 @template()
@@ -21,6 +33,10 @@ def post_viewmodel():
 
 
 
+################################################################################
+##      Define a route for the postListing page
+################################################################################
+
 @router.get('/post/postListing')
 @template()
 async def postListing():
@@ -34,13 +50,21 @@ def postListing_viewmodel():
 
 
 
-@router.get('/post/postDetails')
+################################################################################
+##      Define a route for the postDetails page
+################################################################################
+
+@router.get('/post/{item_id}}')
 @template()
-async def postDetails():
-    return postDetails_viewmodel()
+async def postDetails(item_id: int):
+    return postDetails_viewmodel(item_id)
     
-def postDetails_viewmodel():
+def postDetails_viewmodel(item_id: int):
+    if item := item_service.get_item_by_id(item_id):
         return ViewModel(
+            item = item
+    )
+    return ViewModel(
         error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
+        error_msg = 'Anúncio não encontrado!',
     )

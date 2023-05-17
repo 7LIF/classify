@@ -6,13 +6,13 @@
 				<div class="row align-items-center">
 					<div class="col-lg-6 col-md-6 col-12">
 						<div class="breadcrumbs-content">
-							<h1 class="page-title">Login</h1>
+							<h1 class="page-title">Entrar</h1>
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-12">
 						<ul class="breadcrumb-nav">
-							<li><a href="/">Home</a></li>
-							<li>Login</li>
+							<li><a href="/">Página Principal</a></li>
+							<li>Entrar</li>
 						</ul>
 					</div>
 				</div>
@@ -24,15 +24,18 @@
 				<div class="row">
 					<div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
 						<div class="form-head">
-							<h4 class="title">Login</h4>
-							<form action="#!" method="post">
+							<h4 class="title">Entrar</h4>
+
+							<div tal:condition="error" class="error-msg"> ${error_msg} </div>
+
+							<form action="/account/login" method="POST">
 								<div class="form-group">
-									<label>Username or email</label>
-									<input name="email" type="email"/>
+									<label>Email</label>
+									<input name="email_addr" type="email" required value="${email_addr}">
 								</div>
 								<div class="form-group">
-									<label>Password</label>
-									<input name="password" type="password"/>
+									<label>Palavra-passe</label>
+									<input name="password" type="password" value="${password}">
 								</div>
 								<div class="check-and-pass">
 									<div class="row align-items-center">
@@ -43,37 +46,35 @@
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6 col-12">
-											<a href="javascript:void(0)" class="lost-pass">Lost your password?</a>
+											<a href="javascript:void(0)" class="lost-pass">Esqueceu-se da palavra-passe?</a>
 										</div>
 									</div>
 								</div>
 								<div class="button">
-									<button type="submit" class="btn">Login Now</button>
+									<button type="submit" class="btn">Iniciar Sessão</button>
 								</div>
 								<div class="alt-option">
-									<span>Or</span>
+									<span> Ou </span>
 								</div>
 								<div class="socila-login">
 									<ul>
 										<li>
 											<a href="javascript:void(0)" class="facebook">
                                                 <i class="lni lni-facebook-original"></i>
-                                                Login With Facebook
+                                                Entrar com o Facebook
                                             </a>
 										</li>
 										<li>
 											<a href="javascript:void(0)" class="google">
                                                 <i class="lni lni-google"></i>
-                                                Login With Google
+                                                Entrar com o Google
                                             </a>
 										</li>
 									</ul>
 								</div>
-								<p class="outer-link"> 
-                                    Don't have an account?
-									<a href="/account/register">Register here</a>
-								</p>
+								<p class="outer-link"> Não tem uma conta? <a href="/account/register">Registar aqui</a></p>
 							</form>
+
 						</div>
 					</div>
 				</div>

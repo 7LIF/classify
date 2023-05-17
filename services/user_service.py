@@ -2,14 +2,8 @@ from datetime import date
 from random import randrange
 from typing import List
 from common.auth import hash_password
-from common.common import (
-    is_valid_email, 
-    find_in,
-)
-from data.models import (
-    User, 
-    Testimonial,
-)
+from common.common import is_valid_email, find_in
+from data.models import User, Testimonial
 
 
 
@@ -18,21 +12,34 @@ _users = []
 
 
 
-def get_user_by_email(email: str) -> User | None:
-    if not is_valid_email(email):
-        raise ValueError(f'Endereço de email {email} inválido!')
-    return find_in(_users, lambda users: users.email == email)
+def get_user_by_email(email_addr: str) -> User | None:
+    if not is_valid_email(email_addr):
+        raise ValueError(f'Endereço de email {email_addr} inválido!')
+    return find_in(_users, lambda user: user.email_addr == email_addr)
+
+
+
+def authenticate_user_by_email(email_addr: str, password: str) -> User | None:
+    if not is_valid_email(email_addr):
+        raise ValueError(f'Endereço de email {email_addr} inválido!')
+    if user := get_user_by_email(email_addr):
+        if hash_password(password) == user.password:
+            return user
+        return None 
+
+
+
 
 
 def create_account(
     name: str,
-    email: str,
+    email_addr: str,
     password: str,
 ):
     user = User(
-        randrange(10000, 100000),  # id
+        randrange(10_000, 100_000),  # id
         name,
-        email,
+        email_addr,
         hash_password(password),
     )
     _users.append(user)

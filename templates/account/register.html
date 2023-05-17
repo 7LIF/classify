@@ -45,7 +45,9 @@
 								<div class="alt-option">
 									<span>Ou</span>
 								</div>
-								<div tal:condition="error" class="error-msg">${error_msg}</div>
+
+								<div tal:condition="error" class="error-msg"> ${error_msg} </div>
+
 								<div class="form-group">
 									<label class="form-label" for="name">Nome*</label>
 									<input type="text" name="name" class="form-control form-control-lg" required 
@@ -53,17 +55,15 @@
 								</div>
 								<div class="form-group">
 									<label class="form-label" for="email">Email*</label>
-									<input type="email" name="email" class="form-control form-control-lg" required
-                                        value="${email}">
+									<input type="email" name="email_addr" class="form-control form-control-lg" required value="${email_addr}">
 								</div>
 								<div class="form-group">
 									<label class="form-label" for="password">Palavra-passe*</label>
-									<input type="password" name="password" class="form-control form-control-lg" required
-                                        value="${password}">
+									<input type="password" name="password" class="form-control form-control-lg" required value="${password}">
 								</div>
 								<div class="form-group">
 									<label class="form-label" for="repeat-password">Confirme a palavra-passe*</label>
-									<input type="password" id="repeat_password" class="form-control form-control-lg" required>
+									<input type="password" id="repeat_password" class="form-control form-control-lg">
 								</div>
 								<div class="check-and-pass">
 									<div class="row align-items-center">
@@ -82,8 +82,7 @@
 								<div class="button">
 									<button type="submit" class="btn">Criar Conta</button>
 								</div>
-								<p class="outer-link">Já tem uma conta? <a href="/account/login"><u> Iniciar Sessão</u></a>
-								</p>
+								<p class="outer-link">Já tem uma conta? <a href="/account/login"><u> Iniciar Sessão</u></a></p>
 							</form>
 						</div>
 					</div>

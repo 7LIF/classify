@@ -3,25 +3,15 @@
 ################################################################################
 
 from datetime import date
-from fastapi import (
-    APIRouter,
-    Request,
-    Response,
-    Depends,
-    responses,
-    status,
-)
+from fastapi import APIRouter, Request, Response, Depends, responses, status
 from fastapi_chameleon import template
-from services import user_service, category_service, location_service
-from common.common import (
-    MIN_DATE,
-    is_valid_name,
-    is_valid_email,
-    is_valid_password, 
-)
-from common.fastapi_utils import form_field_as_str
 from common.auth import set_auth_cookie, delete_auth_cookie
+from common.common import MIN_DATE, is_valid_name, is_valid_email, is_valid_password, is_valid_iso_date
+from common.fastapi_utils import form_field_as_str
 from common.viewmodel import ViewModel
+from services import user_service, category_service, location_service
+from services.user_service import authenticate_user_by_email
+
 
 
 ################################################################################
@@ -69,7 +59,7 @@ async def register():
 def register_viewmodel():
     return ViewModel(
         name = '',
-        email = '',
+        email_addr ='',
         password = '',
         checked = False,
     )
@@ -88,44 +78,38 @@ async def post_register(request: Request):
         return vm
     
     response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
-    
     set_auth_cookie(response, vm.new_user_id)
-    
     return response
 
-  
-  
-  
-  
+    
     
 async def post_register_viewmodel(request: Request):
     form_data = await request.form()
     vm = ViewModel(
         name = form_field_as_str(form_data, 'name'),
-        email = form_field_as_str(form_data, 'email'),
+        email_addr = form_field_as_str(form_data, 'email_addr'),
         password = form_field_as_str(form_data, 'password'),
-        new_user_id = None,
+        new_user_id = None
     )
 
     if not is_valid_name(vm.name):
         vm.error, vm.error_msg = True, 'Nome inválido!'
-    elif not is_valid_email(vm.email):
+    elif not is_valid_email(vm.email_addr):
         vm.error, vm.error_msg = True, 'Endereço de email inválido!'
     elif not is_valid_password(vm.password):
-        vm.error, vm.error_msg = True, 'Senha inválida!'
-    elif user_service.get_user_by_email(vm.email):
-        vm.error, vm.error_msg = True, f'O endereço de email {vm.email} já está registado!'
+        vm.error, vm.error_msg = True, 'Palavra-passe inválida!'
+    elif user_service.get_user_by_email(vm.email_addr):
+        vm.error, vm.error_msg = True, f'O endereço de email {vm.email_addr} já está registado!'
     else:
         vm.error, vm.error_msg = False, ''
 
-
-        if not vm.error:
-            user = user_service.create_account(
-                vm.name,
-                vm.email,
-                vm.password,
-            )
-            vm.new_user_id = user.id
+    if not vm.error:
+        user = user_service.create_account(
+            vm.name,
+            vm.email_addr,
+            vm.password,
+        )
+        vm.new_user_id = user.id
 
     return vm
 
@@ -141,17 +125,54 @@ async def login():
     
 def login_viewmodel():
     return ViewModel(
-        email = '',
-        password = '', 
+        email_addr = '',
+        password = '',  
     )
     
 
+################################################################################
+##     Handling the POST request and view model for login
+################################################################################
+
+@router.post('/account/login')
+@template(template_file='account/login.html')
+async def post_login(request: Request):
+    vm = await post_login_viewmodel(request)
+
+    if vm.error:
+        return vm
+    
+    response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
+    set_auth_cookie(response, vm.user_id)
+    return response
+
+
+async def post_login_viewmodel(request: Request) -> ViewModel:
+    form_data = await request.form()
+    vm = ViewModel(
+        email_addr = form_field_as_str(form_data, 'email_addr'),
+        password = form_field_as_str(form_data, 'password'),
+        user_id = None,
+    )
+
+    if not is_valid_email(vm.email_addr):
+        vm.error, vm.error_msg = True, 'Inválido utilizador ou palavra-passe!'
+    elif not is_valid_password(vm.password):
+        vm.error, vm.error_msg = True, 'Palavra-passe inválida!'
+    elif not (user := user_service.authenticate_user_by_email(vm.email_addr, vm.password)):
+        vm.error, vm.error_msg = True, 'Utilizador não encontrado!'
+    else:
+        vm.error, vm.error_msg = False, ''
+        vm.user_id = user.id
+
+    return vm
+
+  
 ################################################################################
 ##      Define a route and View model for the logout page
 ################################################################################
 
 @router.get('/account/logout')
-@template()
 async def logout():
     response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
     delete_auth_cookie(response)
@@ -162,19 +183,6 @@ async def logout():
 ################################################################################
 ##      Define a route and View model for the dashboard page and all pages submenus
 ################################################################################
-
-@router.get('/account')
-@template()
-async def account():
-    return account_viewmodel()
-    
-def account_viewmodel():
-        return ViewModel(
-        error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
-    )
-    
-    
     
 @router.get('/account/profileSettings')
 @template()
@@ -222,7 +230,7 @@ async def postAd():
 def postAd_viewmodel():
     return ViewModel(
         list_category = category_service.list_category(LIST_CATEGORY_COUNT),
-        location_district = location_service.location_district(LOCATION_DISTRICT_COUNT),
+        location_district = location_service.location_district(LOCATION_DISTRICT_COUNT)
     )
     
     
@@ -251,18 +259,6 @@ def deleteAccount_viewmodel():
         # 'error_msg': 'There was an error with your data. Please try again.'
     )
 
-
-@router.get('/account/invoice')
-@template()
-async def invoice():
-    return invoice_viewmodel()
-    
-def invoice_viewmodel():
-        return ViewModel(
-        error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
-    )
-        
         
         
 @router.get('/account/mailSuccess')

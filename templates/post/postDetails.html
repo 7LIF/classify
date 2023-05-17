@@ -1,253 +1,273 @@
 <div metal:use-macro="load: ../shared/_layout.html">
 	<__content__ metal:fill-slot="content" tal:omit-tag="True">
-
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row align-items-center">
-					<div class="col-lg-6 col-md-6 col-12">
-						<div class="breadcrumbs-content">
-							<h1 class="page-title">Detalhes do Anúncio</h1>
+		
+		<!-- Start Main -->
+		<main id="main">
+			
+			<!-- Start Breadcrumbs -->
+			<div class="breadcrumbs">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="breadcrumbs-content">
+								<h1 class="page-title">Detalhes do Anúncio</h1>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-6 col-md-6 col-12">
-						<ul class="breadcrumb-nav">
-							<li><a href="/">Página Principal</a></li>
-							<li>Detalhes do Anúncio</li>
-						</ul>
+						<div class="col-lg-6 col-md-6 col-12">
+							<ul class="breadcrumb-nav">
+								<li><a href="/">Página Principal</a></li>
+								<li>Detalhes do Anúncio</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+			<!--/ End Breadcrumbs -->
 
-		<section class="item-details section">
-			<div class="container">
-				<div class="top-area">
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-12">
-							<div class="product-images">
-								<main id="gallery">
-									<div class="main-img">
-										<img src="/static/assets/images/item-details/image1.jpg" id="current" alt="#"/>
+
+			<!-- Start item/post not found Section -->
+			<section tal:condition="error"  id="postDetails" class="postDetails">
+				<div class="error-msg"> ${error_msg} </div>
+			</section>
+			<!--/ End item/post not found Section -->
+
+
+			<__if__ tal:condition="not error" tal:omit-tag="True">
+				<!-- Start Item details Section -->
+				<section class="item-details section">
+					<div class="container">
+						<div class="top-area">
+							<div class="row">
+								<div class="col-lg-6 col-md-12 col-12">
+									<div class="product-images">
+										<main id="gallery">
+											<div class="main-img">
+												<img src="/static/assets/images/item-details/image1.jpg" id="current" alt="#"/>
+											</div>
+											<div class="images">
+												<img src="/static/assets/images/item-details/image1.jpg" class="img" alt="#"/>
+												<img src="/static/assets/images/item-details/image2.jpg" class="img" alt="#"/>
+												<img src="/static/assets/images/item-details/image3.jpg" class="img" alt="#"/>
+												<img src="/static/assets/images/item-details/image4.jpg" class="img" alt="#"/>
+												<img src="/static/assets/images/item-details/image5.jpg" class="img" alt="#"/>
+											</div>
+										</main>
 									</div>
-									<div class="images">
-										<img src="/static/assets/images/item-details/image1.jpg" class="img" alt="#"/>
-										<img src="/static/assets/images/item-details/image2.jpg" class="img" alt="#"/>
-										<img src="/static/assets/images/item-details/image3.jpg" class="img" alt="#"/>
-										<img src="/static/assets/images/item-details/image4.jpg" class="img" alt="#"/>
-										<img src="/static/assets/images/item-details/image5.jpg" class="img" alt="#"/>
-									</div>
-								</main>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12 col-12">
-							<div class="product-info">
-								<h2 class="title">MacBook Pro 13 polegadas</h2>
-								<p class="location">
-									<i class="lni lni-map-marker"></i
-									><a href="javascript:void(0)">Lisboa</a>
-								</p>
-								<h3 class="price">999€</h3>
-								<div class="list-info">
-									<h4>Informações</h4>
-									<ul>
-										<li><span>Condições:</span> New</li>
-										<li><span>Brand:</span> Apple</li>
-										<li><span>Model:</span> Mackbook Pro</li>
-									</ul>
 								</div>
-								<div class="contact-info">
-									<ul>
-										<li>
-											<a href="tel:+002562352589" class="call">
-												<i class="lni lni-phone-set"></i>
-												256 235 258
-												<span>Call & Get more info</span>
-											</a>
-										</li>
-										<li>
-											<a href="/cdn-cgi/l/email-protection#95f0edf4f8e5f9f0d5f2f8f4fcf9bbf6faf8" class="mail">
-												<i class="lni lni-envelope"></i>
-											</a>
-										</li>
-									</ul>
-								</div>
-								<div class="social-share">
-									<h4>Partilhe o Anúncio</h4>
-									<ul>
-										<li>
-											<a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-filled"></i></a>
-										</li>
-										<li>
-											<a href="javascript:void(0)" class="twitter"><i class="lni lni-twitter-original"></i></a>
-										</li>
-										<li>
-											<a href="javascript:void(0)" class="google"><i class="lni lni-google"></i></a>
-										</li>
-										<li>
-											<a href="javascript:void(0)" class="linkedin"><i class="lni lni-linkedin-original"></i></a>
-										</li>
-										<li>
-											<a href="javascript:void(0)" class="pinterest"><i class="lni lni-pinterest"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="item-details-blocks">
-					<div class="row">
-						<div class="col-lg-8 col-md-7 col-12">
-							<div class="single-block description">
-								<h3>Descrição</h3>
-								<p>
-									Vendo MacBook Pro de 13 polegadas em excelente estado. <br />
-                                    Este MacBook Pro é equipado com um processador Intel Core i5 de 8ª geração, 
-                                    8 GB de RAM e um SSD de 256 GB, é perfeito para trabalhos criativos, edição de fotos e vídeo. <br />
-                                    Tem teclado retroiluminado e trackpad com tecnologia Force Touch. <br />
-                                    Inclui sistema operacional macOS Big Sur mais recente e está pronto para ser usado imediatamente. <br />
-                                    
-								</p>
-								<ul>
-									<li>Modelo: Apple MacBook Pro</li>
-									<li>Chip Apple M1 com CPU de 8 núcleos e GPU de 8 núcleos</li>
-									<li>8GB RAM</li>
-									<li>256GB SSD</li>
-									<li>13.3 polegadas 2560x1600</li>
-								</ul>
-								<p>
-									Este MacBook Pro é perfeito para profissionais que precisam de um laptop 
-                                    confiável e poderoso para trabalhar, estudar ou se divertir.
-								</p>
-							</div>
-
-							<div class="single-block comments">
-								<h3>Comentários</h3>
-
-								<div class="single-comment">
-									<img src="/static/assets/images/testimonial/testi2.jpg" alt="#" />
-									<div class="content">
-										<h4>Luís Faria</h4>
-										<span>25 Feb, 2023</span>
-										<p>
-											Este MacBook Pro parece incrível! Estive à procura de um laptop confiável 
-                                            e potente para trabalhar em projetos de design gráfico e edição de vídeo, 
-                                            e esse me parece perfeito. Infelizmente já comprei um na semana passada.
+								<div class="col-lg-6 col-md-12 col-12">
+									<div class="product-info">
+										<h2 class="title">MacBook Pro 13 polegadas</h2>
+										<p class="location">
+											<i class="lni lni-map-marker"></i
+											><a href="javascript:void(0)">Lisboa</a>
 										</p>
-										<a href="javascript:void(0)" class="reply"><i class="lni lni-reply"></i> Responder</a>
+										<h3 class="price">999€</h3>
+										<div class="list-info">
+											<h4>Informações</h4>
+											<ul>
+												<li><span>Condições:</span> New</li>
+												<li><span>Brand:</span> Apple</li>
+												<li><span>Model:</span> Mackbook Pro</li>
+											</ul>
+										</div>
+										<div class="contact-info">
+											<ul>
+												<li>
+													<a href="tel:+002562352589" class="call">
+														<i class="lni lni-phone-set"></i>
+														256 235 258
+														<span>Call & Get more info</span>
+													</a>
+												</li>
+												<li>
+													<a href="/cdn-cgi/l/email-protection#95f0edf4f8e5f9f0d5f2f8f4fcf9bbf6faf8" class="mail">
+														<i class="lni lni-envelope"></i>
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="social-share">
+											<h4>Partilhe o Anúncio</h4>
+											<ul>
+												<li>
+													<a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-filled"></i></a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" class="twitter"><i class="lni lni-twitter-original"></i></a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" class="google"><i class="lni lni-google"></i></a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" class="linkedin"><i class="lni lni-linkedin-original"></i></a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" class="pinterest"><i class="lni lni-pinterest"></i></a>
+												</li>
+											</ul>
+										</div>
 									</div>
 								</div>
-							</div>
-
-							<div class="single-block comment-form">
-								<h3>Poste um comentário</h3>
-								<form action="#" method="POST">
-									<div class="row">
-										<div class="col-lg-6 col-12">
-											<div class="form-box form-group">
-												<input type="text" name="name" class="form-control form-control-custom" placeholder="Nome"/>
-											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div class="form-box form-group">
-												<input type="email" name="email" class="form-control form-control-custom" placeholder="Email"/>
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-box form-group">
-												<textarea name="#" class="form-control form-control-custom" placeholder="Escreva o seu comentário"></textarea>
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="button">
-												<button type="submit" class="btn">Adicione Comentário</button>
-											</div>
-										</div>
-									</div>
-								</form>
 							</div>
 						</div>
-						<div class="col-lg-4 col-md-5 col-12">
-							<div class="item-details-sidebar">
-								<div class="single-block author">
-									<h3>Anunciante</h3>
-									<div class="content">
-										<img src="/static/assets/images/testimonial/testi3.jpg" alt="#" />
-										<h4>Liliana Mateus</h4>
-										<span>Membro desde 15 de Maio 2023</span>
-										<a href="javascript:void(0)" class="see-all">Ver todos anúncios</a>
+						<div class="item-details-blocks">
+							<div class="row">
+								<div class="col-lg-8 col-md-7 col-12">
+									<div class="single-block description">
+										<h3>Descrição</h3>
+										<p>
+											Vendo MacBook Pro de 13 polegadas em excelente estado. <br />
+											Este MacBook Pro é equipado com um processador Intel Core i5 de 8ª geração, 
+											8 GB de RAM e um SSD de 256 GB, é perfeito para trabalhos criativos, edição de fotos e vídeo. <br />
+											Tem teclado retroiluminado e trackpad com tecnologia Force Touch. <br />
+											Inclui sistema operacional macOS Big Sur mais recente e está pronto para ser usado imediatamente. <br />
+											
+										</p>
+										<ul>
+											<li>Modelo: Apple MacBook Pro</li>
+											<li>Chip Apple M1 com CPU de 8 núcleos e GPU de 8 núcleos</li>
+											<li>8GB RAM</li>
+											<li>256GB SSD</li>
+											<li>13.3 polegadas 2560x1600</li>
+										</ul>
+										<p>
+											Este MacBook Pro é perfeito para profissionais que precisam de um laptop 
+											confiável e poderoso para trabalhar, estudar ou se divertir.
+										</p>
 									</div>
-								</div>
 
-								<div class="single-block contant-seller comment-form">
-									<h3>Contacte o anuciante</h3>
-									<form action="#" method="POST">
-										<div class="row">
-											<div class="col-12">
-												<div class="form-box form-group">
-													<input type="text" name="name" class="form-control form-control-custom" placeholder="Nome"/>
-												</div>
-											</div>
-											<div class="col-12">
-												<div class="form-box form-group">
-													<input type="email" name="email" class="form-control form-control-custom" placeholder="Email"/>
-												</div>
-											</div>
-											<div class="col-12">
-												<div class="form-box form-group">
-													<textarea name="#" class="form-control form-control-custom" placeholder="Escreva a mensagem"></textarea>
-												</div>
-											</div>
-											<div class="col-12">
-												<div class="button">
-													<button type="submit" class="btn">Enviar Mensagem</button>
-												</div>
+									<div class="single-block comments">
+										<h3>Comentários</h3>
+
+										<div class="single-comment">
+											<img src="/static/assets/images/testimonial/testi2.jpg" alt="#" />
+											<div class="content">
+												<h4>Luís Faria</h4>
+												<span>25 Feb, 2023</span>
+												<p>
+													Este MacBook Pro parece incrível! Estive à procura de um laptop confiável 
+													e potente para trabalhar em projetos de design gráfico e edição de vídeo, 
+													e esse me parece perfeito. Infelizmente já comprei um na semana passada.
+												</p>
+												<a href="javascript:void(0)" class="reply"><i class="lni lni-reply"></i> Responder</a>
 											</div>
 										</div>
-									</form>
-								</div>
+									</div>
 
-								<div class="single-block">
-									<h3>Localização</h3>
-									<div class="mapouter">
-										<div class="gmap_canvas">
-											<iframe 
-                                                width="100%" 
-                                                height="300" 
-                                                id="gmap_canvas" 
-                                                src="https://maps.google.com/maps?q=lisboa&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                                frameborder="0"
-												scrolling="no"
-												marginheight="0"
-												marginwidth="0"
-											></iframe>
-                                            <a href="https://putlocker-is.org"></a><br/>
-											<style>
-											    .mapouter {
-													position: relative;
-													text-align: right;
-													height: 300px;
-													width: 100%;
-												}
-                                            </style>
-                                            <a href="https://www.embedgooglemap.net">google map code for website</a>
-											<style>
-                                                .gmap_canvas {
-                                                    overflow: hidden; 
-                                                    background: none !important; 
-                                                    height: 300px; 
-                                                    width: 100%;
-                                                }
-                                            </style>
+									<div class="single-block comment-form">
+										<h3>Poste um comentário</h3>
+										<form action="#" method="POST">
+											<div class="row">
+												<div class="col-lg-6 col-12">
+													<div class="form-box form-group">
+														<input type="text" name="name" class="form-control form-control-custom" placeholder="Nome"/>
+													</div>
+												</div>
+												<div class="col-lg-6 col-12">
+													<div class="form-box form-group">
+														<input type="email" name="email" class="form-control form-control-custom" placeholder="Email"/>
+													</div>
+												</div>
+												<div class="col-12">
+													<div class="form-box form-group">
+														<textarea name="#" class="form-control form-control-custom" placeholder="Escreva o seu comentário"></textarea>
+													</div>
+												</div>
+												<div class="col-12">
+													<div class="button">
+														<button type="submit" class="btn">Adicione Comentário</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-5 col-12">
+									<div class="item-details-sidebar">
+										<div class="single-block author">
+											<h3>Anunciante</h3>
+											<div class="content">
+												<img src="/static/assets/images/testimonial/testi3.jpg" alt="#" />
+												<h4>Liliana Mateus</h4>
+												<span>Membro desde 15 de Maio 2023</span>
+												<a href="javascript:void(0)" class="see-all">Ver todos anúncios</a>
+											</div>
+										</div>
+
+										<div class="single-block contant-seller comment-form">
+											<h3>Contacte o anuciante</h3>
+											<form action="#" method="POST">
+												<div class="row">
+													<div class="col-12">
+														<div class="form-box form-group">
+															<input type="text" name="name" class="form-control form-control-custom" placeholder="Nome"/>
+														</div>
+													</div>
+													<div class="col-12">
+														<div class="form-box form-group">
+															<input type="email" name="email" class="form-control form-control-custom" placeholder="Email"/>
+														</div>
+													</div>
+													<div class="col-12">
+														<div class="form-box form-group">
+															<textarea name="#" class="form-control form-control-custom" placeholder="Escreva a mensagem"></textarea>
+														</div>
+													</div>
+													<div class="col-12">
+														<div class="button">
+															<button type="submit" class="btn">Enviar Mensagem</button>
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+
+										<div class="single-block">
+											<h3>Localização</h3>
+											<div class="mapouter">
+												<div class="gmap_canvas">
+													<iframe 
+														width="100%" 
+														height="300" 
+														id="gmap_canvas" 
+														src="https://maps.google.com/maps?q=lisboa&t=&z=13&ie=UTF8&iwloc=&output=embed"
+														frameborder="0"
+														scrolling="no"
+														marginheight="0"
+														marginwidth="0"
+													></iframe>
+													<a href="https://putlocker-is.org"></a><br/>
+													<style>
+														.mapouter {
+															position: relative;
+															text-align: right;
+															height: 300px;
+															width: 100%;
+														}
+													</style>
+													<a href="https://www.embedgooglemap.net">google map code for website</a>
+													<style>
+														.gmap_canvas {
+															overflow: hidden; 
+															background: none !important; 
+															height: 300px; 
+															width: 100%;
+														}
+													</style>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</section>
+				</section>
+				<!--/ End Item details Section -->
+			</__if__>
+
+		</main>
+		<!--/ End Main -->
 
 	</__content__>
 </div>

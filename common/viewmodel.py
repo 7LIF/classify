@@ -1,15 +1,26 @@
+################################################################################
+##      Specifies the public interface of this module
+################################################################################
+
 __all__ = (
     'ViewModel',
-    'base_viewmodel',
-    'base_viewmodel_with',
 )
 
+
+
+################################################################################
+##      Importing necessary modules
+################################################################################
 
 from typing import Any
 from common.fastapi_utils import global_request
 from common.auth import get_auth_from_cookie
 
 
+
+################################################################################
+##      ViewModel
+################################################################################
 
 class ViewModel(dict):
     def __init__(self, *args, **kargs):
@@ -19,7 +30,7 @@ class ViewModel(dict):
             'error_msg': None,
             'user_id': user_id,
             'is_logged_in': user_id is not None,
-        }
+        } 
         all.update(kargs)
         super().__init__(self, *args, **all)
 
@@ -30,6 +41,7 @@ class ViewModel(dict):
         self[name] = value
 
 
+
 #def base_viewmodel():
 #    return {
 #        'error': None,
@@ -37,9 +49,9 @@ class ViewModel(dict):
 #        'user_id': None,
 #        'is_logged_in': False,
 #    }
-    
-    
-def base_viewmodel_with(update_data: dict) -> dict:
-    vm = base_viewmodel()
-    vm.update(update_data)
-    return vm
+
+
+# def base_viewmodel_with(update_data: dict) -> dict:
+#    vm = base_viewmodel()
+#    vm.update(update_data)
+#    return vm

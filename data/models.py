@@ -5,7 +5,6 @@
 from datetime import date, datetime
 from decimal import Decimal as dec
 from dataclasses import dataclass, field
-from services import user_service
 
 
 @dataclass
@@ -78,7 +77,7 @@ class Item:
 class User:
     id: int
     name: str
-    email: str
+    email_addr: str
     password: str
     birth_date: date | None = None
     presentation: str | None = None
@@ -93,7 +92,7 @@ class User:
 
 @dataclass
 class Testimonial:
-    user_id: int
-    user_name: str
+    id: int
+    name: str
     user_occupation: str
     text: str

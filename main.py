@@ -1,17 +1,18 @@
-##################################################################
-################# startup and configuration file #################
-##################################################################
+################################################################################
+######################## startup and configuration file ########################
+################################################################################
+
+
+################################################################################
+##      Importing necessary modules
+################################################################################
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi_chameleon import global_init
 from fastapi.staticfiles import StaticFiles
 from common.fastapi_utils import add_global_request_middleware
-from views import (
-    account,
-    home,
-    post,
-    error404,
-)
+from views import account, home, post, error404
 
 
 app = FastAPI()
@@ -47,6 +48,7 @@ def config_routes():
     app.mount("/static", StaticFiles(directory="static"), name="static")
     for view in [home, post, account, error404]:
         app.include_router(view.router)
+
 
 
 def start_uvicorn():
