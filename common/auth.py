@@ -3,6 +3,7 @@
 ################################################################################
 
 all = (
+    'exec_login',
     'get_current_user',
     'set_auth_cookie',
     'get_auth_from_cookie',
@@ -17,7 +18,7 @@ all = (
 ################################################################################
 
 from hashlib import sha512
-from fastapi import Request, Response
+from fastapi import Request, Response, responses, status
 from data.models import User
 from common.fastapi_utils import global_request
 from services import user_service
@@ -36,11 +37,18 @@ SECRET_KEY = '8e10d234a1f8eb6f9dd6dfc3a325a0613ad2e620e5b8844cb011470492422bee'
 
 
 
-
 def get_current_user() -> User | None:
     if user_id := get_auth_from_cookie(global_request.get()):
         return user_service.get_user_by_id(user_id)
     return None
+
+
+
+
+def exec_login(user_id: int) -> Response:
+    response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
+    set_auth_cookie(response, user_id)
+    return response
 
 
 
