@@ -1,0 +1,32 @@
+<div metal:use-macro="load: ../shared/_layout.html">
+    <__content__ metal:fill-slot="content" tal:omit-tag="True">
+        
+        <!-- Start Error Area -->
+        <div class="error-area">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="error-content">
+                            <h1>Erro 404</h1>
+                            <h2>Não encontrado</h2>
+                            <p>A página que tentou aceder não existe ou pode ter sido eliminada. Porque não tenta?</p>
+                            <div class="error-redirect">
+                                <div class="button">
+                                    <a href="/" class="btn">Ir para página principal</a>
+                                </div>
+                                <div class="button">
+                                    <a href="/account/login" class="btn">Entrar</a>
+                                </div>
+                                <div class="button">
+                                    <a href="/account/register" class="btn">Criar conta</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Error Area -->
+
+    </__content__>
+</div>
