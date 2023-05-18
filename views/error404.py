@@ -21,12 +21,11 @@ router = APIRouter()
 ################################################################################
 
 @router.get('/error404')
-@template()
+@template(template_file='errors/error404.html')
 async def error404():
     return error404_viewmodel()
     
 def error404_viewmodel():
         return ViewModel(
-        error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
+        error = None
     )
