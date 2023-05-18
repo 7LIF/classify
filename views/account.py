@@ -5,7 +5,7 @@
 from datetime import date
 from fastapi import APIRouter, Request, Response, Depends, responses, status
 from fastapi_chameleon import template
-from common.auth import set_auth_cookie, delete_auth_cookie, get_current_user, exec_login
+from common.auth import requires_unauthentication, requires_authentication, set_auth_cookie, delete_auth_cookie, get_current_user, exec_login
 from common.common import MIN_DATE, is_valid_name, is_valid_email, is_valid_password, is_valid_iso_date
 from common.fastapi_utils import form_field_as_str
 from common.viewmodel import ViewModel
@@ -34,7 +34,10 @@ router = APIRouter()
 ##      Define a route for the account page
 ################################################################################
 
-@router.get('/account')
+@router.get(
+    '/account',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def account():
     return account_viewmodel()
@@ -53,7 +56,10 @@ def account_viewmodel():
 ##     Handling the POST request and view model for account page
 ################################################################################
 
-@router.post('/account')
+@router.post(
+    '/account',
+    dependencies = [Depends(requires_authentication)]
+)
 @template(template_file='account/account.html')
 async def update_account(request: Request):
     vm = await update_account_viewmodel(request)
@@ -103,25 +109,14 @@ async def update_account_viewmodel(request: Request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ################################################################################
 ##      Define a route and View model for the register page
 ################################################################################
 
-@router.get('/account/register')
+@router.get(
+    '/account/register',
+    dependencies = [Depends(requires_unauthentication)]
+    )
 @template()
 async def register():
     return register_viewmodel()
@@ -136,11 +131,19 @@ def register_viewmodel():
     )
 
 
+
+
+
+
+
 ################################################################################
 ##     Handling the POST request and view model for registration
 ################################################################################
 
-@router.post('/account/register')
+@router.post(
+    '/account/register',
+    dependencies = [Depends(requires_unauthentication)]
+)
 @template(template_file='account/register.html')
 async def post_register(request: Request):
     vm = await post_register_viewmodel(request)
@@ -187,7 +190,10 @@ async def post_register_viewmodel(request: Request):
 ##      Define a route and View model for the login page
 ################################################################################
 
-@router.get('/account/login')
+@router.get(
+    '/account/login',
+    dependencies = [Depends(requires_unauthentication)]
+)
 @template()
 async def login():
     return login_viewmodel()
@@ -203,7 +209,10 @@ def login_viewmodel():
 ##     Handling the POST request and view model for login
 ################################################################################
 
-@router.post('/account/login')
+@router.post(
+    '/account/login',
+    dependencies = [Depends(requires_unauthentication)]
+)
 @template(template_file='account/login.html')
 async def post_login(request: Request):
     vm = await post_login_viewmodel(request)
@@ -239,7 +248,10 @@ async def post_login_viewmodel(request: Request) -> ViewModel:
 ##      Define a route and View model for the logout page
 ################################################################################
 
-@router.get('/account/logout')
+@router.get(
+    '/account/logout',
+    dependencies = [Depends(requires_authentication)]
+)
 async def logout():
     response = responses.RedirectResponse(url='/', status_code = status.HTTP_302_FOUND)
     delete_auth_cookie(response)
@@ -251,7 +263,10 @@ async def logout():
 ##      Define a route and View model for the dashboard page and all pages submenus
 ################################################################################
     
-@router.get('/account/profileSettings')
+@router.get(
+    '/account/profileSettings',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def profileSettings():
     return profileSettings_viewmodel()
@@ -263,7 +278,10 @@ def profileSettings_viewmodel():
     )
 
 
-@router.get('/account/myAds')
+@router.get(
+    '/account/myAds',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def myAds():
     return myAds_viewmodel()
@@ -276,7 +294,10 @@ def myAds_viewmodel():
     
     
     
-@router.get('/account/favoritesAds')
+@router.get(
+    '/account/favoritesAds',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def favoritesAds():
     return favoritesAds_viewmodel()
@@ -289,7 +310,10 @@ def favoritesAds_viewmodel():
     
     
     
-@router.get('/account/postAd')
+@router.get(
+    '/account/postAd',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def postAd():
     return postAd_viewmodel()
@@ -302,7 +326,10 @@ def postAd_viewmodel():
     
     
     
-@router.get('/account/messages')
+@router.get(
+    '/account/messages',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def messages():
     return messages_viewmodel()
@@ -315,7 +342,10 @@ def messages_viewmodel():
     
     
     
-@router.get('/account/deleteAccount')
+@router.get(
+    '/account/deleteAccount',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def deleteAccount():
     return deleteAccount_viewmodel()
@@ -328,7 +358,10 @@ def deleteAccount_viewmodel():
 
         
         
-@router.get('/account/mailSuccess')
+@router.get(
+    '/account/mailSuccess',
+    dependencies = [Depends(requires_authentication)]
+)
 @template()
 async def mailSuccess():
     return mailSuccess_viewmodel()

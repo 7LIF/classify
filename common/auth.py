@@ -3,6 +3,7 @@
 ################################################################################
 
 all = (
+    'requires_unauthentication',
     'exec_login',
     'get_current_user',
     'set_auth_cookie',
@@ -33,6 +34,38 @@ from services.user_service import get_user_by_id
 AUTH_COOKIE_NAME = 'user_id'
 SESSION_COOKIE_MAX_AGE = 86400_00          # 86400 seconds =~ 1 day // 86400_00 seconds =~ 100 days
 SECRET_KEY = '8e10d234a1f8eb6f9dd6dfc3a325a0613ad2e620e5b8844cb011470492422bee'
+
+
+
+
+
+
+
+def requires_authentication():
+    if not get_current_user():
+        raise HTTPUnauthorizedAccess(detail = 'This area requires authentication!')
+
+class HTTPUnauthorizedAccess(HTTPException):
+    def __init__(self, *args, **kargs):
+        super().__init__(status_code = status.HTTP_401_UNAUTHORIZED, *args, **kargs)
+
+
+
+
+
+
+def requires_unauthentication():
+    if get_current_user():
+        raise HTTPUnauthenticatedOnly(detail = 'This is a public area only!')     
+        
+class HTTPUnauthenticatedOnly(HTTPUnauthorizedAccess):
+    pass
+
+
+
+
+
+
 
 
 
