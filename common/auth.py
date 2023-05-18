@@ -10,7 +10,6 @@ all = (
     'get_auth_from_cookie',
     'delete_auth_cookie',
     'hash_cookie_value',
-    'hash_password',
 )
 
 
@@ -19,7 +18,7 @@ all = (
 ################################################################################
 
 from hashlib import sha512
-from fastapi import Request, Response, responses, status
+from fastapi import Request, Response, responses, status, HTTPException
 from data.models import User
 from common.fastapi_utils import global_request
 from services import user_service

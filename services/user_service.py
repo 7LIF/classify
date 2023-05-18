@@ -1,7 +1,7 @@
 from datetime import date
 from random import randrange
 from typing import List
-from common.auth import hash_password
+from common.hash_password import hash_password
 from common.common import is_valid_email, find_in
 from data.models import User, Testimonial
 
