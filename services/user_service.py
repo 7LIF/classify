@@ -1,97 +1,420 @@
-from datetime import date
-from random import randrange
-from typing import List
-from common.hash_password import hash_password
-from common.common import is_valid_email, find_in
-from data.models import User, Testimonial
+__all__ = (
+    'InvalidUserAttribute',
+    'UserNotFound',
+    'InvalidAuthentication',
+    'user_count',
+    'authenticate_user_by_email',
+    'get_user_by_email',
+    'get_user_by_id',
+    'get_user_by_external_id',
+    'add_external_login',
+    'password_matches',
+    'DEFAULT_HASH_ALGO',
+    'create_user_account',
+    'update_user_account',
+    
+    'add_profile_image',
+    'create_testimonial',
+    'get_testimonials',
+)
 
 
+import aiofiles
+import passlib.hash as passlib_hash
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+from config_settings import conf
+from common.common import is_valid_email, find_first #find_in
+from data.database import database_session
+from services import (
+    item_service as iserv,
+    user_service as userv,
+    settings_service as setserv,
+)
+from data.models import (
+    User,
+    Item,
+    Testimonial,
+    UserLoginData,
+    UserAccountStatusEnum,
+    UserAccount,
+    HashAlgoEnum,
+    ExternalProvider,
+    UserLoginDataExternal,
+)
+
+
+#from datetime import date
+#from random import randrange
+#from typing import List
+#from common.hash_password import hash_password
+#from data.models import User, Testimonial
 
 # variável que simula a base de dados - TEMPORARIAMENTE
-_users = []
+#_users = []
 
 
 
 
-def create_account(
-    name: str,
-    email_addr: str,
-    password: str,
-):
-    user = User(
-        randrange(10_000, 100_000),  # id
-        name,
-        email_addr,
-        hash_password(password),
-    )
-    _users.append(user)
+
+
+USERS_IMAGES_URL = conf("USERS_IMAGES_URL")
+
+IMAGE_CONTENT_TYPE_TO_EXTENSION = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/gif': 'gif'
+}
+
+KNOWN_HASHERS = {
+    HashAlgoEnum.PBKDF2_SHA256: passlib_hash.pbkdf2_sha256,
+    HashAlgoEnum.PBKDF2_SHA512: passlib_hash.pbkdf2_sha512,
+    HashAlgoEnum.ARGON2: passlib_hash.argon2,
+}
+DEFAULT_HASH_ALGO = HashAlgoEnum.PBKDF2_SHA512
+
+
+class InvalidUserAttribute(ValueError):
+    pass
+
+class UserNotFound(Exception):
+    pass
+
+class InvalidAuthentication(Exception):
+    pass
+
+
+
+def user_count(
+        concrete_type = UserAccount,
+        db_session: Session | None = None,
+) -> int:
+    with database_session(db_session) as db_session:
+        select_stm = select(func.count()).select_from(concrete_type)
+        return db_session.execute(select_stm).scalar_one()
+    
+#### OU 
+#def user_count(db_session: Session | None = None) -> int:
+#    return userv.user_count(User, db_session)
+###
+
+def authenticate_user_by_email(
+        email_addr: str,
+        password: str,
+        db_session: Session | None = None,
+) -> UserAccount | None:
+    with database_session(db_session) as db_session:
+        if not is_valid_email(email_addr):
+            raise UserNotFound(f'Invalid email address: {email_addr}')
+        if user := get_user_by_email(email_addr, db_session):
+            if password_matches(user, password):
+                return user
+        return None
+
+
+
+def get_user_by_email(
+        email_addr: str,
+        db_session: Session | None = None,
+) -> UserAccount | None:
+    with database_session(db_session) as db_session:
+        if not is_valid_email(email_addr):
+            raise ValueError(f'Invalid email: {email_addr}')
+        select_stmt = (
+            select(UserAccount)
+            .join(UserLoginData)
+            .where(UserLoginData.email_addr == email_addr)
+        )
+        return db_session.execute(select_stmt).scalar_one_or_none()
+
+
+def get_user_by_id(
+        user_id: int,
+        db_session: Session | None = None,
+) -> UserAccount | None:
+    with database_session(db_session) as db_session:
+        select_stmt = (
+            select(UserAccount)
+            .join(UserLoginData)
+            .where(UserAccount.user_id == user_id)
+        )
+        return db_session.execute(select_stmt).scalar_one_or_none()
+
+
+def get_user_by_external_id(
+        external_provider_id: int,
+        external_user_id: str,
+        db_session: Session | None = None,
+) -> UserAccount | None:
+    with database_session(db_session) as db_session:
+        select_stmt = (
+            select(UserAccount)
+            .join(UserLoginDataExternal)
+            .join(ExternalProvider)
+            .where(UserLoginDataExternal.external_user_id == external_user_id)
+            .where(ExternalProvider.id == external_provider_id)
+        )
+        return db_session.execute(select_stmt).scalar_one_or_none()
+
+
+def add_external_login(
+        user: UserAccount,
+        external_provider_id: int,
+        external_user_id: str,
+        db_session: Session | None = None,
+) -> UserLoginDataExternal | None:
+    with database_session(db_session) as db_session:
+        if find_first(
+                user.external_login_data,  
+                external_provider_id, 
+                key = lambda row: row.external_provider_id
+        ):
+            err_msg = f'User has already been registered with external provider {external_provider_id}'
+            raise InvalidUserAttribute(err_msg)
+        db_session.add(
+            external_login_data := UserLoginDataExternal(
+                user_id = user.user_id,
+                external_provider_id = external_provider_id,
+                external_user_id =  external_user_id,
+            )
+        )
+        db_session.commit()
+        db_session.refresh(external_login_data)
+        return external_login_data
+
+
+def password_matches(user: UserAccount, password: str) -> bool:
+    hash_algo = user.user_login_data.hash_algo
+    hasher = KNOWN_HASHERS[hash_algo]
+    return hasher.verify(password, user.password_hash)
+
+
+def hash_password(password: str, hash_algo: HashAlgoEnum = DEFAULT_HASH_ALGO) -> str:
+    return KNOWN_HASHERS[hash_algo].hash(password)
+
+
+def ensure_user_is(
+        user_or_id: UserAccount | int,
+        concrete_user_type: UserAccount,
+        db_session: Session | None = None, 
+) -> UserAccount:
+    with database_session(db_session) as db_session:
+        if isinstance(user_or_id, concrete_user_type):
+            user =  user_or_id
+        else:
+            if not (user := get_user_by_id(user_or_id, db_session)):
+                raise ValueError(f'Invalid id {id}.')
+
+            if not isinstance(user, concrete_user_type):
+                msg = (f'Invalid type for user {user.user_id}: expecting'
+                    f'{concrete_user_type.__name__} but got {type(user).__name__}')
+                raise TypeError(msg)
+        return user
+
+
+async def add_profile_image(
+        user_or_id: UserAccount | int, 
+        image_async_file,
+        extension: str = '',
+        content_type: str = '',
+        db_session: Session | None = None
+) -> UserAccount:
+    with database_session(db_session) as db_session:
+        user = ensure_user_is(user_or_id, UserAccount, db_session)
+
+        if not (extension or content_type):
+            raise ValueError('No extension or content type were given')
+
+        extension = (
+            extension if extension else 
+            IMAGE_CONTENT_TYPE_TO_EXTENSION.get(content_type, '')
+        )
+        image_file_path = f"./{USERS_IMAGES_URL}/{user.user_id}.{extension}"
+
+        async with aiofiles.open(image_file_path, "wb") as out_file:
+            await out_file.write(await image_async_file.read())
+
+        user.profile_image_url = image_file_path   
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+
+
+
+
+
+
+#def create_account(
+#    name: str,
+#    email_addr: str,
+#    password: str,
+#):
+#    user = User(
+#        randrange(10_000, 100_000),  # id
+#        name,
+#        email_addr,
+#        hash_password(password),
+#    )
+#    _users.append(user)
+#    return user
+        
+
+
+
+
+MAX_TESTIMONIALS = 10
+
+
+#class InvalidFavorite(Exception):
+#    pass
+
+
+#class AlreadyFavorite(InvalidFavorite):
+#    pass
+
+
+
+
+
+def create_user_account(
+        name: str,
+        email_addr: str,
+        password: str,  
+        address_line: str | None = None,
+        zip_code: str | None = None,
+        status: UserAccountStatusEnum = UserAccountStatusEnum.Active,
+        db_session: Session | None = None,
+) -> User:
+    with database_session(db_session) as db_session:
+        if get_user_by_email(email_addr, db_session):
+            raise InvalidUserAttribute(f'Email already {email_addr} registered')
+
+        db_session.add(
+            user := User(
+                type = User.__name__,
+                name = name,
+                address_line = address_line,
+                zip_code = zip_code,
+            )
+        )
+        user.status = status
+        db_session.flush()
+
+        db_session.add(
+            UserLoginData(
+                user_id = user.user_id,
+                email_addr = email_addr,
+                password_hash = userv.hash_password(password),
+                hash_algo_id = userv.DEFAULT_HASH_ALGO.id,
+            )
+        )
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+
+
+def update_user_account(
+        user_or_id: int | User,
+        current_password: str,
+        new_email: str | None = None,
+        new_password: str | None = None,
+        new_address_line: str | None = None,
+        new_zip_code: str | None = None,
+        db_session: Session | None = None,
+) -> User:
+    with database_session(db_session) as db_session:
+        user = ensure_user(user_or_id, db_session)
+
+        if not password_matches(user, current_password):
+            raise ValueError(f"Password doesn't match.")
+
+        if new_email:
+            if get_user_by_email(new_email, db_session):
+                raise InvalidUserAttribute(f'Email already {new_email} registered')
+            user.email_addr = new_email
+
+        if new_password:
+            if not is_valid_password(new_password):
+                raise InvalidUserAttribute(
+                    f'Invalid new password for user {user.user_id}'
+                )
+            user.password_hash = userv.hash_password(new_password)
+
+        user.address_line = coalesce(new_address_line, user.address_line)
+        user.zip_code = coalesce(new_zip_code, user.zip_code)
+
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+
+
+def ensure_user(
+        user_or_id: User | int,
+        db_session: Session | None = None, 
+) -> User:
+    user = userv.ensure_user_is(user_or_id, User, db_session)
+    assert isinstance(user, User)
     return user
 
 
+def create_testimonial(
+        user_id: int,
+        user_occupation: str,
+        text: str,
+        image_url: str,
+        db_session: Session | None = None,
+) -> Testimonial:
+    with database_session(db_session) as db_session:
+        db_session.add(
+            test := Testimonial(
+                user_id = user_id,
+                user_occupation = user_occupation,
+                text = text,
+                image_url = image_url,
+            )
+        )
+        db_session.commit()
+        db_session.refresh(test)
+        return test
 
 
-
-def get_user_by_id(user_id: int) -> User | None:
-    return find_in(_users, lambda user: user.id == user_id)
-
-
-
-
-def get_user_by_email(email_addr: str) -> User | None:
-    if not is_valid_email(email_addr):
-        raise ValueError(f'Endereço de email {email_addr} inválido!')
-    return find_in(_users, lambda user: user.email_addr == email_addr)
+def get_testimonials(
+        count: int = 0,
+        db_session: Session | None = None,
+) -> list[Testimonial]:
+    with database_session(db_session) as db_session:
+        select_stmt = select(Testimonial)
+        scalar_results = db_session.execute(select_stmt).scalars()
+        return scalar_results.fetchmany(count) if count > 0 else scalar_results.all()
 
 
-
-def authenticate_user_by_email(email_addr: str, password: str) -> User | None:
-    if not is_valid_email(email_addr):
-        raise ValueError(f'Endereço de email {email_addr} inválido!')
-    if user := get_user_by_email(email_addr):
-        if hash_password(password) == user.password:
-            return user
-        return None 
-
-
-
-
-def password_matches(user: User, password: str) -> bool:
-    return user.password == hash_password(password)
+#def is_favorite_item(
+#        user: User,
+#        item: Item,
+#        db_session: Session | None = None,
+#) -> bool:
+#    with database_session(db_session) as db_session:
+#        select_stmt = (
+#            select(Favorite)
+#            .where(Favorite.user_id == user.user_id)
+#            .where(Favorite.item_id == item.id)
+#        )
+#        return bool(db_session.execute(select_stmt).scalar_one_or_none())
 
 
+#def favorite_in_item(
+#        user: User,
+#        item: Item,
+#        db_session: Session | None = None,
+#) -> Favorite:
+#    with database_session(db_session) as db_session:
+#        if is_favorite_item(user, item, db_session):
+#            raise AlreadyFavorite('item {item.id} already is favorite')
+        
 
-
-
-def get_testimonials(count: int) -> List[Testimonial]:
-    return [
-        Testimonial(
-            id = 1,
-            name = 'Francisco Mendonça',
-            user_occupation = 'CEO & Fundador',
-            text = 'Quidem odit voluptate, obcaecati, explicabo nobis corporis perspiciatis nihil',
-        ),
-        Testimonial(
-            id = 2,
-            name = 'Sara Albuquerque',
-            occupation = 'Designer',
-            text = 'Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid',
-        ),
-        Testimonial(
-            id = 3,
-            name = 'Ana Silva',
-            user_occupation = 'Store Owner',
-            text = 'Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem ver',
-        ),
-        Testimonial(
-            id = 4,
-            name = 'Fabio Rodrigues',
-            user_occupation = 'Freelancer',
-            text = 'Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fug',
-        ),
-        Testimonial(
-            id = 5,
-            name = 'João Pedro Valez',
-            user_occupation = 'Entrepreneur',
-            text = 'Quis quorun aliqua sint quem legam fore sunt eram irure aliquaveniamtempornoste',
-        ),
-    ][:count]
+#        favorite = Favorite()
+#        favorite.item = item
+#        user.item.append(favorite)
+#        db_session.add(favorite)
+#        db_session.commit()
+#        return favorite

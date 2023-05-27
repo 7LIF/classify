@@ -37,7 +37,7 @@
 												<option value="none" selected disabled>Categorias</option>
 												<option value="none">Todas as Categorias</option>
 												<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
-													<option value="none">${category.category_name}</option>
+													<option value="none">${category.name}</option>
 												</__repeat__>
 											</select>
 										</div>
@@ -49,8 +49,8 @@
 											<select name="location" id="location">
 												<option value="none" selected disabled>Localização</option>
 												<option value="none">Todas as Localizações</option>
-												<__repeat__ tal:repeat="location location_district" tal:omit-tag="True">
-												<option value="none">${location.district_name}</option>
+												<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
+												<option value="none">${district.name}</option>
 												</__repeat__>
 											</select>
 										</div>
@@ -84,12 +84,12 @@
 								<!-- Start Repeat Categories (Loop For) -->
 								<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
 									<!-- Start Single Category -->
-									<a href="${category.weblink}" class="single-cat">
+									<a href="#" class="single-cat">
 										<div class="icon">
 											<img src="/static/assets/images/categories/${category.icon}" alt="#">
 										</div>
-										<h3>${category.category_name}</h3>
-										<h5 class="total">${category.count_items_category}</h5>
+										<h3>${category.name}</h3>
+										<h5 class="total">${num_categories}</h5>
 									</a>
 									<!--/ End Single Category -->
 								</__repeat__>
@@ -295,17 +295,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
-													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
-													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
 													<h3 class="title">
-														<a href="${item.weblink}">${item.post_title}</a>
+														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
@@ -329,17 +327,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
-													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
-													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
 													<h3 class="title">
-														<a href="${item.weblink}">${item.post_title}</a>
+														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
@@ -362,17 +358,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="${item.weblink}"><img src="static\assets\images\items\${item.img_main}" alt="#"></a>
-													<i class=" cross-badge lni lni-bolt" tal:condition="item.premium == 'Destacado'"></i>
-													<span class="flat-badge sale" tal:condition="item.item_status == 'Vendido'">${item.item_status}</span>
+													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>													
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
 													<h3 class="title">
-														<a href="${item.weblink}">${item.post_title}</a>
+														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.location_region}, ${item.location_district}</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>

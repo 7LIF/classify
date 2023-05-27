@@ -1,18 +1,23 @@
 ################################################################################
 ##      Importing necessary modules
 ################################################################################
+import decimal as dec
 from fastapi import APIRouter
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
-from services import item_service
-
+from config_settings import conf
+from services import (
+    item_service as iserv,
+    user_service as userv,
+    settings_service as setserv,
+)
 
 
 ################################################################################
-##      Create an instance of the router
+##      SETUP FastAPI - Create an instance of the router
 ################################################################################
 
-router = APIRouter()
+router = APIRouter(prefix = '/post')
 
 
 
@@ -20,51 +25,36 @@ router = APIRouter()
 ##      Define a route for the post page
 ################################################################################
 
-@router.get('/post')
+@router.get('/')
 @template()
 async def post():
     return post_viewmodel()
     
 def post_viewmodel():
         return ViewModel(
-        error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
+        error = None
     )
-
-
-
-################################################################################
-##      Define a route for the postListing page
-################################################################################
-
-@router.get('/post/postListing')
-@template()
-async def postListing():
-    return postListing_viewmodel()
-    
-def postListing_viewmodel():
-        return ViewModel(
-        error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
-    )
-
 
 
 ################################################################################
 ##      Define a route for the postDetails page
 ################################################################################
 
-@router.get('/post/{item_id}}')
+@router.get('/{item_id}}')
 @template()
 async def postDetails(item_id: int):
     return postDetails_viewmodel(item_id)
     
-def postDetails_viewmodel(item_id: int):
-    if item := item_service.get_item_by_id(item_id):
+def postDetails_viewmodel(item_id: int) -> ViewModel:
+    if item := iserv.get_item_by_id(item_id):
+        item_price = dec(item.price)
         return ViewModel(
-            item = item
-    )
+            item = item,
+            item_price = f'{item_price} €',
+            images_url = conf('IMAGES_URL'),
+            users_imagens_url = conf('USERS_IMAGES_URL'),
+        )
     return ViewModel(
         error = None,
-        error_msg = 'Anúncio não encontrado!',
+        error_msg = f'Anúncio {id} não encontrado!',
     )

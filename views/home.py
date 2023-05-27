@@ -3,17 +3,13 @@
 ################################################################################
 from fastapi import APIRouter
 from fastapi_chameleon import template
-from services import category_service, location_service, item_service
 from common.viewmodel import ViewModel
-
-
-
-################################################################################
-##      Create an instance of the router
-################################################################################
-
-router = APIRouter()
-
+from config_settings import conf
+from services import (
+    item_service as iserv,
+    user_service as userv,
+    settings_service as setserv,
+)
 
 
 ################################################################################
@@ -27,6 +23,12 @@ RANDOM_ITEMS_COUNT = 8
 LOCATION_DISTRICT_COUNT = 21
 
 
+################################################################################
+##      Create an instance of the router
+################################################################################
+
+router = APIRouter()
+
 
 ################################################################################
 ##      Define a route for the index/home page
@@ -37,16 +39,21 @@ LOCATION_DISTRICT_COUNT = 21
 async def index():
     return index_viewmodel()
 
-def index_viewmodel():
+def index_viewmodel() -> ViewModel:
     return ViewModel(
-        list_category = category_service.list_category(LIST_CATEGORY_COUNT),
-        location_district = location_service.location_district(LOCATION_DISTRICT_COUNT),
-        latest_items = item_service.latest_items(LATEST_ITEMS_COUNT),
-        popular_items = item_service.popular_items(POPULAR_ITEMS_COUNT),
-        random_items = item_service.random_items(RANDOM_ITEMS_COUNT)
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        users_images_url = conf('USERS_IMAGES_URL'),
+        num_items = iserv.item_count(),
+        num_users = userv.user_count(),
+        num_categories = setserv.count_accepted_categories(),
+        location_district = setserv.get_accepted_district(),
+        list_category = setserv.get_accepted_category(),
+        popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
+        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
+        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
     )
 
-
+        
 
 ################################################################################
 ##      Define a route for the howWorks page
@@ -60,7 +67,6 @@ async def howWorks():
 def howWorks_viewmodel():
         return ViewModel(
         error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
     )
 
 
@@ -76,7 +82,6 @@ async def about():
 def about_viewmodel():
         return ViewModel(
         error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
     )
 
 
@@ -93,7 +98,6 @@ async def contact():
 def contact_viewmodel():
         return ViewModel(
         error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
     )
 
 
@@ -110,5 +114,4 @@ async def faq():
 def faq_viewmodel():
         return ViewModel(
         error = None,
-        # 'error_msg': 'There was an error with your data. Please try again.'
     )

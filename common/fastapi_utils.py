@@ -40,12 +40,12 @@ global_request : ContextVar[Request] = ContextVar("global_request")
 # https://fastapi.tiangolo.com/tutorial/middleware/#middleware
 
 def add_global_request_middleware(app: FastAPI):
-    @app.middleware("http")
+    @app.middleware('http')
     async def global_request_middleware(request: Request, call_next):
         global_request.set(request)
         response = await call_next(request)
         return response
-    return global_request_middleware        # this returns the inner function
+    #return global_request_middleware        # this returns the inner function
 
 
 

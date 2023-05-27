@@ -1,98 +1,337 @@
+from sqlalchemy.orm import relationship, Session
+from data.model_base import SqlAlchemyBase
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    Boolean,
+    Date,
+    ForeignKey,
+    Identity,
+    Integer,
+    String,
+    DateTime,
+    UniqueConstraint,
+    func,
+)
+
+
 ################################################################################
-##      Importing necessary modules
+##      ENUM TABLES
+##      NOTE: This module first needs to be generated/compiled.
 ################################################################################
 
-from datetime import date, datetime
-from decimal import Decimal as dec
-from dataclasses import dataclass, field
+from data.enum_tables import *
 
 
-@dataclass
-class Category:
-    id: int
-    category_name: str
-    icon: str
-    weblink: str
-    count_items_category: int
+################################################################################
+##      CONSTANTS
+################################################################################
+
+URL_SIZE = 300
+
+EXTERNAL_PROVIDER_NAME_SIZE = 20
+USER_EXTERNAL_ID_TOKEN_MAX_SIZE = 255
+
+EMAIL_REGEXP = r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+NAME_REGEXP = r'^[^\W_0-9]{2,}(\s[^\W_0-9]{2,})+$'
+NAME_SIZE = 100                         # FULLNAME
+ADDRESS_LINE_SIZE = 60
+ZIP_CODE_SIZE = 10
+PASSWORD_HASH_SIZE = 130
+
+DISTRICT_NAME_MAX_SIZE = 25             # largest district name has 19 chars...
+DISTRICT_NAME_MIN_SIZE = 3              # shortest district name has 4 chars...
+
+TESTIMONIAL_TEXT_SIZE = 200
+
+ITEM_TITLE_SIZE = 30
+ITEM_DESC_SIZE = 1500
+
+CATEGORY_NAME_SIZE = 30
+CATEGORY_NAME_DESC = 100
+CATEGORY_ICON_URL = 300
 
 
-@dataclass
-class Subcategory:
-    id: int
-    subcategory_name: str
-    category_name: str
-    count_items_category: int
+################################################################################
+##      DATA MODEL: User/Login/Account Related Stuff
+################################################################################
+
+# NOTE: most of the parameters come from the server configuration (a Python file).
+# This table contains only basic information about the provider
+
+class ExternalProvider(SqlAlchemyBase):
+    __tablename__ = 'ExternalProvider'
+
+    id = Column(Integer, Identity(start = 1), primary_key = True)
+    name = Column(String(EXTERNAL_PROVIDER_NAME_SIZE), unique = True, nullable = False)
+    end_point_url = Column(String(URL_SIZE), unique = True, nullable = False)
+    active = Column(Boolean, nullable = False, server_default = '1')
+
+    users_using = relationship('UserLoginDataExternal', back_populates = 'external_provider')
+
+
+
+class UserLoginDataExternal(SqlAlchemyBase):
+    __tablename__ = 'UserLoginDataExternal'
+
+    id = Column(Integer, Identity(start = 20000), primary_key = True)
+    user_id = Column(Integer, ForeignKey('UserAccount.user_id'), nullable = False)
+    external_provider_id = Column(Integer, ForeignKey('ExternalProvider.id'), nullable = False)
+    external_user_id = Column(String(USER_EXTERNAL_ID_TOKEN_MAX_SIZE), unique = True, nullable = False)
+    date_created =  Column(Date, nullable = False, server_default = func.current_date())
+
+    external_provider = relationship('ExternalProvider', back_populates = 'users_using')
+    user_account = relationship('UserAccount', back_populates = 'external_login_data')
+
+    UniqueConstraint('user_id', 'external_provider_id', name = 'UserExternalProviderIDX')
+
+
+
+# adding the extra field(s) to the superclass, and not just creating a subclass that extends the superclass.
+# So we don't need the subclass name
+class _(HashAlgo):
+    date = Column(Date, nullable = False, server_default = func.current_date())
+
+
+
+class UserLoginData(SqlAlchemyBase, EmailAddrStatusMixin, HashAlgoMixin):
+    __tablename__ = 'UserLoginData'
     
+    user_id = Column(Integer, ForeignKey('UserAccount.user_id'), primary_key = True)
+    password_hash = Column(String(PASSWORD_HASH_SIZE), nullable = False)
+    email_addr = Column(String, unique = True, nullable = False)
+    last_login = Column(DateTime)
+
+    user_account = relationship('UserAccount', back_populates = 'user_login_data')
+
+    @property
+    def name(self) -> str:
+        return self.user_account.name
     
-@dataclass
-class District:
-    id: int
-    district_name: str
-
-
-@dataclass
-class Region:
-    id: int
-    region_name: str
-    district_name: str
+    __table_args__ = (
+        CheckConstraint(
+            f'email_addr REGEXP "{EMAIL_REGEXP}"', 
+            name = 'EmailCK'
+        ),
+    )
 
 
 
-################################################################################
-##      Defining the Item class with attributes
-################################################################################  
+class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
+    __tablename__ = 'UserAccount'
 
-@dataclass
-class Item:
-    id: int
-    post_title: str
-    subcategory: str
-    category: str
-    publication_date: str
-    last_update: str
-    price: dec
-    price_type: str
-    item_status: str
-    weblink: str
-    location_region: str
-    location_district: str
-    summary: str
-    img_main: str
-    img1: str
-    img2: str
-    img3: str
-    img4: str
-    user_id: int
-    user_name: str
-    profile_img_url: str
-    premium: str
+    user_id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
+    type = Column(String(50))
+    name = Column(String(NAME_SIZE), nullable = False)
+    profile_image_url = Column(String(URL_SIZE), unique = True)
+    address_line = Column(String(ADDRESS_LINE_SIZE))
+    zip_code = Column(String(ZIP_CODE_SIZE))
+    district_id = Column(Integer, ForeignKey('District.id'))
+    date_created =  Column(Date, nullable = False, server_default = func.current_date())
 
+    @property
+    def firstname(self) -> str:
+        return self.name.partition(' ')[0]
 
+    @property
+    def email_addr(self) -> str:
+        return self.user_login_data.email_addr
 
-################################################################################
-##      Defining the User class with attributes
-################################################################################    
+    @email_addr.setter
+    def email_addr(self, new_email_addr: str):
+        self.user_login_data.email_addr = new_email_addr 
+
+    @property
+    def password_hash(self) -> str:
+        return self.user_login_data.password_hash
+
+    @password_hash.setter
+    def password_hash(self, password_hash: str):
+        self.user_login_data.password_hash = password_hash
     
-@dataclass
-class User:
-    id: int
-    name: str
-    email_addr: str
-    password: str
-    birth_date: date | None = None
-    presentation: str | None = None
-    profile_img_url: str | None = None
-    created_date: date = field(default_factory=date.today)
-    last_login: datetime = field(default_factory=date.today)
+    @property
+    def district_name(self) -> str:
+        if self.district:
+            return self.district.name
+        return ''
+    
+
+    # 'uselist = False' turns what was previously a one-to-many 
+    # UserAccount.user_login_data relationship into a one-to-one
+    user_login_data = relationship('UserLoginData', back_populates = 'user_account', uselist = False, lazy = 'immediate')
+    external_login_data = relationship('UserLoginDataExternal', back_populates = 'user_account', lazy = 'immediate')
+    district = relationship('District', back_populates = 'user_accounts', lazy = 'immediate')
+
+    __table_args__ = (
+        CheckConstraint(
+            f'name REGEXP "{NAME_REGEXP}"', 
+            name = 'NameCK'
+        ),
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'UserAccount',
+        'polymorphic_on': type,
+    }
+
+
+class District(SqlAlchemyBase):
+    __tablename__ = 'District'
+
+    id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
+    name = Column(String(DISTRICT_NAME_MAX_SIZE), nullable = False, unique = True)
+    
+    user_accounts = relationship('UserAccount', back_populates = 'district')
+
+"""
+    __table_args__ = (
+        CheckConstraint(
+            func.char_length(name) > DISTRICT_NAME_MIN_SIZE,
+            name = 'NameLenCK'
+        )
+    )
+"""
+
+
+class User(UserAccount):
+    __tablename__ = 'User'
+
+    user_id = Column(Integer, ForeignKey("UserAccount.user_id"), primary_key = True)
+    presentation_image_url = Column(String(URL_SIZE), unique = True)
+    presentation = Column(String, nullable = True)
+
+    @property
+    def expertise_title(self) -> str:
+        return self.expertise.name
+    
+    items = relationship('Item', back_populates = 'user')
+
+    testimonials = relationship('Testimonial', back_populates = 'user')
+    
+    #items = relationship('Favorite', back_populates = 'user')
+
+    __mapper_args__ = {'polymorphic_identity': 'User'}
+
+
+class Testimonial(SqlAlchemyBase):
+    __tablename__ = 'Testimonial'
+
+    id = Column(Integer, primary_key = True, autoincrement = 'auto')
+    text = Column(String(TESTIMONIAL_TEXT_SIZE), nullable = False)
+    user_occupation = Column(String(50), nullable = False)
+    date_created = Column(Date, nullable = False, server_default = func.current_date())
+    user_id = Column(Integer, ForeignKey("User.user_id"), nullable = False, unique = True)
+    image_url = Column(String(URL_SIZE), unique = True, nullable = False)
+
+    @property
+    def user_name(self) -> str:
+        return self.user.name
+
+    user = relationship('User', back_populates = 'testimonials', lazy = 'immediate',)
+
 
 
 ################################################################################
-##      Defining the Testimonial class with attributes
-################################################################################  
+##      DATA MODEL: Item and Related Tables
+################################################################################
 
-@dataclass
-class Testimonial:
-    id: int
-    name: str
-    user_occupation: str
-    text: str
+class Category(SqlAlchemyBase):
+    __tablename__ = 'Category'
+
+    id = Column(Integer, Identity(start = 1), primary_key = True)
+    name = Column(String(CATEGORY_NAME_SIZE), unique = True, nullable = False)
+    description = Column(String(CATEGORY_NAME_DESC), nullable = True)
+    icon = Column(String(CATEGORY_ICON_URL), nullable = False)
+
+    subcategories = relationship('Subcategory', back_populates = 'category')
+
+
+
+class Subcategory(SqlAlchemyBase):
+    __tablename__ = 'Subcategory'
+
+    id = Column(Integer, Identity(start = 1), primary_key = True)
+    name = Column(String(CATEGORY_NAME_SIZE), nullable = False)
+    description = Column(String(CATEGORY_NAME_DESC), nullable = True)
+    category_id = Column(Integer, ForeignKey("Category.id"), nullable = False)
+
+    @property
+    def category_name(self) -> str:
+        return self.category.name
+    
+    category = relationship('Category', back_populates = 'subcategories', lazy = 'immediate')
+    items = relationship('Item', back_populates = 'subcategory')
+    
+    UniqueConstraint('name', 'category_id', name = 'NameSubCatIDX')
+
+
+
+
+class Item(SqlAlchemyBase, ItemStatusMixin):
+    __tablename__ = 'Item'
+
+    # id = Column(Integer, primary_key = True, autoincrement='auto')
+    id = Column(Integer, Identity(start = 1), primary_key = True)
+    title = Column(String(ITEM_TITLE_SIZE), nullable = False)
+    description = Column(String(ITEM_DESC_SIZE), nullable = False)
+    main_image_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    image1_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    image2_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    image3_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    image4_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    date_created =  Column(Date, nullable = False, server_default = func.current_date())
+    last_updated_date = Column(Date, nullable = False, server_default = func.current_date())
+    # price = Column(Numeric(10,2), default=dec(0), nullable = False)
+    price = Column(String(20), server_default='0.00', nullable = False)   # just for SQLite
+
+    subcategory_id = Column(Integer, ForeignKey("Subcategory.id"),nullable = False,)
+    user_id = Column(Integer, ForeignKey("User.user_id"), nullable = False,)
+
+    @property
+    def subcategory_name(self) -> str:
+        return self.subcategory.name
+
+    @property
+    def category_name(self) -> str:
+        return self.category.name
+    
+    @property
+    def user_name(self) -> str:
+        return self.user.name
+    
+    @property
+    def user_presentation_image_url(self) -> str:
+        return self.user.presentation_image_url
+    
+    subcategory = relationship('Subcategory', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
+    user = relationship('User', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
+#   user = relationship('Favorite', back_populates = 'item')
+    
+    __table_args__ = (
+        CheckConstraint(
+            f'price >= 0',
+            name = 'PriceCK'
+        ),
+    )
+
+
+
+#class Favorite(SqlAlchemyBase):
+#    __tablename__ = "Favorite"
+
+#    id = Column(Integer, Identity(start = 1), primary_key = True)
+#    user_id = Column(ForeignKey('User.user_id'), nullable = False)
+#    item_id = Column(ForeignKey('Item.id'), nullable = False)
+
+#    user = relationship('User', back_populates = 'items')
+#    item = relationship('Item', back_populates = 'users')
+
+#    UniqueConstraint('user_id', 'item_id', name = 'UserItemIDX')
+
+
+################################################################################
+##      METADATA: Populate tables with initial metadata
+################################################################################
+
+def populate_metadata(db_session: Session):
+    populate_enum_tables(db_session)
