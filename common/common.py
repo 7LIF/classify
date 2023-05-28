@@ -4,6 +4,16 @@
 
 __all__ = (
     'MIN_DATE',
+    'GOOGLE_CLIENT_ID',
+    'GOOGLE_CLIENT_SECRET',
+    'GOOGLE_AUTH_URI',
+    'GOOGLE_TOKEN_URI',
+    'GOOGLE_REDIRECT_URI',
+    'GOOGLE_SCOPE_REPLY',
+    'GOOGLE_DISCOVERY_DOC_URL',
+    'GOOGLE_GRANT_TYPE',
+    'GOOGLE_JWKS_URI',
+    'GOOGLE_ISS_URIS',
     'coalesce',
     'is_valid_name',
     'is_valid_email',
@@ -19,10 +29,8 @@ __all__ = (
     'all_except',
     'random_str',
     
-    
     #'is_valid_iso_date',
     #'is_valid_birth_date',
-    #'find_in'
 )
 
 
@@ -38,6 +46,7 @@ import secrets
 import string
 from datetime import date
 from typing import Any, Callable, Iterable, Iterator
+from config_settings import conf
 
 
 
@@ -47,6 +56,16 @@ from typing import Any, Callable, Iterable, Iterator
 
 MIN_DATE = date.fromisoformat('1920-01-01')
 
+GOOGLE_CLIENT_ID = conf('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = conf('GOOGLE_CLIENT_SECRET')
+GOOGLE_AUTH_URI = conf('GOOGLE_AUTH_URI')
+GOOGLE_TOKEN_URI = conf('GOOGLE_TOKEN_URI')
+GOOGLE_REDIRECT_URI = conf('GOOGLE_REDIRECT_URI')
+GOOGLE_SCOPE_REPLY = conf('GOOGLE_SCOPE_REPLY')
+GOOGLE_DISCOVERY_DOC_URL = conf('GOOGLE_DISCOVERY_DOC_URL')
+GOOGLE_GRANT_TYPE = conf('GOOGLE_GRANT_TYPE')
+GOOGLE_JWKS_URI = conf('GOOGLE_JWKS_URI')
+GOOGLE_ISS_URIS = conf('GOOGLE_ISS_URIS')
 
 
 ################################################################################

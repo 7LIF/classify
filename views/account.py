@@ -21,6 +21,16 @@ from common.auth import (
 #    from common.auth import set_auth_cookie, delete_auth_cookie,
 from common.common import (
     MIN_DATE,
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    GOOGLE_AUTH_URI,
+    GOOGLE_TOKEN_URI,
+    GOOGLE_REDIRECT_URI,
+    GOOGLE_SCOPE_REPLY,
+    GOOGLE_DISCOVERY_DOC_URL,
+    GOOGLE_GRANT_TYPE,
+    GOOGLE_JWKS_URI,
+    GOOGLE_ISS_URIS,
     is_valid_name,
     is_valid_email,
     is_valid_password,
@@ -39,19 +49,6 @@ from services import (
 ##      SETTINGS FOR THIS VIEW and Constants
 ################################################################################
 
-GOOGLE_CLIENT_ID = conf('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = conf('GOOGLE_CLIENT_SECRET')
-GOOGLE_AUTH_URI = conf('GOOGLE_AUTH_URI')
-GOOGLE_TOKEN_URI = conf('GOOGLE_TOKEN_URI')
-GOOGLE_REDIRECT_URI = conf('GOOGLE_REDIRECT_URI')
-GOOGLE_SCOPE_REPLY = conf('GOOGLE_SCOPE_REPLY')
-GOOGLE_DISCOVERY_DOC_URL = conf('GOOGLE_DISCOVERY_DOC_URL')
-GOOGLE_GRANT_TYPE = conf('GOOGLE_GRANT_TYPE')
-GOOGLE_JWKS_URI = conf('GOOGLE_JWKS_URI')
-GOOGLE_ISS_URIS = conf('GOOGLE_ISS_URIS')
-
-MIN_DATE = date.fromisoformat('1920-01-01')
-
 ADDRESS_LINE_SIZE = 60
 ZIP_CODE_SIZE = 20
 
@@ -65,7 +62,6 @@ LOCATION_DISTRICT_COUNT = 21
 ################################################################################
 
 router = APIRouter(prefix='/account')
-
 
 
 ################################################################################
@@ -116,7 +112,6 @@ async def update_account_viewmodel(request: Request):
         if new is None or new == old:
             return None
         return new
-    
     
     user = get_current_user()
     assert user is not None
@@ -174,6 +169,7 @@ async def update_account_viewmodel(request: Request):
                 )
                 
     return vm
+
 
 
 def districts_viewmodel_info(selected_name_district: str) -> dict:
@@ -384,11 +380,10 @@ def favoritesAds_viewmodel():
 async def postAd():
     return postAd_viewmodel()
    
-#TODO: MUDAR CATEGORY_SERVICE  E LOCATION_SERVICE
 def postAd_viewmodel():
     return ViewModel(
         list_category = setserv.get_accepted_category(),
-        location_district = location_service.location_district(LOCATION_DISTRICT_COUNT)
+        location_district = setserv.get_accepted_district(),
     )
     
     

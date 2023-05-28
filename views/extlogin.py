@@ -1,36 +1,31 @@
-from urllib.parse import quote_plus as quote
-
-from fastapi import APIRouter, Request, Depends, responses, status
-from fastapi import responses, status, HTTPException
-from pydantic import BaseModel
 import aiohttp
+from urllib.parse import quote_plus as quote
+from fastapi import APIRouter, Request, Depends, responses, status, HTTPException
+from pydantic import BaseModel
 from jose import jwt
 from config_settings import conf
 from views.account import exec_login
+from common.auth import get_session, requires_unauthentication
+from common.common import (
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    GOOGLE_AUTH_URI,
+    GOOGLE_TOKEN_URI,
+    GOOGLE_REDIRECT_URI,
+    GOOGLE_SCOPE_REPLY,
+    GOOGLE_DISCOVERY_DOC_URL,
+    GOOGLE_GRANT_TYPE,
+    GOOGLE_JWKS_URI,
+    GOOGLE_ISS_URIS,
+    is_ascii, 
+    secure_random_str
+)
 from services import (
     item_service as iserv,
     user_service as userv,
     settings_service as setserv,
 )
-from common.auth import get_session, requires_unauthentication
-from common.common import is_ascii, secure_random_str
 
-################################################################################
-##
-##  SETTINGS FOR THIS VIEW
-##
-################################################################################
-
-GOOGLE_CLIENT_ID = conf('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = conf('GOOGLE_CLIENT_SECRET')
-GOOGLE_AUTH_URI = conf('GOOGLE_AUTH_URI')
-GOOGLE_TOKEN_URI = conf('GOOGLE_TOKEN_URI')
-GOOGLE_REDIRECT_URI = conf('GOOGLE_REDIRECT_URI')
-GOOGLE_SCOPE_REPLY = conf('GOOGLE_SCOPE_REPLY')
-GOOGLE_DISCOVERY_DOC_URL = conf('GOOGLE_DISCOVERY_DOC_URL')
-GOOGLE_GRANT_TYPE = conf('GOOGLE_GRANT_TYPE')
-GOOGLE_JWKS_URI = conf('GOOGLE_JWKS_URI')
-GOOGLE_ISS_URIS = conf('GOOGLE_ISS_URIS')
 
 ################################################################################
 ##
@@ -38,7 +33,7 @@ GOOGLE_ISS_URIS = conf('GOOGLE_ISS_URIS')
 ##
 ################################################################################
 
-router = APIRouter(prefix='/extlogin')
+router = APIRouter(prefix = '/extlogin')
 
 ################################################################################
 ##

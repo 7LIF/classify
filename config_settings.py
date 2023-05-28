@@ -45,7 +45,7 @@ class Config:
     DATABASE_PASSWORD = environ.get('DATABASE_PASSWORD')
 
     STATIC_PATH = '/static'
-    IMAGES_URL = f'{STATIC_PATH}/assets/img'
+    IMAGES_URL = f'{STATIC_PATH}/assets/images'
     USERS_IMAGES_URL = f'{IMAGES_URL}/users'
     ITEMS_IMAGES_URL = f'{IMAGES_URL}/items'
 
