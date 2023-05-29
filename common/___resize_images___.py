@@ -1,5 +1,7 @@
 # pip install pillow
 
+# this file have been inside the images folder
+
 from PIL import Image
 import os, glob
 
