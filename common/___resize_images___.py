@@ -3,7 +3,7 @@
 from PIL import Image
 import os, glob
 
-folder_path = "static/assets/images/districts"
+folder_path = 'static/assets/images/districts'
 desired_width = 425
 desired_height = 290
 
@@ -35,3 +35,4 @@ def resize_images(image_paths, desired_width, desired_height):
 
 
 resize_images(image_paths, desired_width, desired_height)
+print('run successfully')
