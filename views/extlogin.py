@@ -3,7 +3,6 @@ from urllib.parse import quote_plus as quote
 from fastapi import APIRouter, Request, Depends, responses, status, HTTPException
 from pydantic import BaseModel
 from jose import jwt
-from config_settings import conf
 from views.account import exec_login
 from common.auth import get_session, requires_unauthentication
 from common.common import (

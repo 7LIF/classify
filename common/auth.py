@@ -27,6 +27,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, status, responses
 from fastapi.requests import Request
 from fastapi.responses import Response
+from common.fastapi_utils import global_request
 from starlette.middleware.sessions import SessionMiddleware
 from config_settings import config_value
 from data.models import User
@@ -35,7 +36,7 @@ from services import (
     user_service as userv,
     settings_service as setserv,
 )
-from common.fastapi_utils import global_request
+
 
 
 
@@ -47,7 +48,6 @@ from common.fastapi_utils import global_request
 #SESSION_COOKIE_MAX_AGE = 86400_00          # 86400 seconds =~ 1 day // 86400_00 seconds =~ 100 days
 #SECRET_KEY = '8e10d234a1f8eb6f9dd6dfc3a325a0613ad2e620e5b8844cb011470492422bee'
 
-
 SESSION_COOKIE_NAME = config_value('SESSION_COOKIE_NAME')
 SESSION_SECRET_KEY = config_value('SESSION_SECRET_KEY')
 SESSION_COOKIE_HTTPONLY = config_value('SESSION_COOKIE_HTTPONLY')
@@ -55,8 +55,6 @@ SESSION_COOKIE_SECURE = config_value('SESSION_COOKIE_SECURE')
 SESSION_COOKIE_SAMESITE = config_value('SESSION_COOKIE_SAMESITE')
 SESSION_COOKIE_MAX_AGE = config_value('SESSION_COOKIE_MAX_AGE')
 SESSION_ID_LEN = 64   # in chars
-
-
 
 
 

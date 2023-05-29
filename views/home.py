@@ -21,6 +21,7 @@ LATEST_ITEMS_COUNT = 8
 POPULAR_ITEMS_COUNT = 8
 RANDOM_ITEMS_COUNT = 8
 LOCATION_DISTRICT_COUNT = 21
+SECTION_DISTRICT_COUNT = 3
 
 
 ################################################################################
@@ -41,6 +42,8 @@ async def index():
 
 def index_viewmodel() -> ViewModel:
     return ViewModel(
+        categories_images_url = conf('CATEGORIES_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
         users_images_url = conf('USERS_IMAGES_URL'),
         num_items = iserv.item_count(),
@@ -48,6 +51,7 @@ def index_viewmodel() -> ViewModel:
         num_categories = setserv.count_accepted_categories(),
         location_district = setserv.get_accepted_district(),
         list_category = setserv.get_accepted_category(),
+        section_district = setserv.get_random_districts_with_items(SECTION_DISTRICT_COUNT),
         popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),

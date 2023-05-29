@@ -39,22 +39,19 @@ __all__ = (
 ##      Importing necessary modules
 ################################################################################
 
-import math
-import random
-import re
-import secrets
-import string
+import math, random, re, string, secrets
 from datetime import date
 from typing import Any, Callable, Iterable, Iterator
-from config_settings import conf
-
-
-
+from config_settings import conf, config_value
+import common.viewmodel
+ 
+ 
+ 
 ################################################################################
-##      Constants
+##
+##  SETTINGS
+##
 ################################################################################
-
-MIN_DATE = date.fromisoformat('1920-01-01')
 
 GOOGLE_CLIENT_ID = conf('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = conf('GOOGLE_CLIENT_SECRET')
@@ -66,6 +63,13 @@ GOOGLE_DISCOVERY_DOC_URL = conf('GOOGLE_DISCOVERY_DOC_URL')
 GOOGLE_GRANT_TYPE = conf('GOOGLE_GRANT_TYPE')
 GOOGLE_JWKS_URI = conf('GOOGLE_JWKS_URI')
 GOOGLE_ISS_URIS = conf('GOOGLE_ISS_URIS')
+
+SESSION_COOKIE_NAME = config_value('SESSION_COOKIE_NAME')
+SESSION_SECRET_KEY = config_value('SESSION_SECRET_KEY')
+SESSION_COOKIE_HTTPONLY = config_value('SESSION_COOKIE_HTTPONLY')
+SESSION_COOKIE_SECURE = config_value('SESSION_COOKIE_SECURE')
+SESSION_COOKIE_SAMESITE = config_value('SESSION_COOKIE_SAMESITE')
+SESSION_COOKIE_MAX_AGE = config_value('SESSION_COOKIE_MAX_AGE')
 
 
 ################################################################################

@@ -46,9 +46,11 @@ class Config:
 
     STATIC_PATH = '/static'
     IMAGES_URL = f'{STATIC_PATH}/assets/images'
-    USERS_IMAGES_URL = f'{IMAGES_URL}/users'
+    CATEGORIES_IMAGES_URL = f'{IMAGES_URL}/categories'
+    DISTRICTS_IMAGES_URL = f'{IMAGES_URL}/districts'
     ITEMS_IMAGES_URL = f'{IMAGES_URL}/items'
-
+    USERS_IMAGES_URL = f'{IMAGES_URL}/users'
+    
     TEMPLATES_PATH = './templates'
     ERROR_TEMPLATE_PATH = f'{TEMPLATES_PATH}/errors'
 

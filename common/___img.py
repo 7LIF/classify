@@ -1,10 +1,9 @@
 # pip install pillow
 
 from PIL import Image
-import os
-import glob
+import os, glob
 
-folder_path = "static/assets/images/cities"
+folder_path = "static/assets/images/districts"
 desired_width = 425
 desired_height = 290
 

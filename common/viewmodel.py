@@ -13,8 +13,7 @@ __all__ = (
 ################################################################################
 
 from typing import Any
-from common.auth import get_current_user
-
+import common.auth
 
 
 ################################################################################
@@ -23,7 +22,7 @@ from common.auth import get_current_user
 
 class ViewModel(dict):
     def __init__(self, *args, **kargs):
-        user = get_current_user()
+        user = common.auth.get_current_user()
         user_id = user.user_id if user else None
         all = {
             'error': None,

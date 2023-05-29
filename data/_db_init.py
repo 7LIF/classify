@@ -14,6 +14,7 @@ from services.user_service import *
 from services.item_service import *
 from services.settings_service import *
 from data.models import District
+from views.account import districts_viewmodel_info
 
 
 db_session: Session | None = None
@@ -99,95 +100,124 @@ def insert_external_auth_providers():
 def insert_districts():
     insert_rows(
         label = 'DISTRICTS',
-        summary = lambda district: f"Created district '{district.name}'",
+        summary = lambda distr: f"Created district '{distr.name}'",
         insert_function = accept_district,
         rows = (
             {
                 'name': 'Aveiro',
+                'image_url': 'aveiro.jpg'
             },
             {
                 'name': 'Beja',
+                'image_url': 'beja.jpg'
             },
             {
                 'name': 'Braga',
+                'image_url': 'braga.jpg'
             },
             {
                 'name': 'Bragança',
+                'image_url': 'braganca.jpg'
             },
             {
                 'name': 'Castelo Branco',
+                'image_url': 'castelo_branco.jpg'
             },
             {
                 'name': 'Coimbra',
+                'image_url': 'coimbra.jpg'
             },
             {
                 'name': 'Évora',
+                'image_url': 'evora.jpg'
             },
             {
                 'name': 'Faro',
+                'image_url': 'faro.jpg'
             },
             {
                 'name': 'Guarda',
+                'image_url': 'guarda.jpg'
             },
             {
                 'name': 'Leiria',
+                'image_url': 'leiria.jpg'
             },
             {
                 'name': 'Lisboa',
+                'image_url': 'lisboa.jpg'
             },
             {
                 'name': 'Portalegre',
+                'image_url': 'portalegre.jpg'
             },
             {
                 'name': 'Porto',
+                'image_url': 'porto.jpg'
             },
             {
                 'name': 'Santarém',
+                'image_url': 'santarem.jpg'
             },
             {
                 'name': 'Setúbal',
+                'image_url': 'setubal.jpg'
             },
             {
                 'name': 'Viana do Castelo',
+                'image_url': 'viana_castelo.jpg'
             },
             {
                 'name': 'Vila Real',
+                'image_url': 'vila_real.jpg'
             },
             {
                 'name': 'Viseu',
+                'image_url': 'viseu.jpg'
             },
             {
                 'name': 'Ilha da Madeira',
+                'image_url': 'ilha_madeira.jpg'
             },
             {
                 'name': 'Ilha de Porto Santo',
+                'image_url': 'ilha_porto_santo.jpg'
             },
             {
                 'name': 'Ilha de Santa Maria',
+                'image_url': 'ilha_santa_maria.jpg'
             },
             {
                 'name': 'Ilha de São Miguel',
+                'image_url': 'ilha_sao_miguel.jpg'
             },
             {
                 'name': 'Ilha Terceira',
+                'image_url': 'ilha_terceira.jpg'
             },
             {
                 'name': 'Ilha da Graciosa',
+                'image_url': 'ilha_graciosa.jpg'
             },
             {
                 'name': 'Ilha de São Jorge',
+                'image_url': 'ilha_sao_jorge.jpg'
             },
             {
                 'name': 'Ilha do Pico',
+                'image_url': 'ilha_pico.jpg'
             },
             {
                 'name': 'Ilha do Faial',
+                'image_url': 'ilha_faial.jpg'
             },
             {
                 'name': 'Ilha das Flores',
+                'image_url': 'ilha_flores.jpg'
             },
             {
                 'name': 'Ilha do Corvo',
+                'image_url': 'ilha_corvo.jpg'
             },
         )
     )
@@ -350,57 +380,57 @@ def insert_categories():
             {
                 'name': 'Veículos',
                 'description': 'Carros, motas, veículos elétricos',
-                'icon': 'car.svg',
+                'image_url': 'car.svg',
             },
             {
                 'name': 'Eletrónicos',
                 'description': '',
-                'icon': 'laptop.svg',
+                'image_url': 'laptop.svg',
             },
             {
                 'name': 'Mobiliário',
                 'description': '',
-                'icon': 'furniture.svg',
+                'image_url': 'furniture.svg',
             },
             {
                 'name': 'Vestuário',
                 'description': '',
-                'icon': 'tshirt.svg',
+                'image_url': 'tshirt.svg',
             },
             {
                 'name': 'Acessórios',
                 'description': '',
-                'icon': 'watch.svg',
+                'image_url': 'watch.svg',
             },
             {
                 'name': 'Saúde & Beleza',
                 'description': '',
-                'icon': 'hospital.svg',
+                'image_url': 'hospital.svg',
             },
             {
                 'name': 'Livros',
                 'description': '',
-                'icon': 'education.svg',
+                'image_url': 'education.svg',
             },
             {
                 'name': 'Jogos',
                 'description': '',
-                'icon': 'controller.svg',
+                'image_url': 'controller.svg',
             },
             {
                 'name': 'Habitação',
                 'description': '',
-                'icon': 'real-estate.svg',
+                'image_url': 'real-estate.svg',
             },
             {
                 'name': 'Empregos',
                 'description': '',
-                'icon': 'jobs.svg',
+                'image_url': 'jobs.svg',
             },
             {
                 'name': 'Outros',
                 'description': '',
-                'icon': 'matrimony.svg',
+                'image_url': 'matrimony.svg',
             },
         )
     )
@@ -483,6 +513,9 @@ def insert_items():
                 'image3_url': '',
                 'image4_url': '',
                 'price': dec(200.215).quantize(dec('0.01')),
+                'address_line': '',
+                'zip_code': '',
+                'district_id': distr('Aveiro').id,
                 'subcategory_id': subcat('Smartphones').id,
                 'user_id': user('Augusto Andrade').user_id,
             },
@@ -518,6 +551,9 @@ def external_provider(name: str):
 
 def user(name: str):
     return make_simple_query(User, User.name == name)
+
+def distr(name: str):
+    return make_simple_query(District, District.name == name)
 
 
 def cat(name: str):

@@ -30,6 +30,9 @@ def create_item(
         image2_url: str,
         image3_url: str,
         image4_url: str,
+        address_line: str,
+        zip_code: str,
+        district_id: str,
         subcategory_id: str,
         price: dec,
         user_id: str,
@@ -46,6 +49,9 @@ def create_item(
                 image2_url = image2_url,
                 image3_url = image3_url,
                 image4_url = image4_url,
+                address_line = address_line,
+                zip_code = zip_code,
+                district_id = district_id,
                 subcategory_id = subcategory_id,
                 price = str(price),
                 user_id = user_id,
@@ -95,9 +101,7 @@ def get_random_items(
         select_stmt = select(Item).where(Item.status_id == ItemStatusEnum.Active.id)
         all_items = db_session.execute(select_stmt).scalars().all()
         random_items = sample(all_items, total_count)
-        if total_count < count:
-            return random_items
-        return random_items[:count]
+        return random_items if total_count < count else random_items[:count]
 
 
 

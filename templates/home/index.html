@@ -13,8 +13,7 @@
 								<h2 class="wow fadeInUp" data-wow-delay=".3s">Bem-vindo ao Classify</h2>
 								<p class="wow fadeInUp" data-wow-delay=".5s">
 									Aqui pode comprar e vender tudo, usados ou novos. <br>
-									Desde carros, smartphones, computadores, propriedades, empregos e muito
-									mais.
+									Desde carros, smartphones, computadores, propriedades, empregos e muito	mais.
 								</p>
 							</div>
 
@@ -25,8 +24,7 @@
 									<div class="col-lg-4 col-md-4 col-12 p-0">
 										<div class="search-input">
 											<label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-											<input type="text" name="keyword" id="keyword" placeholder="O que
-												procura?">
+											<input type="text" name="keyword" id="keyword" placeholder="O querocura?">
 										</div>
 									</div>
 
@@ -86,7 +84,7 @@
 									<!-- Start Single Category -->
 									<a href="#" class="single-cat">
 										<div class="icon">
-											<img src="/static/assets/images/categories/${category.icon}" alt="#">
+											<img src="${categories_images_url}/${category.image_url}" alt="#">
 										</div>
 										<h3>${category.name}</h3>
 										<h5 class="total">${num_categories}</h5>
@@ -109,112 +107,33 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="section-title">
-							<h2 class="wow fadeInUp" data-wow-delay=".4s">Browse By Cities</h2>
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Pesquise por localidade</h2>
 							<p class="wow fadeInUp" data-wow-delay=".6s">
-								There are many variations of passages of Lorem
-								Ipsum available, but the majority have suffered alteration in some form.
+								Pode pesquisar tudo o que precisa na sua localidade!
 							</p>
 						</div>
 					</div>
 				</div>
 				<div class="row ">
-					<div class="col-lg-4 col-md-4 col-12">
-						<div class="single-city wow fadeInUp" data-wow-delay=".2s">
-							<a href="category.html" class="info-box">
-								<div class="image">
-									<img src="/static/assets/images/cities/img1.jpg" alt="#">
-								</div>
-								<div class="content">
-									<h4 class="name">
-										New York City
-										<span>155 Ads</span>
-									</h4>
-								</div>
-								<div class="more-btn">
-									<i class="lni lni-circle-plus"></i>
-								</div>
-							</a>
+					<__repeat__ tal:repeat="district section_district" tal:omit-tag="True">
+						<div class="col-lg-4 col-md-4 col-12">
+							<div class="single-city wow fadeInUp" data-wow-delay=".2s">
+								<a href="category.html" class="info-box">
+									<div class="image">
+										<img src="${districts_images_url}/${district.image_url}" alt="#">
+									</div>
+									<div class="content">
+										<h4 class="name"> ${district.name}
+											<span>155 Ads</span>
+										</h4>
+									</div>
+									<div class="more-btn">
+										<i class="lni lni-circle-plus"></i>
+									</div>
+								</a>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-4 col-md-4 col-12">
-						<div class="single-city wow fadeInUp" data-wow-delay=".4s">
-							<a href="category.html" class="info-box">
-								<div class="image">
-									<img src="/static/assets/images/cities/img2.jpg" alt="#">
-								</div>
-								<div class="content">
-									<h4 class="name">
-										Philadelphia
-										<span>288 Ads</span>
-									</h4>
-								</div>
-								<div class="more-btn">
-									<i class="lni lni-circle-plus"></i>
-								</div>
-							</a>
-						</div>
-
-					</div>
-					<div class="col-lg-4 col-md-4 col-12">
-
-						<div class="single-city wow fadeInUp" data-wow-delay=".6s">
-							<a href="category.html" class="info-box">
-								<div class="image">
-									<img src="/static/assets/images/cities/img3.jpg" alt="#">
-								</div>
-								<div class="content">
-									<h4 class="name">
-										Los Angeles
-										<span>95 Ads</span>
-									</h4>
-								</div>
-								<div class="more-btn">
-									<i class="lni lni-circle-plus"></i>
-								</div>
-							</a>
-						</div>
-
-					</div>
-					<div class="col-lg-6 col-md-6 col-12">
-
-						<div class="single-city wow fadeInUp" data-wow-delay=".2s">
-							<a href="category.html" class="info-box">
-								<div class="image">
-									<img src="/static/assets/images/cities/img4.jpg" alt="#">
-								</div>
-								<div class="content">
-									<h4 class="name">
-										San Francisco
-										<span>355 Ads</span>
-									</h4>
-								</div>
-								<div class="more-btn">
-									<i class="lni lni-circle-plus"></i>
-								</div>
-							</a>
-						</div>
-
-					</div>
-					<div class="col-lg-6 col-md-6 col-12">
-
-						<div class="single-city wow fadeInUp" data-wow-delay=".4s">
-							<a href="category.html" class="info-box">
-								<div class="image">
-									<img src="/static/assets/images/cities/img5.jpg" alt="#">
-								</div>
-								<div class="content">
-									<h4 class="name">
-										Newe Orleans
-										<span>76 Ads</span>
-									</h4>
-								</div>
-								<div class="more-btn">
-									<i class="lni lni-circle-plus"></i>
-								</div>
-							</a>
-						</div>
-
-					</div>
+					</__repeat__>
 				</div>
 			</div>
 		</section>

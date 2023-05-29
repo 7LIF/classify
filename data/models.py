@@ -49,7 +49,7 @@ ITEM_DESC_SIZE = 1500
 
 CATEGORY_NAME_SIZE = 30
 CATEGORY_NAME_DESC = 100
-CATEGORY_ICON_URL = 300
+CATEGORY_IMAGE_URL = 300
 
 
 ################################################################################
@@ -180,17 +180,11 @@ class District(SqlAlchemyBase):
 
     id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
     name = Column(String(DISTRICT_NAME_MAX_SIZE), nullable = False, unique = True)
+    image_url = Column(String(URL_SIZE), unique = True, nullable = False)
     
     user_accounts = relationship('UserAccount', back_populates = 'district')
+    items = relationship('Item', back_populates = 'district')
 
-"""
-    __table_args__ = (
-        CheckConstraint(
-            func.char_length(name) > DISTRICT_NAME_MIN_SIZE,
-            name = 'NameLenCK'
-        )
-    )
-"""
 
 
 class User(UserAccount):
@@ -205,9 +199,7 @@ class User(UserAccount):
         return self.expertise.name
     
     items = relationship('Item', back_populates = 'user')
-
     testimonials = relationship('Testimonial', back_populates = 'user')
-    
     #items = relationship('Favorite', back_populates = 'user')
 
     __mapper_args__ = {'polymorphic_identity': 'User'}
@@ -241,7 +233,7 @@ class Category(SqlAlchemyBase):
     id = Column(Integer, Identity(start = 1), primary_key = True)
     name = Column(String(CATEGORY_NAME_SIZE), unique = True, nullable = False)
     description = Column(String(CATEGORY_NAME_DESC), nullable = True)
-    icon = Column(String(CATEGORY_ICON_URL), nullable = False)
+    image_url = Column(String(CATEGORY_IMAGE_URL), nullable = False)
 
     subcategories = relationship('Subcategory', back_populates = 'category')
 
@@ -279,6 +271,9 @@ class Item(SqlAlchemyBase, ItemStatusMixin):
     image2_url = Column(String(URL_SIZE), nullable = False, unique = True)
     image3_url = Column(String(URL_SIZE), nullable = False, unique = True)
     image4_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    address_line = Column(String(ADDRESS_LINE_SIZE), nullable = True)
+    zip_code = Column(String(ZIP_CODE_SIZE), nullable = True)
+    district_id = Column(Integer, ForeignKey('District.id'), nullable = False)
     date_created =  Column(Date, nullable = False, server_default = func.current_date())
     last_updated_date = Column(Date, nullable = False, server_default = func.current_date())
     # price = Column(Numeric(10,2), default=dec(0), nullable = False)
@@ -303,9 +298,16 @@ class Item(SqlAlchemyBase, ItemStatusMixin):
     def user_presentation_image_url(self) -> str:
         return self.user.presentation_image_url
     
+    @property
+    def district_name(self) -> str:
+        if self.district:
+            return self.district.name
+        return ''
+    
     subcategory = relationship('Subcategory', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
     user = relationship('User', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
-#   user = relationship('Favorite', back_populates = 'item')
+    district = relationship('District', back_populates = 'items', lazy = 'immediate')
+    #user = relationship('Favorite', back_populates = 'item')
     
     __table_args__ = (
         CheckConstraint(

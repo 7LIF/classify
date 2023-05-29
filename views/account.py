@@ -20,17 +20,6 @@ from common.auth import (
 
 #    from common.auth import set_auth_cookie, delete_auth_cookie,
 from common.common import (
-    MIN_DATE,
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET,
-    GOOGLE_AUTH_URI,
-    GOOGLE_TOKEN_URI,
-    GOOGLE_REDIRECT_URI,
-    GOOGLE_SCOPE_REPLY,
-    GOOGLE_DISCOVERY_DOC_URL,
-    GOOGLE_GRANT_TYPE,
-    GOOGLE_JWKS_URI,
-    GOOGLE_ISS_URIS,
     is_valid_name,
     is_valid_email,
     is_valid_password,
@@ -51,11 +40,9 @@ from services import (
 
 ADDRESS_LINE_SIZE = 60
 ZIP_CODE_SIZE = 20
-
 LIST_CATEGORY_COUNT = 11
 LOCATION_DISTRICT_COUNT = 21
 
-# TODO: needs refactoring: there are duplicate definitions in models.py
 
 ################################################################################
 ##      Create an instance of the router

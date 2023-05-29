@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-sys.path[0] = f'{os.getcwd()}/..'
-
+import sys, os
 from common.common import pascal_to_snake_case
+
+sys.path[0] = f'{os.getcwd()}/..'
 
 
 ENUM_CONSTANT_NAME_SIZE = 20
