@@ -7,7 +7,7 @@ from config_settings import config_value, set_config_level
 from common.fastapi_utils import add_global_request_middleware
 from common.auth import HTTPUnauthenticatedOnly, HTTPUnauthorizedAccess, add_session_middleware
 from common.viewmodel import ViewModel
-from views import home, post, account, extlogin
+from views import home, adPost, account, extlogin
 from data.database import db_init, DBProvider
 
 
@@ -81,7 +81,7 @@ def config_exception_handlers(app: FastAPI):
 def config_routes(app: FastAPI):
     static_path = config_value('STATIC_PATH')
     app.mount(static_path, StaticFiles(directory='static'), name='static')
-    for view in (home, post, account, extlogin):
+    for view in (home, adPost, account, extlogin):
         app.include_router(view.router)
     print("[+] ...routes configured")
 

@@ -362,12 +362,12 @@ def favoritesAds_viewmodel():
     
     
     
-@router.get('/postAd', dependencies = [Depends(requires_authentication)])
+@router.get('/newAdPost', dependencies = [Depends(requires_authentication)])
 @template()
-async def postAd():
-    return postAd_viewmodel()
+async def newAdPost():
+    return newAdPost_viewmodel()
    
-def postAd_viewmodel():
+def newAdPost_viewmodel():
     return ViewModel(
         list_category = setserv.get_accepted_category(),
         location_district = setserv.get_accepted_district(),

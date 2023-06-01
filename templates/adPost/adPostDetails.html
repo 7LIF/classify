@@ -26,13 +26,13 @@
 
 
 			<!-- Start item/post not found Section -->
-			<section tal:condition="error"  id="postDetails" class="postDetails">
+			<section tal:condition="error"  tal:omit-tag="True" id="adPostDetails" class="adPostDetails">
 				<div class="error-msg"> ${error_msg} </div>
 			</section>
 			<!--/ End item/post not found Section -->
 
 
-			<__if__ tal:condition="not error" tal:omit-tag="True">
+			<__if__ tal:condition="not error" tal:omit-tag="True" id="adPostDetails" class="adPostDetails">
 				<!-- Start Item details Section -->
 				<section class="item-details section">
 					<div class="container">
@@ -42,7 +42,7 @@
 									<div class="product-images">
 										<main id="gallery">
 											<div class="main-img">
-												<img src="/static/assets/images/item-details/image1.jpg" id="current" alt="#"/>
+												<img src="{$items_images_url}/${item.main_image_url}" id="current" alt="#"/>
 											</div>
 											<div class="images">
 												<img src="/static/assets/images/item-details/image1.jpg" class="img" alt="#"/>

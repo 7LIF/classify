@@ -17,7 +17,7 @@ from services import (
 ##      SETUP FastAPI - Create an instance of the router
 ################################################################################
 
-router = APIRouter(prefix = '/post')
+router = APIRouter(prefix = '/adPost')
 
 
 
@@ -27,34 +27,48 @@ router = APIRouter(prefix = '/post')
 
 @router.get('/')
 @template()
-async def post():
-    return post_viewmodel()
+async def adPost():
+    return adPost_viewmodel()
     
-def post_viewmodel():
+def adPost_viewmodel():
         return ViewModel(
         error = None
     )
 
 
 ################################################################################
+##      Define a route for the adPostListing page
+################################################################################
+
+@router.get('/adPostListing')
+@template()
+async def adPostListing():
+    return adPostListing_viewmodel()
+    
+def adPostListing_viewmodel():
+        return ViewModel(
+        error = None
+    )
+
+
+
+################################################################################
 ##      Define a route for the postDetails page
 ################################################################################
 
-@router.get('/{item_id}}')
-@template()
-async def postDetails(item_id: int):
-    return postDetails_viewmodel(item_id)
+@router.get('/{item_id}')
+@template(template_file='adPost/adPostDetails.html')
+async def adPostDetails(item_id: int):
+    return adPostDetails_viewmodel(item_id)
     
-def postDetails_viewmodel(item_id: int) -> ViewModel:
+def adPostDetails_viewmodel(item_id: int) -> ViewModel:
     if item := iserv.get_item_by_id(item_id):
-        item_price = dec(item.price)
         return ViewModel(
             item = item,
-            item_price = f'{item_price} €',
             images_url = conf('IMAGES_URL'),
-            users_imagens_url = conf('USERS_IMAGES_URL'),
+            items_imagens_url = conf('ITEMS_IMAGES_URL'),
         )
     return ViewModel(
-        error = None,
-        error_msg = f'Anúncio {id} não encontrado!',
+        error = True,
+        error_msg = f'Anúncio {item_id} não encontrado!',
     )

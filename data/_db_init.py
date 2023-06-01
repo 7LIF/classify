@@ -519,6 +519,11 @@ def insert_items():
                 'subcategory_id': subcat('Smartphones').id,
                 'user_id': user('Augusto Andrade').user_id,
             },
+            
+            
+            
+            
+            
         ),
     )
 

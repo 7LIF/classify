@@ -214,15 +214,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>
+													<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category.name}</a>
 													<h3 class="title">
 														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.district.name}</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
@@ -246,15 +246,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>
+													<a href="#"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category.name}</a>
 													<h3 class="title">
 														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.district.name}</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
@@ -277,15 +277,15 @@
 										<div class="col-lg-3 col-md-4 col-12">
 											<div class="single-item-grid">
 												<div class="image">
-													<a href="#"><img src="static\assets\images\items\${item.main_image_url}" alt="#"></a>													
+													<a href="#"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>													
 												</div>
 												<div class="content">
-													<a href="javascript:void(0)" class="tag">${item.subcategory.category}</a>
+													<a href="javascript:void(0)" class="tag">${item.subcategory.category.name}</a>
 													<h3 class="title">
 														<a href="#">${item.title}</a>
 													</h3>
 													<p class="location">
-														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item_district]</a>
+														<a href="javascript:void(0)"><i class="lni lni-map-marker"></i>${item.district.name}</a>
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
