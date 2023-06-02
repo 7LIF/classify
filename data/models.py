@@ -116,6 +116,17 @@ class UserLoginData(SqlAlchemyBase, EmailAddrStatusMixin, HashAlgoMixin):
     )
 
 
+class District(SqlAlchemyBase):
+    __tablename__ = 'District'
+
+    id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
+    name = Column(String(DISTRICT_NAME_MAX_SIZE), nullable = False, unique = True)
+    image_url = Column(String(URL_SIZE), unique = True, nullable = False)
+    
+    user_accounts = relationship('UserAccount', back_populates = 'district')
+    items = relationship('Item', back_populates = 'district')
+
+
 
 class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
     __tablename__ = 'UserAccount'
@@ -123,7 +134,6 @@ class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
     user_id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
     type = Column(String(50))
     name = Column(String(NAME_SIZE), nullable = False)
-    profile_image_url = Column(String(URL_SIZE), unique = True)
     address_line = Column(String(ADDRESS_LINE_SIZE))
     zip_code = Column(String(ZIP_CODE_SIZE))
     district_id = Column(Integer, ForeignKey('District.id'))
@@ -175,34 +185,19 @@ class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
     }
 
 
-class District(SqlAlchemyBase):
-    __tablename__ = 'District'
-
-    id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
-    name = Column(String(DISTRICT_NAME_MAX_SIZE), nullable = False, unique = True)
-    image_url = Column(String(URL_SIZE), unique = True, nullable = False)
-    
-    user_accounts = relationship('UserAccount', back_populates = 'district')
-    items = relationship('Item', back_populates = 'district')
-
-
-
 class User(UserAccount):
     __tablename__ = 'User'
 
     user_id = Column(Integer, ForeignKey("UserAccount.user_id"), primary_key = True)
-    presentation_image_url = Column(String(URL_SIZE), unique = True)
-    presentation = Column(String, nullable = True)
-
-    @property
-    def expertise_title(self) -> str:
-        return self.expertise.name
+    profile_image = Column(String(URL_SIZE), unique = True)
     
     items = relationship('Item', back_populates = 'user')
     testimonials = relationship('Testimonial', back_populates = 'user')
     #items = relationship('Favorite', back_populates = 'user')
 
-    __mapper_args__ = {'polymorphic_identity': 'User'}
+    __mapper_args__ = {
+        'polymorphic_identity': 'User',
+    }
 
 
 class Testimonial(SqlAlchemyBase):
@@ -262,21 +257,19 @@ class Subcategory(SqlAlchemyBase):
 class Item(SqlAlchemyBase, ItemStatusMixin):
     __tablename__ = 'Item'
 
-    # id = Column(Integer, primary_key = True, autoincrement='auto')
     id = Column(Integer, Identity(start = 1), primary_key = True)
     title = Column(String(ITEM_TITLE_SIZE), nullable = False)
     description = Column(String(ITEM_DESC_SIZE), nullable = False)
-    main_image_url = Column(String(URL_SIZE), nullable = False, unique = True)
-    image1_url = Column(String(URL_SIZE), nullable = False, unique = True)
-    image2_url = Column(String(URL_SIZE), nullable = False, unique = True)
-    image3_url = Column(String(URL_SIZE), nullable = False, unique = True)
-    image4_url = Column(String(URL_SIZE), nullable = False, unique = True)
+    main_image_url = Column(String(URL_SIZE), nullable = False)
+    image1_url = Column(String(URL_SIZE), nullable = True)
+    image2_url = Column(String(URL_SIZE), nullable = True)
+    image3_url = Column(String(URL_SIZE), nullable = True)
+    image4_url = Column(String(URL_SIZE), nullable = True)
     address_line = Column(String(ADDRESS_LINE_SIZE), nullable = True)
     zip_code = Column(String(ZIP_CODE_SIZE), nullable = True)
     district_id = Column(Integer, ForeignKey('District.id'), nullable = False)
     date_created =  Column(Date, nullable = False, server_default = func.current_date())
     last_updated_date = Column(Date, nullable = False, server_default = func.current_date())
-    # price = Column(Numeric(10,2), default=dec(0), nullable = False)
     price = Column(String(20), server_default='0.00', nullable = False)   # just for SQLite
 
     subcategory_id = Column(Integer, ForeignKey("Subcategory.id"),nullable = False,)
@@ -295,8 +288,8 @@ class Item(SqlAlchemyBase, ItemStatusMixin):
         return self.user.name
     
     @property
-    def user_presentation_image_url(self) -> str:
-        return self.user.presentation_image_url
+    def user_profile_image(self) -> str:
+        return self.user.profile_image
     
     @property
     def district_name(self) -> str:

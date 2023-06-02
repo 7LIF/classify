@@ -6,13 +6,14 @@ __all__ = (
     'authenticate_user_by_email',
     'get_user_by_email',
     'get_user_by_id',
+    'get_user_id_by_name',
     'get_user_by_external_id',
     'add_external_login',
     'password_matches',
     'DEFAULT_HASH_ALGO',
     'create_user_account',
+    'add_profile_image_to_user',
     'update_user_account',
-    
     'add_profile_image',
     'create_testimonial',
     'get_testimonials',
@@ -24,7 +25,7 @@ import passlib.hash as passlib_hash
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from config_settings import conf
-from common.common import is_valid_email, find_first #find_in
+from common.common import coalesce, is_valid_email, find_first #find_in
 from data.database import database_session
 from services import (
     item_service as iserv,
@@ -32,6 +33,7 @@ from services import (
     settings_service as setserv,
 )
 from data.models import (
+    District,
     User,
     Item,
     Testimonial,
@@ -140,6 +142,27 @@ def get_user_by_id(
         )
         return db_session.execute(select_stmt).scalar_one_or_none()
 
+#def get_user_id_by_name(
+#    name: str, 
+#    db_session: Session | None = None,
+#) -> int | None:
+#    user = db_session.query(User).filter_by(name=name).first()
+#    if not user:
+#        raise InvalidUserAttribute(f'User with name {name} does not exist')
+#    return user.user_id
+
+def get_user_id_by_name(
+    name: str, 
+    db_session: Session | None = None,
+) -> UserAccount | None:
+    with database_session(db_session) as db_session:
+        select_stmt = (
+            select(UserAccount)
+            .join(UserLoginData)
+            .where(UserAccount.name == name)
+        )
+        return db_session.execute(select_stmt).scalar_one_or_none()
+
 
 def get_user_by_external_id(
         external_provider_id: int,
@@ -234,7 +257,7 @@ async def add_profile_image(
         async with aiofiles.open(image_file_path, "wb") as out_file:
             await out_file.write(await image_async_file.read())
 
-        user.profile_image_url = image_file_path   
+        user.profile_image = image_file_path   
         db_session.commit()
         db_session.refresh(user)
         return user
@@ -274,14 +297,13 @@ MAX_TESTIMONIALS = 10
 
 
 
-
-
 def create_user_account(
         name: str,
         email_addr: str,
         password: str,  
         address_line: str | None = None,
         zip_code: str | None = None,
+        district_id: str | None = None,
         status: UserAccountStatusEnum = UserAccountStatusEnum.Active,
         db_session: Session | None = None,
 ) -> User:
@@ -295,11 +317,12 @@ def create_user_account(
                 name = name,
                 address_line = address_line,
                 zip_code = zip_code,
+                district_id = district_id,
             )
         )
         user.status = status
         db_session.flush()
-
+        
         db_session.add(
             UserLoginData(
                 user_id = user.user_id,
@@ -313,6 +336,55 @@ def create_user_account(
         return user
 
 
+
+def add_profile_image_to_user(
+    user_id: int, 
+    profile_image: str, 
+    db_session: Session | None = None
+) -> User:
+    with database_session(db_session) as db_session:
+        user = db_session.query(User).get(user_id)
+        if not user:
+            raise InvalidUserAttribute(f'User with id {user_id} does not exist')
+
+        user.profile_image = profile_image
+        
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+
+
+"""
+def add_profile_image_to_user(
+        user_id: int, 
+        profile_image: str, 
+        db_session: Session | None = None,
+) -> None:
+    with database_session(db_session) as db_session:
+        user = db_session.query(User).get(user_id)
+        if not user:
+            raise InvalidUserAttribute(f'User with id {user_id} does not exist')
+
+        user.profile_image = profile_image
+        db_session.commit()
+
+def add_profile_image_to_user(
+        user_id: str,
+        profile_image: str,
+        db_session: Session | None = None,
+) -> User:
+        db_session.add(
+            user := User(
+                user_id = user_id,
+                profile_image = profile_image,
+            )
+        )
+
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+"""
+
 def update_user_account(
         user_or_id: int | User,
         current_password: str,
@@ -320,6 +392,7 @@ def update_user_account(
         new_password: str | None = None,
         new_address_line: str | None = None,
         new_zip_code: str | None = None,
+        new_district_id: int | None = None,
         db_session: Session | None = None,
 ) -> User:
     with database_session(db_session) as db_session:
@@ -342,6 +415,7 @@ def update_user_account(
 
         user.address_line = coalesce(new_address_line, user.address_line)
         user.zip_code = coalesce(new_zip_code, user.zip_code)
+        user.district_id = coalesce(new_district_id, user.district_id)
 
         db_session.commit()
         db_session.refresh(user)

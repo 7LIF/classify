@@ -1,5 +1,6 @@
 from os import environ
 from logging import INFO, DEBUG as LOG_DEBUG, CRITICAL
+import os
 
 
 __all__ = (
@@ -53,6 +54,9 @@ class Config:
     
     TEMPLATES_PATH = './templates'
     ERROR_TEMPLATE_PATH = f'{TEMPLATES_PATH}/errors'
+    
+    os.environ['URL_WEBSITE'] = 'http://127.0.0.1:8000'
+    URL_WEBSITE = os.environ.get('URL_WEBSITE')
 
     GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')
     GOOGLE_CLIENT_SECRET = environ.get('GOOGLE_CLIENT_SECRET')

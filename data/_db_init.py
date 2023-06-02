@@ -1,5 +1,6 @@
 import sys
 import os
+
 sys.path[0] = f'{os.getcwd()}/..'
 
 from typing import Callable, Iterable
@@ -17,7 +18,10 @@ from data.models import District
 from views.account import districts_viewmodel_info
 
 
+
 db_session: Session | None = None
+
+
 
 
 def main():
@@ -60,6 +64,7 @@ def populate_database():
     insert_external_auth_providers()
     insert_districts()
     insert_users()
+    insert_profile_image_to_user()
     insert_external_logins()
     insert_testimonials()
     insert_categories()
@@ -74,7 +79,7 @@ def populate_database():
 def insert_external_auth_providers():
     insert_rows(
         label = 'EXTERNAL AUTH PROVIDERS',
-        summary = lambda eap : f"Created external auth provider {eap.name} ('{eap.id}')",
+        summary = lambda eap : f"Created external auth provider {eap.name} (id: {eap.id})",
         insert_function = accept_external_auth_provider,
         rows = (
             {
@@ -100,7 +105,7 @@ def insert_external_auth_providers():
 def insert_districts():
     insert_rows(
         label = 'DISTRICTS',
-        summary = lambda distr: f"Created district '{distr.name}'",
+        summary = lambda distr: f"Created district '{distr.name}' (id: {distr.id})",
         insert_function = accept_district,
         rows = (
             {
@@ -234,7 +239,7 @@ def insert_districts():
 
 ############################################################################
 ##
-##      users
+##      Users Account
 ##
 ############################################################################
 
@@ -250,6 +255,8 @@ def insert_users():
                 'password': 'abc',
                 'address_line': 'Rua Pimenta da Cruz, Lote 33 - 1o Esquerdo',
                 'zip_code': '2200-033 Águeda',
+                'district_id': distr('Aveiro').id,
+                #'profile_image': 'profile_image1.jpg',
             },
             {
                 'name': 'Avelino Américo',
@@ -257,6 +264,8 @@ def insert_users():
                 'password': 'abc',
                 'address_line': 'Av. Da Esperança, Lote 21 - 4o Direito',
                 'zip_code': '1010-100 Amarante',
+                'district_id': distr('Porto').id,
+                #'profile_image': 'profile_image2.jpg',
             },
             {
                 'name': 'Beatriz Batista',
@@ -264,6 +273,8 @@ def insert_users():
                 'password': 'abc123',
                 'address_line': 'Rua das Flores, Lote 14 - 2o Esquerdo',
                 'zip_code': '2750-327 Cascais',
+                'district_id': distr('Lisboa').id,
+                #'profile_image': 'profile_image3.jpg',
             },
             {
                 'name': 'Carlos Carvalho',
@@ -271,6 +282,8 @@ def insert_users():
                 'password': '123abc',
                 'address_line': 'Av. da Liberdade, Lote 81 - 3o Direito',
                 'zip_code': '1250-100 Lisboa',
+                'district_id': distr('Lisboa').id,
+                #'profile_image': 'profile_image4.jpg',
             },
             {
                 'name': 'Diego Domingues',
@@ -278,6 +291,8 @@ def insert_users():
                 'password': 'a1b2c3',
                 'address_line': 'Rua do Sol, Lote 6 - 4o Esquerdo',
                 'zip_code': '4000-392 Porto',
+                'district_id': distr('Porto').id,
+                #'profile_image': 'profile_image5.jpg',
             },
             {
                 'name': 'Eva Esteves',
@@ -285,6 +300,8 @@ def insert_users():
                 'password': 'p4ssword',
                 'address_line': 'Rua dos Moinhos, Lote 9 - 1o Direito',
                 'zip_code': '4900-341 Viana do Castelo',
+                'district_id': distr('Viana do Castelo').id,
+                #'profile_image': 'profile_image6.jpg',
             },
             {
                 'name': 'Fábio Fernandes',
@@ -292,6 +309,8 @@ def insert_users():
                 'password': 'qwerty',
                 'address_line': 'Rua Nova, Lote 19 - 2o Esquerdo',
                 'zip_code': '8000-020 Faro',
+                'district_id': distr('Faro').id,
+                #'profile_image': 'profile_image7.jpg',
             },
             {
                 'name': 'Gabriela Gomes',
@@ -299,11 +318,26 @@ def insert_users():
                 'password': 'gabi123',
                 'address_line': 'Av. da Praia, Lote 8 - 1o Esquerdo',
                 'zip_code': '2520-038 Peniche',
-            },           
+                'district_id': distr('Leiria').id,
+                #'profile_image': 'profile_image8.jpg',
+            },
+            {
+                'name': 'José Faria',
+                'email_addr': 'faria.j@hotmail.com',
+                'password': 'jonyquerty123',
+                'address_line': 'Rua da Carreira',
+                'zip_code': '9000-036 Funchal',
+                'district_id': distr('Ilha da Madeira').id,
+                #'profile_image': 'profile_image9.jpg',
+            },    
         ),
     )
 
 
+
+
+   
+    
 ############################################################################
 ##
 ##      EXTERNAL LOGINS
@@ -313,7 +347,7 @@ def insert_users():
 def insert_external_logins():
         insert_rows(
         label = 'EXTERNAL LOGINS',
-        summary = lambda data: (f"Added external user id '{data.external_user_id}' for student '{data.user_id}'"),
+        summary = lambda data: (f"Added external login '{data.external_user_id}' to the user id '{data.user_id}' (id: {data.id})"),
         insert_function = add_external_login,
         rows = (
             {
@@ -334,7 +368,7 @@ def insert_external_logins():
 def insert_testimonials():
     insert_rows(
         label = 'TESTIMONIALS',
-        summary = lambda test: f"Created '{test.user_name}' testimonial ",
+        summary = lambda test: f"Created '{test.user_name}' testimonial (id: {test.id})",
         insert_function = create_testimonial,
         rows = (
             {
@@ -374,7 +408,7 @@ def insert_testimonials():
 def insert_categories():
     insert_rows(
         label = 'CATEGORIES',
-        summary = lambda cat: f"Created category '{cat.name}' (id: '{cat.id}')",
+        summary = lambda cat: f"Created category '{cat.name}' (id: {cat.id})",
         insert_function = create_category,
         rows = (
             {
@@ -403,29 +437,9 @@ def insert_categories():
                 'image_url': 'watch.svg',
             },
             {
-                'name': 'Saúde & Beleza',
-                'description': '',
-                'image_url': 'hospital.svg',
-            },
-            {
                 'name': 'Livros',
                 'description': '',
                 'image_url': 'education.svg',
-            },
-            {
-                'name': 'Jogos',
-                'description': '',
-                'image_url': 'controller.svg',
-            },
-            {
-                'name': 'Habitação',
-                'description': '',
-                'image_url': 'real-estate.svg',
-            },
-            {
-                'name': 'Empregos',
-                'description': '',
-                'image_url': 'jobs.svg',
             },
             {
                 'name': 'Outros',
@@ -446,7 +460,7 @@ def insert_categories():
 def insert_subcategories():
     insert_rows(
         label = 'SUBCATEGORIES',
-        summary = lambda subcat: f"Created subcategory '{subcat.name}' (id: '{subcat.id}')",
+        summary = lambda subcat: f"Created subcategory '{subcat.name}' (id: {subcat.id})",
         insert_function = create_subcategory,
         rows = (
             {
@@ -460,7 +474,7 @@ def insert_subcategories():
                 'category_id': cat('Veículos').id,
             },
             {
-                'name': 'Veículos Elétricos',
+                'name': 'Carros Elétricos',
                 'description': 'Veículos Elétricos',
                 'category_id': cat('Veículos').id,
             },
@@ -470,7 +484,7 @@ def insert_subcategories():
                 'category_id': cat('Eletrónicos').id,
             },
             {
-                'name': 'Portáteis',
+                'name': 'Portáteis',
                 'description': 'Portáteis',
                 'category_id': cat('Eletrónicos').id, 
             },
@@ -484,12 +498,145 @@ def insert_subcategories():
                 'description': 'Smartphones, telemóveis',
                 'category_id': cat('Eletrónicos').id,
             },
+            {
+                'name': 'Câmaras Fotográficas',
+                'description': 'Câmaras Fotográficas',
+                'category_id': cat('Eletrónicos').id,
+            },
+            {
+                'name': 'Consolas de Jogos',
+                'description': 'Consolas de Jogos',
+                'category_id': cat('Eletrónicos').id,
+            },
+            {
+                'name': 'Outros Eletrónicos',
+                'description': 'Outros Eletrónicos',
+                'category_id': cat('Eletrónicos').id,
+            },
+            {
+                'name': 'Mobilia de Quarto',
+                'description': 'Mobilia de Quarto',
+                'category_id': cat('Mobiliário').id,
+            },
+            {
+                'name': 'Mobilia de Sala',
+                'description': 'Mobilia de Sala',
+                'category_id': cat('Mobiliário').id, 
+            },
+            {
+                'name': 'Mobilia de Cozinha',
+                'description': 'Mobilia de Cozinha',
+                'category_id': cat('Mobiliário').id,
+            },
+            {
+                'name': 'Outro Mobiliário',
+                'description': 'Mobiliário de Exterior',
+                'category_id': cat('Mobiliário').id,
+            },
+            {
+                'name': 'Vestuário de Mulher',
+                'description': 'Vestuário de Mulher',
+                'category_id': cat('Vestuário').id,
+            },
+            {
+                'name': 'Vestuário de Homem',
+                'description': 'Vestuário de Homem',
+                'category_id': cat('Vestuário').id,
+            },
+            {
+                'name': 'Vestuário de Criança & Bebé',
+                'description': 'Vestuário de Criança & Bebé',
+                'category_id': cat('Vestuário').id,
+            },
+            {
+                'name': 'Relógios',
+                'description': 'Relógios',
+                'category_id': cat('Acessórios').id,
+            },
+            {
+                'name': 'Malas',
+                'description': 'Malas',
+                'category_id': cat('Acessórios').id,
+            },
+            {
+                'name': 'Outros Acessórios',
+                'description': 'Outros Acessórios',
+                'category_id': cat('Acessórios').id,
+            },
+            {
+                'name': 'Livros Escolares',
+                'description': 'Livros Escolares',
+                'category_id': cat('Livros').id,
+            },
+            {
+                'name': 'Livros em Português',
+                'description': 'Livros Escolares',
+                'category_id': cat('Livros').id,
+            },
+            {
+                'name': 'Livros em Língua Estrangeira',
+                'description': 'Livros Escolares',
+                'category_id': cat('Livros').id,
+            },
+            {
+                'name': 'Saúde & Beleza',
+                'description': 'Saúde & Beleza',
+                'category_id': cat('Outros').id,
+            },
+            {
+                'name': 'Diversos',
+                'description': 'Todos os artigos que não se enquadram em nenhuma das categorias anteriores',
+                'category_id': cat('Outros').id,
+            },
         )
     )
     
-    
 
 
+def insert_profile_image_to_user():
+    insert_rows(
+        label='ADD PROFILE IMAGE TO USER TABLE',
+        summary = lambda user: f"Added profile image '{user.profile_image}' to the user id '{user.user_id}' (id: {user.user_id})",
+        insert_function= add_profile_image_to_user,
+        rows=(
+            {
+                'user_id': user('Augusto Andrade').user_id,
+                'profile_image': 'profile_image1.jpg',
+            },
+            {
+                'user_id': user('Avelino Américo').user_id,
+                'profile_image': 'profile_image2.jpg',
+            },
+            {
+                'user_id': user('Beatriz Batista').user_id,
+                'profile_image': 'profile_image3.jpg',
+            },
+            {
+                'user_id': user('Carlos Carvalho').user_id,
+                'profile_image': 'profile_image4.jpg',
+            },
+            {
+                'user_id': user('Diego Domingues').user_id,
+                'profile_image': 'profile_image5.jpg',
+            },
+            {
+                'user_id': user('Eva Esteves').user_id,
+                'profile_image': 'profile_image6.jpg',
+            },
+            {
+                'user_id': user('Fábio Fernandes').user_id,
+                'profile_image': 'profile_image7.jpg',
+            },
+            {
+                'user_id': user('Gabriela Gomes').user_id,
+                'profile_image': 'profile_image8.jpg',
+            },
+            {
+                'user_id': user('José Faria').user_id,
+                'profile_image': 'profile_image9.jpg',
+            }, 
+        )
+    )
 
 
 ############################################################################
@@ -501,29 +648,189 @@ def insert_subcategories():
 def insert_items():
     insert_rows(
         label = 'ITEMS',
-        summary = lambda item: f"Created item '{item.title}' (id: '{item.id}')",
+        summary = lambda item: f"Created item '{item.title}' (id: {item.id})",
         insert_function = create_item,
         rows = (
             {
-                'title': 'Apple Iphone X',
-                'description':  'Smartphone Apple Iphone X',
-                'main_image_url': 'item_id7_img_main.jpg',
+                'title': 'MacBook Pro 13 polegadas',
+                'description': '<p>Vendo MacBook Pro de 13 polegadas em excelente estado. <br />Este MacBook Pro é equipado com um processador Intel Core i5 de 8ª geração, 8 GB de RAM e um SSD de 256 GB, é perfeito para trabalhos criativos, edição de fotos e vídeo. <br /> Tem teclado retroiluminado e trackpad com tecnologia Force Touch. <br />Inclui sistema operacional macOS Big Sur mais recente e está pronto para ser usado imediatamente. <br /></p><ul><li>Modelo: Apple MacBook Pro</li><li>Chip Apple M1 com CPU de 8 núcleos e GPU de 8 núcleos</li><li>8GB RAM</li><li>256GB SSD</li><li>13.3 polegadas 2560x1600</li></ul><p>Este MacBook Pro é perfeito para profissionais que precisam de um laptop confiável e poderoso para trabalhar, estudar ou se divertir.</p>',
+                'main_image_url': 'item_id1_img_main.jpg',
+                'image1_url': 'item_id1_img1.jpg',
+                'image2_url': 'item_id1_img2.jpg',
+                'image3_url': 'item_id1_img3.jpg',
+                'image4_url': 'item_id1_img4.jpg',
+                'price': dec(666.00).quantize(dec('0.01')),
+                'address_line': 'Rua dos Moinhos',
+                'zip_code': '4900-341 Viana do Castelo',
+                'district_id': distr('Viana do Castelo').id,
+                'subcategory_id': subcat('Portáteis').id,
+                'user_id': user('Eva Esteves').user_id,
+            },
+            {
+                'title': 'Cama King Size Espaçosa',
+                'description': 'A cama king size oferece uma generosa área de descanso, permitindo que você se espalhe e desfrute de um espaço amplo e confortável. Comprimento: 2 metros; Largura: 1,8 metros; Estrutura robusta e durável para suporte sólido e estabilidade. Design elegante que se adapta perfeitamente a qualquer estilo de decoração. Qualidade excecional para garantir durabilidade e longevidade.',
+                'main_image_url': 'item_id2_img_main.jpg',
                 'image1_url': '',
                 'image2_url': '',
                 'image3_url': '',
                 'image4_url': '',
-                'price': dec(200.215).quantize(dec('0.01')),
+                'price': dec(200.00).quantize(dec('0.01')),
+                'address_line': 'Av. Da Esperança',
+                'zip_code': '1010-100 Amarante',
+                'district_id': distr('Porto').id,
+                'subcategory_id': subcat('Mobilia de Quarto').id,
+                'user_id': user('Avelino Américo').user_id,
+            },
+            {
+                'title': 'Canon SX Powershot D-SLR',
+                'description': 'A camera é equipada com um sensor de alta resolução e uma lente de alta qualidade, obtendo imagens nítidas e detalhadas. Possui um zoom ótico poderoso sem perder a qualidade. A estabilização avançada de imagem garante fotos e vídeos sem tremores, enquanto o modo manual permite um controle criativo completo.',
+                'main_image_url': 'item_id3_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(200.00).quantize(dec('0.01')),
+                'address_line': 'Rua das Flores',
+                'zip_code': '2750-327 Cascais',
+                'district_id': distr('Lisboa').id,
+                'subcategory_id': subcat('Câmaras Fotográficas').id,
+                'user_id': user('Beatriz Batista').user_id,
+            },
+            {
+                'title': '2012 BMW 5 Series Gran Turismo 535i RWD',
+                'description':  'BMW 5 Series Gran Turismo 535i RWD de 2012. Apenas teve 1 proprietário. Quilometragem: 149.413km; Tração: Tração traseira; Cor exterior: Azul; Cor interior: Bege; Motor: Motor de 3L I6 com 300 cavalos de potência; Consumo de combustível: 9.41 L/100km; Tipo de combustível: Gasolina; Transmissão: Automática de 8 velocidades.',
+                'main_image_url': 'item_id4_img_main.jpeg',
+                'image1_url': 'item_id4_img1.jpeg',
+                'image2_url': 'item_id4_img2.jpeg',
+                'image3_url': 'item_id4_img3.jpeg',
+                'image4_url': '',
+                'price': dec(7500.00).quantize(dec('0.01')),
+                'address_line': '',
+                'zip_code': '1250-100 Lisboa',
+                'district_id': distr('Lisboa').id,
+                'subcategory_id': subcat('Carros').id,
+                'user_id': user('Carlos Carvalho').user_id,
+            },
+            {
+                'title': ' Xiaomi Mi Home Security Camera Basic 1080p',
+                'description':  'A Xiaomi Mi Home Security Camera Basic 1080p é uma camera de segurança doméstica com recursos avançados. Algumas de suas características incluem: resolução 1080p, visão noturna, detenção de movimento, áudio bidirecional, armazenamento em nuvem, conectividade Wi-Fi, panorâmica e inclinação, e configurações de privacidade. A camera oferece qualidade de vídeo nítida e clara; permite visualização noturna; deteta movimentos e envia notificações; possui áudio bidirecional; armazena vídeos na nuvem; permite acesso remoto via Wi-Fi; possui funcionalidade de panorâmica e inclinação; e oferece recursos de privacidade para proteger dados e privacidade.',
+                'main_image_url': 'item_id5_img_main.jpg',
+                'image1_url': 'item_id5_img1.jpg',
+                'image2_url': 'item_id5_img2.jpg',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(30.00).quantize(dec('0.01')),
+                'address_line': 'Rua do Sol',
+                'zip_code': '',
+                'district_id': distr('Porto').id,
+                'subcategory_id': subcat('Outros Eletrónicos').id,
+                'user_id': user('Diego Domingues').user_id,
+            },
+            {
+                'title': 'Cadeiras de Escritório',
+                'description':  'Vendo 3 cadeiras de Escritório eme bom estado, a 50€ cada uma.',
+                'main_image_url': 'item_id6_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(150.00).quantize(dec('0.01')),
+                'address_line': '',
+                'zip_code': '1250-100 Lisboa',
+                'district_id': distr('Lisboa').id,
+                'subcategory_id': subcat('Outro Mobiliário').id,
+                'user_id': user('Carlos Carvalho').user_id,
+            },
+            {
+                'title': 'Apple Iphone X',
+                'description':  'Smartphone Apple Iphone X',
+                'main_image_url': 'item_id7_img_main.jpg',
+                'image1_url': 'item_id7_img1.jpg',
+                'image2_url': 'item_id7_img2.jpg',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(199.999).quantize(dec('0.01')),
                 'address_line': '',
                 'zip_code': '',
                 'district_id': distr('Aveiro').id,
                 'subcategory_id': subcat('Smartphones').id,
                 'user_id': user('Augusto Andrade').user_id,
             },
-            
-            
-            
-            
-            
+            {
+                'title': 'Livros',
+                'description':  'Vendo 9 livros cada um a 5€ cada.',
+                'main_image_url': 'item_id8_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(45.000).quantize(dec('0.01')),
+                'address_line': 'Rua dos Moinhos',
+                'zip_code': '4900-341 Viana do Castelo',
+                'district_id': distr('Viana do Castelo').id,
+                'subcategory_id': subcat('Livros em Língua Estrangeira').id,
+                'user_id': user('Eva Esteves').user_id,
+            },
+            {
+                'title': 'Kit de viagem',
+                'description':  'Vendo 1 kit de viagem com uma máscara facial, um desinfetante, um sabonete, umas toalhitas para as mãos e a bolsa para guardar todo o que precisa.',
+                'main_image_url': 'item_id9_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(15.000).quantize(dec('0.01')),
+                'address_line': 'Rua dos Moinhos',
+                'zip_code': '4900-341 Viana do Castelo',
+                'district_id': distr('Viana do Castelo').id,
+                'subcategory_id': subcat('Saúde & Beleza').id,
+                'user_id': user('Eva Esteves').user_id,
+            },
+            {
+                'title': 'Nikon DSLR Camera',
+                'description':  'A câmara Nikon DSLR é uma poderosa ferramenta fotográfica que combina tecnologia avançada e qualidade de imagem superior. Com um sensor de alta resolução e capacidade de capturar detalhes incríveis, esta câmara oferece imagens nítidas e vibrantes. Além disso, possui um sistema de autofoco rápido e preciso, permitindo capturar momentos precisos com facilidade. Com modos de disparo versáteis, incluindo fotografia em sequência e intervalos de tempo, a câmara Nikon DSLR é ideal para fotógrafos profissionais e entusiastas apaixonados pela arte da fotografia.',
+                'main_image_url': 'item_id10_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(800.000).quantize(dec('0.01')),
+                'address_line': 'Rua Nova',
+                'zip_code': '8000-020 Faro',
+                'district_id': distr('Faro').id,
+                'subcategory_id': subcat('Câmaras Fotográficas').id,
+                'user_id': user('Fábio Fernandes').user_id,
+            },
+            {
+                'title': 'Pintura',
+                'description':  'Quadro expressivo e vibrante, uma obra única de arte contemporânea.',
+                'main_image_url': 'item_id11_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(45.000).quantize(dec('0.01')),
+                'address_line': 'Av. da Praia',
+                'zip_code': '2520-038 Peniche',
+                'district_id': distr('Leiria').id,
+                'subcategory_id': subcat('Diversos').id,
+                'user_id': user('Gabriela Gomes').user_id,
+            },
+            {
+                'title': 'Livro',
+                'description':  'Vendo livro em inglês.',
+                'main_image_url': 'item_id12_img_main.jpg',
+                'image1_url': '',
+                'image2_url': '',
+                'image3_url': '',
+                'image4_url': '',
+                'price': dec(5.000).quantize(dec('0.01')),
+                'address_line': 'Rua da Carreira',
+                'zip_code': '9000-036 Funchal',
+                'district_id': distr('Ilha da Madeira').id,
+                'subcategory_id': subcat('Livros em Língua Estrangeira').id,
+                'user_id': user('José Faria').user_id,
+            },
         ),
     )
 
