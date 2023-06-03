@@ -149,7 +149,7 @@ async def update_account_viewmodel(request: Request):
             async with upload_file_closing(file) as file_cm:
                 if not file_cm.content_type:
                     raise ValueError(f"No content type for uploaded file {file.filename}")
-                await sserv.add_profile_image(
+                await userv.add_profile_image(
                    user.user_id,
                    file_cm,
                    content_type = file_cm.content_type,

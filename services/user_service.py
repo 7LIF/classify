@@ -354,36 +354,7 @@ def add_profile_image_to_user(
         return user
 
 
-"""
-def add_profile_image_to_user(
-        user_id: int, 
-        profile_image: str, 
-        db_session: Session | None = None,
-) -> None:
-    with database_session(db_session) as db_session:
-        user = db_session.query(User).get(user_id)
-        if not user:
-            raise InvalidUserAttribute(f'User with id {user_id} does not exist')
 
-        user.profile_image = profile_image
-        db_session.commit()
-
-def add_profile_image_to_user(
-        user_id: str,
-        profile_image: str,
-        db_session: Session | None = None,
-) -> User:
-        db_session.add(
-            user := User(
-                user_id = user_id,
-                profile_image = profile_image,
-            )
-        )
-
-        db_session.commit()
-        db_session.refresh(user)
-        return user
-"""
 
 def update_user_account(
         user_or_id: int | User,

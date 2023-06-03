@@ -134,7 +134,8 @@
                                 </ul>
                             </div>
                             <div class="button header-button">
-                                <a href="/account/newAdPost" class="btn">Post an Ad</a>
+                                <a tal:condition="not is_logged_in" href="/account/register" class="btn">Post an Ad</a>
+                                <a tal:condition="is_logged_in" href="/account/newAdPost" class="btn">Post an Ad</a>
                             </div>
                         </nav> <!-- navbar -->
                     </div>

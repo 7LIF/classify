@@ -1,6 +1,7 @@
 ################################################################################
 ##      Importing necessary modules
 ################################################################################
+from unicodedata import category
 from fastapi import APIRouter
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
@@ -49,9 +50,11 @@ def index_viewmodel() -> ViewModel:
         num_items = iserv.item_count(),
         num_users = userv.user_count(),
         num_categories = setserv.count_accepted_categories(),
+        num_subcategories = setserv.subcategory_count(),
         location_district = setserv.get_accepted_district(),
         list_category = setserv.get_accepted_category(),
         section_district = setserv.get_random_districts_with_items(SECTION_DISTRICT_COUNT),
+        items_in_category = setserv.count_items_in_categories(),
         popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),

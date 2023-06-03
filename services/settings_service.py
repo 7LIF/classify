@@ -3,8 +3,8 @@
 ################################################################################
 
 from random import sample
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session, selectinload
 from data.database import database_session
 from data.enum_tables import ItemStatusEnum
 from data.models import District, Category, Item, Subcategory, ExternalProvider
@@ -52,11 +52,16 @@ def get_accepted_district(
     
     
 def get_random_districts_with_items(
-    count: int, 
+    count: int,
     db_session: Session | None = None
 ) -> list[District]:
     with database_session(db_session) as db_session:
-        stmt = select(District).join(Item, Item.district_id == District.id).where(Item.status_id == ItemStatusEnum.Active.id)
+        stmt = (
+            select(District)
+            .join(Item, Item.district_id == District.id)
+            .where(Item.status_id == ItemStatusEnum.Active.id)
+            .distinct(District.id)                                          # distinct avoid duplicate districts
+        )
         all_districts = db_session.execute(stmt).scalars().all()
         districts_with_items = [district for district in all_districts if district.items]
         if len(districts_with_items) <= count:
@@ -65,6 +70,51 @@ def get_random_districts_with_items(
 
 
 
+
+# a função seguinte retorna um dicionário {'Veículos': 1, 'Eletrónicos': 5, 'Mobiliário': 2, 'Vestuário': 0, 'Acessórios': 0, 'Livros': 2, 'Outros': 2}
+def count_items_in_categories(db_session: Session | None = None) -> dict[str, int]:
+    with database_session(db_session) as db_session:
+        stmt = (
+            select(Category)
+            .options(selectinload(Category.subcategories))
+        )
+        categories = db_session.execute(stmt).scalars().all()
+
+        items_per_category = {}
+
+        for category in categories:
+            sum_items = 0
+
+            for subcategory in category.subcategories:
+                subcategory_items = (
+                    db_session.query(Item)
+                    .filter(Item.subcategory_id == subcategory.id)
+                    .count()
+                )
+                sum_items += subcategory_items
+
+            items_per_category[category.name] = sum_items
+
+        return items_per_category
+
+
+
+def get_random_districts_with_items(
+    count: int,
+    db_session: Session | None = None
+) -> list[District]:
+    with database_session(db_session) as db_session:
+        stmt = (
+            select(District)
+            .join(Item, Item.district_id == District.id)
+            .where(Item.status_id == ItemStatusEnum.Active.id)
+            .distinct(District.id)                                          # distinct avoid duplicate districts
+        )
+        all_districts = db_session.execute(stmt).scalars().all()
+        districts_with_items = [district for district in all_districts if district.items]
+        if len(districts_with_items) <= count:
+            return districts_with_items
+        return sample(districts_with_items, count)
 
 
 
@@ -104,6 +154,11 @@ def count_accepted_categories() -> int:
 
 
 
+
+
+
+
+
 def create_subcategory(
         name: str,
         description: str,
@@ -121,6 +176,13 @@ def create_subcategory(
         db_session.commit()
         db_session.refresh(subcat)
         return subcat
+
+
+def subcategory_count(db_session: Session | None = None) -> int:
+    with database_session(db_session) as db_session:
+        select_stm = select(func.count()).select_from(Subcategory)
+        return db_session.execute(select_stm).scalar_one()
+
 
 
 def accept_external_auth_provider(

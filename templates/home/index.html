@@ -24,7 +24,7 @@
 									<div class="col-lg-4 col-md-4 col-12 p-0">
 										<div class="search-input">
 											<label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-											<input type="text" name="keyword" id="keyword" placeholder="O querocura?">
+											<input type="text" name="keyword" id="keyword" placeholder="O que Procura?">
 										</div>
 									</div>
 
@@ -87,7 +87,7 @@
 											<img src="${categories_images_url}/${category.image_url}" alt="#">
 										</div>
 										<h3>${category.name}</h3>
-										<h5 class="total">${num_categories}</h5>
+										<h5 class="total">${items_in_category[category.name]}</h5>
 									</a>
 									<!--/ End Single Category -->
 								</__repeat__>
@@ -147,26 +147,34 @@
 				<div class="row">
 					<div class="col-lg-3 col-md-3 col-12">
 						<div class="single-achievement wow fadeInUp" data-wow-delay=".2s">
-							<h3 class="counter"><span id="secondo1" class="countup" cup-end="1250">1250</span>+</h3>
-							<p>Regular Ads</p>
+							<h3 class="counter"><span id="secondo1" class="countup" cup-end="${num_items}">${num_items}</span></h3>
+							<p>Anúncios</p>
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-3 col-12">
 						<div class="single-achievement wow fadeInUp" data-wow-delay=".4s">
-							<h3 class="counter"><span id="secondo2" class="countup" cup-end="350">350</span>+</h3>
-							<p>Locations</p>
+							<h3 class="counter"><span id="secondo2" class="countup" cup-end="${num_items}">${num_items}</span></h3>
+							<p>Localizações</p>
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-3 col-12">
-						<div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
-							<h3 class="counter"><span id="secondo3" class="countup" cup-end="2500">2500</span>+</h3>
-							<p>Reguler Members</p>
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".4s">
+							<h3 class="counter"><span id="secondo2" class="countup" cup-end="${num_subcategories}">${num_subcategories}</span></h3>
+							<p>Subcategorias</p>
 						</div>
 					</div>
+					<!-- ainda não implementado
 					<div class="col-lg-3 col-md-3 col-12">
 						<div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
-							<h3 class="counter"><span id="secondo3" class="countup" cup-end="250">250</span>+</h3>
+							<h3 class="counter"><span id="secondo3" class="countup" cup-end="250">250</span></h3>
 							<p>Premium Ads</p>
+						</div>
+					</div>
+					-->
+					<div class="col-lg-3 col-md-3 col-12">
+						<div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
+							<h3 class="counter"><span id="secondo3" class="countup" cup-end="${num_users}">${num_users}</span></h3>
+							<p>Utilizadores</p>
 						</div>
 					</div>
 				</div>
@@ -316,13 +324,13 @@
 						<div class="inner">
 							<div class="content">
 								<h2 class="wow fadeInUp" data-wow-delay=".4s">
-									Do you have something to sell?
+									Tem algo para vender?
 								</h2>
 								<p class="wow fadeInUp" data-wow-delay=".6s">
-									Post your ad for free on ClassiGrids
+									Publique o seu anúncio gratuitamente no Classify
 								</p>
 								<div class="button wow fadeInUp" data-wow-delay=".8s">
-									<a href="javascript:void(0)" class="btn">Post an ad now</a>
+									<a href="javascript:void(0)" class="btn">Publicar Agora</a>
 								</div>
 							</div>
 						</div>
