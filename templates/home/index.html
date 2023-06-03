@@ -330,7 +330,8 @@
 									Publique o seu anúncio gratuitamente no Classify
 								</p>
 								<div class="button wow fadeInUp" data-wow-delay=".8s">
-									<a href="javascript:void(0)" class="btn">Publicar Agora</a>
+									<a tal:condition="not is_logged_in" href="/account/register" class="btn">Publicar Agora</a>
+									<a tal:condition="is_logged_in" href="/account/newAdPost" class="btn">Publicar Agora</a>
 								</div>
 							</div>
 						</div>
@@ -348,10 +349,10 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="section-title">
-							<h2 class="wow fadeInUp" data-wow-delay=".4s">How it Works</h2>
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Como Funciona</h2>
 							<p class="wow fadeInUp" data-wow-delay=".6s">
-								There are many variations of passages of Lorem
-								Ipsum available, but the majority have suffered alteration in some form.
+								Junte-se à comunidade Classify hoje mesmo! Aproveite a nossa plataforma para vender 
+								os seus artigos de forma rápida e eficiente, em apenas três passos simples:
 							</p>
 						</div>
 					</div>
@@ -361,9 +362,8 @@
 						<!-- Start Single Work -->
 						<div class="single-work wow fadeInUp" data-wow-delay=".2s">
 							<span class="serial">01</span>
-							<h3>Create Account</h3>
-							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
-								incididunt labore.</p>
+							<h3>Crie uma Conta</h3>
+							<p>Registe-se gratuitamente e crie a sua conta pessoal. É rápido e fácil!</p>
 						</div>
 						<!--/ End Single Work -->
 					</div>
@@ -371,9 +371,11 @@
 						<!-- Start Single Work -->
 						<div class="single-work wow fadeInUp" data-wow-delay=".4s">
 							<span class="serial">02</span>
-							<h3>Post Your Ads</h3>
-							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
-								incididunt labore.</p>
+							<h3>Publique os seus Anúncios</h3>
+							<p>
+								Faça o upload das informações e imagens dos seus itens para criar anúncios atrativos. 
+								Descreva-os detalhadamente e defina um preço justo.
+							</p>
 						</div>
 						<!--/ End Single Work -->
 					</div>
@@ -381,9 +383,11 @@
 						<!-- Start Single Work -->
 						<div class="single-work wow fadeInUp" data-wow-delay=".6s">
 							<span class="serial">03</span>
-							<h3>Sell Your Item</h3>
-							<p>Lorem ipsum dolor sit amet constur adipisicing sed do eiusmod tempor
-								incididunt labore.</p>
+							<h3>Venda os seus Artigos</h3>
+							<p>
+								Aguarde pelas mensagens e ligações dos potenciais compradores interessados nos seus itens. 
+								Negocie diretamente com eles e conclua a venda de forma segura.
+							</p>
 						</div>
 						<!--/ End Single Work -->
 					</div>
@@ -505,10 +509,10 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="section-title">
-							<h2 class="wow fadeInUp" data-wow-delay=".4s">Why Choose Us</h2>
+							<h2 class="wow fadeInUp" data-wow-delay=".4s">Porquê Escolher o Classify</h2>
 							<p class="wow fadeInUp" data-wow-delay=".6s">
-								There are many variations of passages of Lorem
-								Ipsum available, but the majority have suffered alteration in some form.
+								Na plataforma de anúncios da Classify, oferecemos diversas 
+								vantagens para tornar a sua experiência a melhor possível:
 							</p>
 						</div>
 					</div>
@@ -520,47 +524,11 @@
 								<div class="col-lg-4 col-md-6 col-12">
 									<!-- Start Single List -->
 									<div class="single-list wow fadeInUp" data-wow-delay=".2s">
-										<i class="lni lni-book"></i>
-										<h4>Fully Documented</h4>
-										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
-										</p>
-									</div>
-									<!-- End Single List -->
-								</div>
-								<div class="col-lg-4 col-md-6 col-12">
-									<!-- Start Single List -->
-									<div class="single-list wow fadeInUp" data-wow-delay=".4s">
-										<i class="lni lni-leaf"></i>
-										<h4>Clean & Modern Design</h4>
-										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
-										</p>
-									</div>
-									<!-- End Single List -->
-								</div>
-								<div class="col-lg-4 col-md-6 col-12">
-									<!-- Start Single List -->
-									<div class="single-list wow fadeInUp" data-wow-delay=".6s">
 										<i class="lni lni-cog"></i>
-										<h4>Completely Customizable</h4>
+										<h4>Plataforma Versátil</h4>
 										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
-										</p>
-									</div>
-									<!-- End Single List -->
-								</div>
-								<div class="col-lg-4 col-md-6 col-12">
-									<!-- Start Single List -->
-									<div class="single-list wow fadeInUp" data-wow-delay=".2s">
-										<i class="lni lni-pointer-up"></i>
-										<h4>User Friendly</h4>
-										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
+											Nossa plataforma permite que compre e venda uma ampla variedade de produtos, desde 
+											carros usados até telefones móveis. Econtrará tudo o que precisa em um só lugar.
 										</p>
 									</div>
 									<!-- End Single List -->
@@ -568,11 +536,11 @@
 								<div class="col-lg-4 col-md-6 col-12">
 									<!-- Start Single List -->
 									<div class="single-list wow fadeInUp" data-wow-delay=".4s">
-										<i class="lni lni-layout"></i>
-										<h4>Awesome Layout</h4>
+										<i class="lni lni-pointer-up"></i>
+										<h4>Facilidade de Uso</h4>
 										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
+											Nossa plataforma é intuitiva e fácil de usar. Com navegação simplificada e recursos amigáveis, 
+											você poderá encontrar e publicar anúncios de forma rápida e eficiente.
 										</p>
 									</div>
 									<!-- End Single List -->
@@ -580,14 +548,14 @@
 								<div class="col-lg-4 col-md-6 col-12">
 									<!-- Start Single List -->
 									<div class="single-list wow fadeInUp" data-wow-delay=".6s">
-										<i class="lni lni-laptop-phone"></i>
-										<h4>Fully Responsive</h4>
+										<i class="lni lni-layout"></i>
+										<h4>Design Moderno e Personalizável</h4>
 										<p>
-											Buy and sell everything from used cars to mobile
-											phones and computer or search for property.
+											Nosso design limpo e moderno oferece uma experiência visualmente agradável. Além disso, 
+											você pode personalizar de acordo com suas preferências para criar uma experiência única.
 										</p>
 									</div>
-									<!--/ End Single List -->
+									<!-- End Single List -->
 								</div>
 							</div>
 						</div>
