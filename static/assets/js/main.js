@@ -58,11 +58,15 @@
     });
     
       //===== mobile-menu-btn
-	let navbarToggler = document.querySelector(".mobile-menu-btn");
-	navbarToggler.addEventListener('click', function () {
-		navbarToggler.classList.toggle("active");
-	});
-
-
-})();
+      let navbarToggler = document.querySelector(".mobile-menu-btn");
+      if (navbarToggler)
+        navbarToggler.addEventListener("click", function () {
+          navbarToggler.classList.toggle("active");
+        });
+    })();
+    $(document).ready(function () {
+      $(".img-alt").click(function () {
+        $("#current").attr("src", $(this).attr("src"));
+      });
+    });
 

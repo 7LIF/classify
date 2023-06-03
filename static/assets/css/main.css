@@ -4243,7 +4243,8 @@ blockquote .shape {
     margin-top: 30px;
     border: 1px solid #3333331a;
     -webkit-transition: all .4s ease;
-    transition: all .4s ease
+    transition: all .4s ease;
+    height: 400px;
 }
 
 .single-item-grid:hover {
@@ -4263,8 +4264,10 @@ blockquote .shape {
 
 .single-item-grid .image img {
     width: 100%;
+    height: 200px;
     -webkit-transition: all .3s ease;
     transition: all .3s ease
+
 }
 
 .single-item-grid .image .cross-badge {
@@ -6062,6 +6065,11 @@ blockquote .shape {
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 1em 1em;
     margin-top: 1em
+}
+
+.item-details .product-images .images img {
+    width: 110px;
+    height: 82px;
 }
 
 @-webkit-keyframes fadeIn {

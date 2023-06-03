@@ -65,7 +65,8 @@ def adPostDetails_viewmodel(item_id: int) -> ViewModel:
     if item := iserv.get_item_by_id(item_id):
         return ViewModel(
             item = item,
-            items_imagens_url = conf('ITEMS_IMAGES_URL'),
+            items_images_url = conf('ITEMS_IMAGES_URL'),
+            users_images_url = conf('USERS_IMAGES_URL'),
             url_website = conf('URL_WEBSITE'),
         )
     return ViewModel(

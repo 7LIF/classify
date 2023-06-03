@@ -10,5 +10,7 @@ passlib
 argon2_cffi
 python-jose[cryptography]
 aiohttp
+aiofiles
 docopt
 itsdangerous
+

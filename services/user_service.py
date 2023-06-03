@@ -142,14 +142,7 @@ def get_user_by_id(
         )
         return db_session.execute(select_stmt).scalar_one_or_none()
 
-#def get_user_id_by_name(
-#    name: str, 
-#    db_session: Session | None = None,
-#) -> int | None:
-#    user = db_session.query(User).filter_by(name=name).first()
-#    if not user:
-#        raise InvalidUserAttribute(f'User with name {name} does not exist')
-#    return user.user_id
+
 
 def get_user_id_by_name(
     name: str, 
@@ -400,6 +393,13 @@ def ensure_user(
     user = userv.ensure_user_is(user_or_id, User, db_session)
     assert isinstance(user, User)
     return user
+
+
+
+
+
+
+
 
 
 def create_testimonial(

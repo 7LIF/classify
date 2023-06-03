@@ -42,26 +42,26 @@
 									<div class="product-images">
 										<main id="gallery">
 											<div class="main-img">
-												<img src="{$items_images_url}/${item.main_image_url}" id="current" alt="#"/>
+												<img src="${items_images_url}/${item.main_image_url}" id="current" alt="#"/>
 											</div>
 											<div class="images">
-												<img src="/static/assets/images/item-details/image1.jpg" class="img" alt="#"/>
-												<img src="/static/assets/images/item-details/image2.jpg" class="img" alt="#"/>
-												<img src="/static/assets/images/item-details/image3.jpg" class="img" alt="#"/>
-												<img src="/static/assets/images/item-details/image4.jpg" class="img" alt="#"/>
-												<img src="/static/assets/images/item-details/image5.jpg" class="img" alt="#"/>
+												<img src="${items_images_url}/${item.main_image_url}" class="img img-alt"  alt="#" tal:condition="item.main_image_url != ''" />
+												<img src="${items_images_url}/${item.image1_url}" class="img img-alt" alt="#" tal:condition="item.image1_url != ''" />
+												<img src="${items_images_url}/${item.image2_url}" class="img img-alt" alt="#" tal:condition="item.image2_url != ''" />
+												<img src="${items_images_url}/${item.image3_url}" class="img img-alt" alt="#" tal:condition="item.image3_url != ''" />
+												<img src="${items_images_url}/${item.image4_url}" class="img img-alt" alt="#" tal:condition="item.image4_url != ''" />
 											</div>
 										</main>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-12 col-12">
 									<div class="product-info">
-										<h2 class="title">MacBook Pro 13 polegadas</h2>
+										<h2 class="title">${item.title}</h2>
 										<p class="location">
-											<i class="lni lni-map-marker"></i
-											><a href="javascript:void(0)">Lisboa</a>
+											<i class="lni lni-map-marker"></i><a href="javascript:void(0)">${item.district.name}</a>
 										</p>
-										<h3 class="price">999€</h3>
+										<h3 class="price">${item.price}€</h3>
+										<!-- ainda não implementado
 										<div class="list-info">
 											<h4>Informações</h4>
 											<ul>
@@ -70,8 +70,10 @@
 												<li><span>Model:</span> Mackbook Pro</li>
 											</ul>
 										</div>
+										-->
 										<div class="contact-info">
 											<ul>
+												<!-- ainda não implementado
 												<li>
 													<a href="tel:+002562352589" class="call">
 														<i class="lni lni-phone-set"></i>
@@ -79,6 +81,7 @@
 														<span>Call & Get more info</span>
 													</a>
 												</li>
+												-->
 												<li>
 													<a href="/cdn-cgi/l/email-protection#95f0edf4f8e5f9f0d5f2f8f4fcf9bbf6faf8" class="mail">
 														<i class="lni lni-envelope"></i>
@@ -115,45 +118,8 @@
 								<div class="col-lg-8 col-md-7 col-12">
 									<div class="single-block description">
 										<h3>Descrição</h3>
-										<p>
-											Vendo MacBook Pro de 13 polegadas em excelente estado. <br />
-											Este MacBook Pro é equipado com um processador Intel Core i5 de 8ª geração, 
-											8 GB de RAM e um SSD de 256 GB, é perfeito para trabalhos criativos, edição de fotos e vídeo. <br />
-											Tem teclado retroiluminado e trackpad com tecnologia Force Touch. <br />
-											Inclui sistema operacional macOS Big Sur mais recente e está pronto para ser usado imediatamente. <br />
-											
-										</p>
-										<ul>
-											<li>Modelo: Apple MacBook Pro</li>
-											<li>Chip Apple M1 com CPU de 8 núcleos e GPU de 8 núcleos</li>
-											<li>8GB RAM</li>
-											<li>256GB SSD</li>
-											<li>13.3 polegadas 2560x1600</li>
-										</ul>
-										<p>
-											Este MacBook Pro é perfeito para profissionais que precisam de um laptop 
-											confiável e poderoso para trabalhar, estudar ou se divertir.
-										</p>
+										<p>${item.description}</p>
 									</div>
-
-									<div class="single-block comments">
-										<h3>Comentários</h3>
-
-										<div class="single-comment">
-											<img src="/static/assets/images/testimonial/testi2.jpg" alt="#" />
-											<div class="content">
-												<h4>Luís Faria</h4>
-												<span>25 Feb, 2023</span>
-												<p>
-													Este MacBook Pro parece incrível! Estive à procura de um laptop confiável 
-													e potente para trabalhar em projetos de design gráfico e edição de vídeo, 
-													e esse me parece perfeito. Infelizmente já comprei um na semana passada.
-												</p>
-												<a href="javascript:void(0)" class="reply"><i class="lni lni-reply"></i> Responder</a>
-											</div>
-										</div>
-									</div>
-
 									<div class="single-block comment-form">
 										<h3>Poste um comentário</h3>
 										<form action="#" method="POST">
@@ -187,39 +153,11 @@
 										<div class="single-block author">
 											<h3>Anunciante</h3>
 											<div class="content">
-												<img src="/static/assets/images/testimonial/testi3.jpg" alt="#" />
-												<h4>Liliana Mateus</h4>
+												<img src="${users_images_url}/${item.user.profile_image}" alt="#" />
+												<h4>${item.user.name}</h4>
 												<span>Membro desde 15 de Maio 2023</span>
 												<a href="javascript:void(0)" class="see-all">Ver todos anúncios</a>
 											</div>
-										</div>
-
-										<div class="single-block contant-seller comment-form">
-											<h3>Contacte o anuciante</h3>
-											<form action="#" method="POST">
-												<div class="row">
-													<div class="col-12">
-														<div class="form-box form-group">
-															<input type="text" name="name" class="form-control form-control-custom" placeholder="Nome"/>
-														</div>
-													</div>
-													<div class="col-12">
-														<div class="form-box form-group">
-															<input type="email" name="email" class="form-control form-control-custom" placeholder="Email"/>
-														</div>
-													</div>
-													<div class="col-12">
-														<div class="form-box form-group">
-															<textarea name="#" class="form-control form-control-custom" placeholder="Escreva a mensagem"></textarea>
-														</div>
-													</div>
-													<div class="col-12">
-														<div class="button">
-															<button type="submit" class="btn">Enviar Mensagem</button>
-														</div>
-													</div>
-												</div>
-											</form>
 										</div>
 
 										<div class="single-block">
