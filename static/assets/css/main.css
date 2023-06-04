@@ -1972,6 +1972,10 @@ ul, ol {
     padding-right: 45px
 }
 
+.search-page{
+    margin-top: 0px;
+}
+
 .search-form.style2 {
     padding: 0;
     padding: 50px;
@@ -3773,8 +3777,17 @@ blockquote .shape {
 
 .category-sidebar .single-widget .list li a i {
     display: inline-block;
-    margin-right: 5px
+    margin-right: 5px;
 }
+
+.category-sidebar .single-widget .list li a img {
+    display: inline-block;
+    margin-right: 5px;
+    color: #888;
+    position: relative;
+    height: 20px;
+}
+
 
 .category-sidebar .single-widget .list li a span {
     height: 30px;

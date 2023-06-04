@@ -40,8 +40,14 @@ async def adPost():
     
 def adPost_viewmodel() -> ViewModel:
         return ViewModel(
+        categories_images_url = conf('CATEGORIES_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
+        num_categories = setserv.count_accepted_categories(),
         num_items = iserv.item_count(),
+        location_district = setserv.get_accepted_district(),
+        list_category = setserv.get_accepted_category(),
+        items_in_category = setserv.count_items_in_categories(),
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
     )
