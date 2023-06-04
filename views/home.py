@@ -60,7 +60,9 @@ def index_viewmodel() -> ViewModel:
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
     )
 
-        
+@router.get('/search')
+def search_items():
+    pass
 
 ################################################################################
 ##      Define a route for the howWorks page
