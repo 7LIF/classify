@@ -1,6 +1,6 @@
 # pip install pillow
 
-# this file have been inside the images folder
+# this file have been inside the images folder to run it
 
 from PIL import Image
 import os, glob
