@@ -2,7 +2,7 @@
 ##      Importing necessary modules
 ################################################################################
 import decimal as dec
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi_chameleon import template
 from common.common import format_date
 from common.viewmodel import ViewModel
@@ -13,6 +13,13 @@ from services import (
     settings_service as setserv,
 )
 
+
+################################################################################
+##      Constants
+################################################################################
+
+LATEST_ITEMS_COUNT = 10
+RANDOM_ITEMS_COUNT = 10
 
 ################################################################################
 ##      SETUP FastAPI - Create an instance of the router
@@ -31,27 +38,14 @@ router = APIRouter(prefix = '/adPost')
 async def adPost():
     return adPost_viewmodel()
     
-def adPost_viewmodel():
+def adPost_viewmodel() -> ViewModel:
         return ViewModel(
-        error = None
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        num_items = iserv.item_count(),
+        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
+        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
     )
 
-
-
-
-################################################################################
-##      Define a route for the adPostSearch page
-################################################################################
-
-@router.get('/adPostSearch')
-@template()
-async def adPostSearch():
-    return adPostSearch_viewmodel()
-    
-def adPostSearch_viewmodel():
-        return ViewModel(
-        error = None
-    )
 
 
 
