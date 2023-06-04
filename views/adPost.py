@@ -4,6 +4,7 @@
 import decimal as dec
 from fastapi import APIRouter
 from fastapi_chameleon import template
+from common.common import format_date
 from common.viewmodel import ViewModel
 from config_settings import conf
 from services import (
@@ -37,15 +38,15 @@ def adPost_viewmodel():
 
 
 ################################################################################
-##      Define a route for the adPostListing page
+##      Define a route for the adPostSearch page
 ################################################################################
 
-@router.get('/adPostListing')
+@router.get('/adPostSearch')
 @template()
-async def adPostListing():
-    return adPostListing_viewmodel()
+async def adPostSearch():
+    return adPostSearch_viewmodel()
     
-def adPostListing_viewmodel():
+def adPostSearch_viewmodel():
         return ViewModel(
         error = None
     )
@@ -68,6 +69,7 @@ def adPostDetails_viewmodel(item_id: int) -> ViewModel:
             items_images_url = conf('ITEMS_IMAGES_URL'),
             users_images_url = conf('USERS_IMAGES_URL'),
             url_website = conf('URL_WEBSITE'),
+            user_created = format_date(userv.get_user_by_id(item.user_id).date_created)
         )
     return ViewModel(
         error = True,

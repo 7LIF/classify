@@ -39,8 +39,7 @@ __all__ = (
 ##      Importing necessary modules
 ################################################################################
 
-import calendar
-import datetime
+import calendar, datetime, locale
 import math, random, re, string, secrets
 from datetime import date
 from typing import Any, Callable, Iterable, Iterator
@@ -142,6 +141,14 @@ def format_date(date_string):
     year = date_obj.year
 
     return f"{day} de {month} de {year}"
+
+
+def format_date(data):
+    locale.setlocale(locale.LC_ALL, 'pt')
+    day = data.day
+    month = data.strftime('%B')
+    year = data.year
+    return f'{day} de {month} de {year}'
 
 
 

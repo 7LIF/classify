@@ -3,7 +3,7 @@ from random import sample
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 from data.database import database_session
-from data.models import Item, ItemStatusEnum, District
+from data.models import Category, Item, ItemStatusEnum, District, Subcategory
 
 
 __all__ = (
@@ -13,7 +13,11 @@ __all__ = (
     'available_items',
     'get_item_by_id',
     'get_district_name_from_item',
+    'search_items',
 )
+
+
+MAX_ITEMS_SEARCH = 100
 
 
 def item_count(db_session: Session | None = None) -> int:
@@ -141,3 +145,20 @@ def get_district_name_from_item(
 #        return district.name
 #    else:
 #        return None
+
+
+
+
+async def search_items(keyword: str = None, category: str = None, district: str = None):
+    query = Item.query
+
+    if keyword:
+        query = query.filter(Item.title.ilike(f"%{keyword}%"))
+
+    if category:
+        query = query.join(Subcategory).join(Category).filter(Category.name == category)
+
+    if district:
+        query = query.join(District).filter(District.name == district)
+
+    return await query.limit(MAX_ITEMS_SEARCH).all()

@@ -4244,6 +4244,10 @@ blockquote .shape {
     border: 1px solid #3333331a;
     -webkit-transition: all .4s ease;
     transition: all .4s ease;
+    
+}
+
+.main-page-img-grid {
     height: 400px;
 }
 
@@ -6054,10 +6058,17 @@ blockquote .shape {
     border-radius: 6px
 }
 
-.item-details .product-images img {
+.item-details .product-images  img {
     width: 100%;
     cursor: pointer
 }
+
+.item-details .product-images .main-img img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+}
+
 
 .item-details .product-images .images {
     display: -ms-grid;

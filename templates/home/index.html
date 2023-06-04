@@ -18,50 +18,52 @@
 							</div>
 
 							<!-- Start Search Form -->
-							<div class="search-form wow fadeInUp" data-wow-delay=".7s">
-								<div class="row">
+							<form action="/adPostSearch" method="post" >
+								<div class="search-form wow fadeInUp" data-wow-delay=".7s">
+									<div class="row">
 
-									<div class="col-lg-4 col-md-4 col-12 p-0">
-										<div class="search-input">
-											<label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-											<input type="text" name="keyword" id="keyword" placeholder="O que Procura?">
+										<div class="col-lg-4 col-md-4 col-12 p-0">
+											<div class="search-input">
+												<label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
+												<input type="text" name="keyword" id="keyword" placeholder="O que Procura?">
+											</div>
 										</div>
-									</div>
 
-									<div class="col-lg-3 col-md-3 col-12 p-0">
-										<div class="search-input">
-											<label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-											<select name="category" id="category">
-												<option value="none" selected disabled>Categorias</option>
-												<option value="none">Todas as Categorias</option>
-												<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
-													<option value="none">${category.name}</option>
-												</__repeat__>
-											</select>
+										<div class="col-lg-3 col-md-3 col-12 p-0">
+											<div class="search-input">
+												<label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
+												<select name="category" id="category">
+													<option value="none" selected disabled>Categorias</option>
+													<option value="none">Todas as Categorias</option>
+													<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
+														<option value="none">${category.name}</option>
+													</__repeat__>
+												</select>
+											</div>
 										</div>
-									</div>
 
-									<div class="col-lg-3 col-md-3 col-12 p-0">
-										<div class="search-input">
-											<label for="location"><i class="lni lni-map-marker theme-color"></i></label>
-											<select name="location" id="location">
-												<option value="none" selected disabled>Localização</option>
-												<option value="none">Todas as Localizações</option>
-												<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
-												<option value="none">${district.name}</option>
-												</__repeat__>
-											</select>
+										<div class="col-lg-3 col-md-3 col-12 p-0">
+											<div class="search-input">
+												<label for="location"><i class="lni lni-map-marker theme-color"></i></label>
+												<select name="location" id="location">
+													<option value="none" selected disabled>Localização</option>
+													<option value="none">Todas as Localizações</option>
+													<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
+													<option value="none">${district.name}</option>
+													</__repeat__>
+												</select>
+											</div>
 										</div>
-									</div>
 
-									<div class="col-lg-2 col-md-2 col-12 p-0">
-										<div class="search-btn button">
-											<button class="btn"><i class="lni lni-search-alt"></i> Pesquisar</button>
+										<div class="col-lg-2 col-md-2 col-12 p-0">
+											<div class="search-btn button">
+												<button class="btn"><i class="lni lni-search-alt"></i> Pesquisar</button>
+											</div>
 										</div>
-									</div>
 
+									</div>
 								</div>
-							</div>
+							</form>
 							<!-- End Search Form -->
 
 						</div>
@@ -220,7 +222,7 @@
 									<!-- Start Repeat Latest Adds (Loop For) -->
 									<__repeat__ tal:repeat="item latest_items" tal:omit-tag="True">
 										<div class="col-lg-3 col-md-4 col-12">
-											<div class="single-item-grid">
+											<div class="single-item-grid main-page-img-grid">
 												<div class="image">
 													<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
 												</div>
@@ -252,7 +254,7 @@
 									<!-- Start Repeat Popular Adds (Loop For) -->
 									<__repeat__ tal:repeat="item popular_items" tal:omit-tag="True">
 										<div class="col-lg-3 col-md-4 col-12">
-											<div class="single-item-grid">
+											<div class="single-item-grid main-page-img-grid">
 												<div class="image">
 													<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
 												</div>
@@ -283,7 +285,7 @@
 									<!-- Start Repeat Random Adds (Loop For) -->
 									<__repeat__ tal:repeat="item random_items" tal:omit-tag="True">
 										<div class="col-lg-3 col-md-4 col-12">
-											<div class="single-item-grid">
+											<div class="single-item-grid main-page-img-grid">
 												<div class="image">
 													<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>													
 												</div>
