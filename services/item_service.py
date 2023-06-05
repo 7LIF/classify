@@ -1,6 +1,6 @@
 from decimal import Decimal as dec
 from random import sample
-from sqlalchemy import select, func
+from sqlalchemy import select, or_, func
 from sqlalchemy.orm import Session
 from data.database import database_session
 from data.models import Category, Item, ItemStatusEnum, District, Subcategory
@@ -149,16 +149,15 @@ def get_district_name_from_item(
 
 
 
-async def search_items(keyword: str = None, category: str = None, district: str = None):
-    query = Item.query
+#def search_item(
+#    keyword: str | None = None, 
+#    db_session: Session | None = None
+#) -> list[Item] | None:
+#    with database_session(db_session) as db_session:   
+#        select_stmt = select(Item).where(Item.title == keyword)
+#        return db_session.execute(select_stmt).scalars().all()
 
-    if keyword:
-        query = query.filter(Item.title.ilike(f"%{keyword}%"))
-
-    if category:
-        query = query.join(Subcategory).join(Category).filter(Category.name == category)
-
-    if district:
-        query = query.join(District).filter(District.name == district)
-
-    return await query.limit(MAX_ITEMS_SEARCH).all()
+def search_item(keyword: str | None = None, db_session: Session | None = None) -> list[Item] | None:
+    with database_session(db_session) as db_session:   
+        select_stmt = select(Item).where(or_(Item.title.ilike(f'%{keyword}%'), Item.description.ilike(f'%{keyword}%')))
+        return db_session.execute(select_stmt).scalars().all()

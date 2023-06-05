@@ -74,10 +74,7 @@ def get_random_districts_with_items(
 # a função seguinte retorna um dicionário {'Veículos': 1, 'Eletrónicos': 5, 'Mobiliário': 2, 'Vestuário': 0, 'Acessórios': 0, 'Livros': 2, 'Outros': 2}
 def count_items_in_categories(db_session: Session | None = None) -> dict[str, int]:
     with database_session(db_session) as db_session:
-        stmt = (
-            select(Category)
-            .options(selectinload(Category.subcategories))
-        )
+        stmt = (select(Category).options(selectinload(Category.subcategories)))
         categories = db_session.execute(stmt).scalars().all()
 
         items_per_category = {}

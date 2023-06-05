@@ -3,7 +3,8 @@
 ################################################################################
 from typing import Optional
 from unicodedata import category
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response
+from fastapi.encoders import jsonable_encoder
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
 from config_settings import conf
@@ -13,6 +14,7 @@ from services import (
     settings_service as setserv,
 )
 
+from common.auth import get_session
 
 ################################################################################
 ##      Constants
@@ -60,6 +62,42 @@ def index_viewmodel() -> ViewModel:
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
     )
+
+
+
+#################################################################################
+
+@router.get('/search')
+@template(template_file='adPost/adPost.html')
+async def search(request: Request):
+    keyword = request.query_params.get('keyword')
+    if keyword is not None:
+        viewmodel = search_viewmodel(keyword)
+        if viewmodel['keyword'] is not None:
+            return viewmodel  # Retorna a viewmodel diretamente
+        else:
+            return Response(content="Nenhum resultado encontrado", status_code=200)
+    else:
+        return Response(content="Palavra-chave não encontrada", status_code=400)
+
+
+def search_viewmodel(keyword: str | None) -> ViewModel:
+    return ViewModel(
+        keyword=iserv.search_item(keyword),
+        
+        categories_images_url = conf('CATEGORIES_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        num_categories = setserv.count_accepted_categories(),
+        num_items = iserv.item_count(),
+        location_district = setserv.get_accepted_district(),
+        list_category = setserv.get_accepted_category(),
+        items_in_category = setserv.count_items_in_categories(),
+        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
+        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
+    )
+
+
 
 
 

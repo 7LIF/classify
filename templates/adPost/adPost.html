@@ -124,29 +124,31 @@
 									<div class="tab-pane fade" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
 										
 										<div class="row">
-											<!-- Start Repeat Latest Adds (Loop For) -->
-											<__repeat__ tal:repeat="item latest_items" tal:omit-tag="True">
-												<div class="col-lg-4 col-md-6 col-12">
-													<div class="single-item-grid">
-														<div class="image">
-															<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
-														</div>
-														<div class="content">
-															<a href="javascript:void(0)" class="tag">${item.subcategory.category.name} &nbsp;>&nbsp; ${item.subcategory.name}</a>
-															<h3 class="title">
-																<a href="/adPost/${item.id}">${item.title}</a>
-															</h3>
-															<p class="location">
-																<a href="javascript:void(0)"><i	class="lni lni-map-marker"></i>${item.district.name}</a></p>
-															<ul class="info">
-																<li class="price">${item.price}€</li>
-																<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
-															</ul>
+											<__if__ tal:condition="keyword or latest_items" tal:omit-tag="True">
+												<!-- Start Repeat keyword or Latest Ads (Loop For) -->
+												<__repeat__ tal:repeat="item (keyword or latest_items)" tal:omit-tag="True">
+													<div class="col-lg-4 col-md-6 col-12">
+														<div class="single-item-grid">
+															<div class="image">
+																<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
+															</div>
+															<div class="content">
+																<a href="javascript:void(0)" class="tag">${item.subcategory.category.name} &nbsp;>&nbsp; ${item.subcategory.name}</a>
+																<h3 class="title">
+																	<a href="/adPost/${item.id}">${item.title}</a>
+																</h3>
+																<p class="location">
+																	<a href="javascript:void(0)"><i	class="lni lni-map-marker"></i>${item.district.name}</a></p>
+																<ul class="info">
+																	<li class="price">${item.price}€</li>
+																	<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+																</ul>
+															</div>
 														</div>
 													</div>
-												</div>
-											</__repeat__>
-											<!--/ End Repeat Latest Adds (Loop For) -->
+												</__repeat__>
+												<!--/ End Repeat keyword or Latest Ads (Loop For) -->
+											</__if__>		
 										</div>
 
 										<div class="row">
@@ -170,35 +172,37 @@
 
 									<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
 										<div class="row">
-											<!-- Start Repeat Latest Adds (Loop For) -->
-											<__repeat__ tal:repeat="item latest_items" tal:omit-tag="True">
-												<div class="col-lg-12 col-md-12 col-12">
-													<div class="single-item-grid">
-														<div class="row align-items-center">
-															<div class="col-lg-5 col-md-7 col-12">
-																<div class="image">
-																	<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
+											<__if__ tal:condition="keyword or latest_items" tal:omit-tag="True">
+												<!-- Start Repeat keyword or Latest Ads (Loop For) -->
+												<__repeat__ tal:repeat="item (keyword or latest_items)" tal:omit-tag="True">
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="single-item-grid">
+															<div class="row align-items-center">
+																<div class="col-lg-5 col-md-7 col-12">
+																	<div class="image">
+																		<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
+																	</div>
 																</div>
-															</div>
-															<div class="col-lg-7 col-md-5 col-12">
-																<div class="content">
-																	<a href="javascript:void(0)" class="tag">${item.subcategory.category.name} &nbsp;>&nbsp; ${item.subcategory.name}</a>
-																	<h3 class="title">
-																		<a href="/adPost/${item.id}">${item.title}</a>
-																	</h3>
-																	<p class="location"><a href="javascript:void(0)">
-																		<i class="lni lni-map-marker"></i>${item.district.name}</a></p>
-																	<ul class="info">
-																		<li class="price">${item.price}€</li>
-																		<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
-																	</ul>
+																<div class="col-lg-7 col-md-5 col-12">
+																	<div class="content">
+																		<a href="javascript:void(0)" class="tag">${item.subcategory.category.name} &nbsp;>&nbsp; ${item.subcategory.name}</a>
+																		<h3 class="title">
+																			<a href="/adPost/${item.id}">${item.title}</a>
+																		</h3>
+																		<p class="location"><a href="javascript:void(0)">
+																			<i class="lni lni-map-marker"></i>${item.district.name}</a></p>
+																		<ul class="info">
+																			<li class="price">${item.price}€</li>
+																			<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+																		</ul>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											</__repeat__>
-											<!--/ End Repeat Latest Adds (Loop For) -->								
+												</__repeat__>
+												<!--/ End Repeat keyword or Latest Ads (Loop For) -->
+											</__if__>					
 										</div>
 
 										<div class="row">
@@ -212,9 +216,9 @@
 														<li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
 													</ul>
 												</div>
-
 											</div>
 										</div>
+										
 									</div>
 								</div>
 							</div>

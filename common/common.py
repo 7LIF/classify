@@ -28,9 +28,8 @@ __all__ = (
     'find_first_if',
     'all_except',
     'random_str',
-    
-    #'is_valid_iso_date',
-    #'is_valid_birth_date',
+    'is_valid_iso_date',
+    'is_valid_birth_date',
 )
 
 
@@ -45,6 +44,10 @@ from datetime import date
 from typing import Any, Callable, Iterable, Iterator
 from config_settings import conf, config_value
 import common.viewmodel
+ 
+ 
+ 
+MIN_DATE = date.fromisoformat('1920-01-01')
  
  
  
@@ -126,21 +129,12 @@ def is_valid_iso_date(iso_date: str) -> bool:
         return True
 
 
+
 def is_valid_birth_date(birth_date: str) -> bool:
     return (is_valid_iso_date(birth_date) 
         and date.fromisoformat(birth_date) >= MIN_DATE)
 
 
-
-
-def format_date(date_string):
-    date_obj = datetime.datetime.strptime(date_string, "%Y-%m-%d")
-
-    day = date_obj.day
-    month = calendar.month_name[date_obj.month]
-    year = date_obj.year
-
-    return f"{day} de {month} de {year}"
 
 
 def format_date(data):

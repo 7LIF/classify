@@ -25,7 +25,7 @@ import passlib.hash as passlib_hash
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from config_settings import conf
-from common.common import coalesce, is_valid_email, find_first #find_in
+from common.common import coalesce, is_valid_email, find_first, is_valid_password #find_in
 from data.database import database_session
 from services import (
     item_service as iserv,
