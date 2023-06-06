@@ -1148,6 +1148,7 @@ ul, ol {
     color: #fff
 }
 
+
 .align-left {
     text-align: left
 }
@@ -3671,6 +3672,7 @@ blockquote .shape {
 .category-sidebar .single-widget.search form button:hover {
     color: #5830e0
 }
+
 
 .category-sidebar .single-widget.range input {
     color: #081828;
@@ -7149,8 +7151,11 @@ blockquote .shape {
     .button .btn {
         padding: 12px 25px;
         font-size: 14px;
-        font-weight: 500
+        font-weight: 500;
     }
+
+     
+
 
     #scrollUp {
         bottom: 55px

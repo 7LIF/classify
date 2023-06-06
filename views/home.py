@@ -1,10 +1,7 @@
 ################################################################################
 ##      Importing necessary modules
 ################################################################################
-from typing import Optional
-from unicodedata import category
 from fastapi import APIRouter, Request, Response
-from fastapi.encoders import jsonable_encoder
 from fastapi_chameleon import template
 from common.viewmodel import ViewModel
 from config_settings import conf
@@ -14,7 +11,6 @@ from services import (
     settings_service as setserv,
 )
 
-from common.auth import get_session
 
 ################################################################################
 ##      Constants
@@ -67,24 +63,23 @@ def index_viewmodel() -> ViewModel:
 
 #################################################################################
 
+
 @router.get('/search')
 @template(template_file='adPost/adPost.html')
 async def search(request: Request):
     keyword = request.query_params.get('keyword')
-    if keyword is not None:
-        viewmodel = search_viewmodel(keyword)
-        if viewmodel['keyword'] is not None:
-            return viewmodel  # Retorna a viewmodel diretamente
-        else:
-            return Response(content="Nenhum resultado encontrado", status_code=200)
-    else:
-        return Response(content="Palavra-chave não encontrada", status_code=400)
+    category = request.query_params.get('category')
+    district = request.query_params.get('location')
+    vm = await search_viewmodel(keyword, category, district)
 
+    return vm
+    
+    
 
-def search_viewmodel(keyword: str | None) -> ViewModel:
-    return ViewModel(
-        keyword=iserv.search_item(keyword),
-        
+async def search_viewmodel(keyword: str | None, category: str | None, district: str | None) -> ViewModel:
+    vm = ViewModel(
+        search=iserv.search_item(keyword, category, district),
+
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
@@ -93,14 +88,19 @@ def search_viewmodel(keyword: str | None) -> ViewModel:
         location_district = setserv.get_accepted_district(),
         list_category = setserv.get_accepted_category(),
         items_in_category = setserv.count_items_in_categories(),
-        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
-        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
+        latest_items = '',
     )
 
+    if keyword is None or keyword == '' and category is None and district is None:
+        vm.latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT)
+    elif vm.search == []:
+        vm.error, vm.error_msg = True, 'Não foram encontrados anúncios para a pesquisa!'
+    else:
+        vm.error, vm.error_msg = False, ''    
+        
+    vm.error = bool(vm.error_msg)
 
-
-
-
+    return vm
 
 
 ################################################################################

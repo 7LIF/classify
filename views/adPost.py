@@ -33,13 +33,24 @@ router = APIRouter(prefix = '/adPost')
 ##      Define a route for the post page
 ################################################################################
 
+
 @router.get('/')
-@template()
-async def adPost():
-    return adPost_viewmodel()
+@template(template_file='adPost/adPost.html')
+async def search(request: Request):
+    keyword = request.query_params.get('keyword')
+    category = request.query_params.get('category')
+    district = request.query_params.get('location')
+    price = request.query_params.get('price')
+    vm = await search_viewmodel(keyword, category, district, price)
+
+    return vm
     
-def adPost_viewmodel() -> ViewModel:
-        return ViewModel(
+    
+
+async def search_viewmodel(keyword: str | None, category: str | None, district: str | None,  price: str | None) -> ViewModel:
+    vm = ViewModel(
+        search=iserv.search_item(keyword, category, district, price),
+
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
@@ -48,9 +59,19 @@ def adPost_viewmodel() -> ViewModel:
         location_district = setserv.get_accepted_district(),
         list_category = setserv.get_accepted_category(),
         items_in_category = setserv.count_items_in_categories(),
-        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
-        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
+        latest_items = '',
     )
+
+    if keyword is None or keyword == '' and category is None and district is None and price is None:
+        vm.latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT)
+    elif vm.search == []:
+        vm.error, vm.error_msg = True, 'Não foram encontrados anúncios para a pesquisa!'
+    else:
+        vm.error, vm.error_msg = False, ''    
+        
+    vm.error = bool(vm.error_msg)
+
+    return vm
 
 
 

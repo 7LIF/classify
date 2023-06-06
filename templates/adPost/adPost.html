@@ -23,79 +23,83 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-3 col-md-4 col-12">
-					<div class="category-sidebar">
-						<div class="single-widget search">
-							<h3>Procurar Anúncios</h3>
-							<form action="#">
-								<input type="text" placeholder="Procure aqui..." />
-								<button type="submit"><i class="lni lni-search-alt"></i></button>
-							</form>
-						</div>
+					<form action="/adPost" >
+						<div class="category-sidebar">
+							<div class="single-widget search">
+								<h3>Procurar Anúncios</h3>
+									<input name="keyword" type="text" placeholder="Procure aqui..." />
+								</div>
 
-						<div class="single-widget search-form search-page wow fadeInUp">
-							<h3>Categorias</h3>
-							<ul class="search-input">
-								<label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-								<select name="category" id="category">
-									<option value="none">Todas as Categorias</option>
-									<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
-										<option value="none">${category.name}</option>
-									</__repeat__>
-								</select>
-							</ul>
-						</div>
-
-						<div class="single-widget search-form search-page wow fadeInUp">
-							<h3>Localização</h3>
-							<div class="search-input">
-								<label for="location"><i class="lni lni-map-marker theme-color"></i></label>
-								<select name="location" id="location">
-									<option value="none">Todas as Localizações</option>
-									<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
-										<option value="none">${district.name}</option>
-									</__repeat__>
-								</select>
+							<div class="single-widget search-form search-page wow fadeInUp">
+								<h3>Categorias</h3>
+								<ul class="search-form wow fadeInUp search-input ">
+									<label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
+									<select name="category" id="category">
+										<option value="none">Todas as Categorias</option>
+										<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
+											<option value=${category.name}>${category.name}</option>
+										</__repeat__>
+									</select>
+								</ul>
 							</div>
-						</div>
+
+							<div class="single-widget search-form search-page wow fadeInUp">
+								<h3>Localização</h3>
+								<div class="search-input">
+									<label for="location"><i class="lni lni-map-marker theme-color"></i></label>
+									<select name="location" id="location">
+										<option value="none">Todas as Localizações</option>
+										<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
+											<option value=${district.name}>${district.name}</option>
+										</__repeat__>
+									</select>
+								</div>
+							</div>
 
 
-						<div class="single-widget range">
-							<h3>Price Range</h3>
-							<input type="range" class="form-range" name="range" step="1" min="0"
-								max="1000" value="10" onchange="rangePrimary.value=value" />
-							<div class="range-inner">
-								<label>€</label>
-								<input type="text" id="rangePrimary" placeholder="10" />
+							<div class="single-widget range">
+								<h3>Price Range</h3>
+								<input type="range" class="form-range" name="range" step="1" min="0"
+									max="1000" value="10" onchange="rangePrimary.value=value" />
+								<div class="range-inner">
+									<label>€</label>
+									<input name="price" type="text" id="rangePrimary" placeholder="10" />
+								</div>
+							</div>
+							<!-- opcional
+							<div class="single-widget condition">
+								<h3>Condition</h3>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value
+										id="flexCheckDefault1" />
+									<label class="form-check-label" for="flexCheckDefault1">Todos</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value
+										id="flexCheckDefault2" />
+									<label class="form-check-label" for="flexCheckDefault2">Novo</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value
+										id="flexCheckDefault3" />
+									<label class="form-check-label" for="flexCheckDefault3">Usado</label>
+								</div>
+							</div>
+							
+								<div class="single-widget banner">
+									<h3>Advertisement</h3>
+									<a href="javascript:void(0)">
+										<img src="/static/assets/images/banner/banner.jpg" alt="#" />
+									</a>
+								</div>
+								-->
+							<div class="col-lg-2 col-md-2 col-12 p-0">
+								<div class="search-btn button">
+									<button class="btn"><i class="lni lni-search-alt"></i> Pesquisar</button>
+								</div>
 							</div>
 						</div>
-
-						<div class="single-widget condition">
-							<h3>Condition</h3>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value
-									id="flexCheckDefault1" />
-								<label class="form-check-label" for="flexCheckDefault1">Todos</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value
-									id="flexCheckDefault2" />
-								<label class="form-check-label" for="flexCheckDefault2">Novo</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value
-									id="flexCheckDefault3" />
-								<label class="form-check-label" for="flexCheckDefault3">Usado</label>
-							</div>
-						</div>
-						<!-- opcional
-							<div class="single-widget banner">
-								<h3>Advertisement</h3>
-								<a href="javascript:void(0)">
-									<img src="/static/assets/images/banner/banner.jpg" alt="#" />
-								</a>
-							</div>
-							-->
-					</div>
+					</form>
 				</div>
 
 				<div class="col-lg-9 col-md-8 col-12">
@@ -120,13 +124,13 @@
 
 
 								<div class="tab-content" id="nav-tabContent">
-
+									<div tal:condition="error" class="error-msg"> ${error_msg} </div>
 									<div class="tab-pane fade" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
 										
 										<div class="row">
-											<__if__ tal:condition="keyword or latest_items" tal:omit-tag="True">
-												<!-- Start Repeat keyword or Latest Ads (Loop For) -->
-												<__repeat__ tal:repeat="item (keyword or latest_items)" tal:omit-tag="True">
+											<__if__ tal:condition="search or latest_items" tal:omit-tag="True">
+												<!-- Start Repeat search or Latest Ads (Loop For) -->
+												<__repeat__ tal:repeat="item (search or latest_items)" tal:omit-tag="True">
 													<div class="col-lg-4 col-md-6 col-12">
 														<div class="single-item-grid">
 															<div class="image">
@@ -147,7 +151,7 @@
 														</div>
 													</div>
 												</__repeat__>
-												<!--/ End Repeat keyword or Latest Ads (Loop For) -->
+												<!--/ End Repeat search or Latest Ads (Loop For) -->
 											</__if__>		
 										</div>
 
@@ -172,12 +176,13 @@
 
 									<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
 										<div class="row">
-											<__if__ tal:condition="keyword or latest_items" tal:omit-tag="True">
-												<!-- Start Repeat keyword or Latest Ads (Loop For) -->
-												<__repeat__ tal:repeat="item (keyword or latest_items)" tal:omit-tag="True">
+											<__if__ tal:condition="search or latest_items" tal:omit-tag="True">
+												<!-- Start Repeat search or Latest Ads (Loop For) -->
+												<__repeat__ tal:repeat="item (search or latest_items)" tal:omit-tag="True">
 													<div class="col-lg-12 col-md-12 col-12">
 														<div class="single-item-grid">
 															<div class="row align-items-center">
+																
 																<div class="col-lg-5 col-md-7 col-12">
 																	<div class="image">
 																		<a href="/adPost/${item.id}"><img src="${items_images_url}\${item.main_image_url}" alt="#"></a>
@@ -201,7 +206,7 @@
 														</div>
 													</div>
 												</__repeat__>
-												<!--/ End Repeat keyword or Latest Ads (Loop For) -->
+												<!--/ End Repeat search or Latest Ads (Loop For) -->
 											</__if__>					
 										</div>
 

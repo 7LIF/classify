@@ -1,6 +1,6 @@
 from decimal import Decimal as dec
 from random import sample
-from sqlalchemy import select, or_, func
+from sqlalchemy import Float, select, or_, and_, func
 from sqlalchemy.orm import Session
 from data.database import database_session
 from data.models import Category, Item, ItemStatusEnum, District, Subcategory
@@ -148,16 +148,26 @@ def get_district_name_from_item(
 
 
 
+def search_item(
+    keyword: str | None = None,
+    category: str | None = None,
+    district: str | None = None,
+    price: str | None = None,
+    db_session: Session | None = None
+) -> list[Item] | None:
+    with database_session(db_session) as db_session:
+        
+        query = db_session.query(Item).join(Subcategory).join(Category).join(District).filter(
+            Item.status_id == ItemStatusEnum.Active.id
+        )
 
-#def search_item(
-#    keyword: str | None = None, 
-#    db_session: Session | None = None
-#) -> list[Item] | None:
-#    with database_session(db_session) as db_session:   
-#        select_stmt = select(Item).where(Item.title == keyword)
-#        return db_session.execute(select_stmt).scalars().all()
-
-def search_item(keyword: str | None = None, db_session: Session | None = None) -> list[Item] | None:
-    with database_session(db_session) as db_session:   
-        select_stmt = select(Item).where(or_(Item.title.ilike(f'%{keyword}%'), Item.description.ilike(f'%{keyword}%')))
-        return db_session.execute(select_stmt).scalars().all()
+        if keyword:
+            query = query.filter(or_(Item.title.ilike(f'%{keyword}%'), Item.description.ilike(f'%{keyword}%')))
+        if category and category != 'none':
+            query = query.filter(Category.name == category)
+        if district and district != 'none':
+            query = query.filter(District.name == district)
+        if price and price != 'none':
+            query = query.filter(func.cast(Item.price, Float) <= float(price))
+            
+        return query.all()

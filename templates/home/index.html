@@ -36,7 +36,7 @@
 													<option value="none" selected disabled>Categorias</option>
 													<option value="none">Todas as Categorias</option>
 													<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
-														<option value="none">${category.name}</option>
+														<option value="${category.name}">${category.name}</option>
 													</__repeat__>
 												</select>
 											</div>
@@ -49,7 +49,7 @@
 													<option value="none" selected disabled>Localização</option>
 													<option value="none">Todas as Localizações</option>
 													<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
-														<option value="none">${district.name}</option>
+														<option value="${district.name}">${district.name}</option>
 													</__repeat__>
 												</select>
 											</div>
