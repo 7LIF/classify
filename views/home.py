@@ -3,6 +3,7 @@
 ################################################################################
 from fastapi import APIRouter, Request, Response
 from fastapi_chameleon import template
+from common.auth import get_current_user
 from common.viewmodel import ViewModel
 from config_settings import conf
 from services import (
@@ -42,10 +43,12 @@ async def index():
 
 def index_viewmodel() -> ViewModel:
     return ViewModel(
+        selected_menu = 'home',
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
         users_images_url = conf('USERS_IMAGES_URL'),
+        user = get_current_user(),
         num_items = iserv.item_count(),
         num_users = userv.user_count(),
         num_categories = setserv.count_accepted_categories(),
@@ -54,6 +57,7 @@ def index_viewmodel() -> ViewModel:
         list_category = setserv.get_accepted_category(),
         section_district = setserv.get_random_districts_with_items(SECTION_DISTRICT_COUNT),
         items_in_category = setserv.count_items_in_categories(),
+        items_in_district = setserv.count_items_in_districts(),
         popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
@@ -78,6 +82,7 @@ async def search(request: Request):
 
 async def search_viewmodel(keyword: str | None, category: str | None, district: str | None) -> ViewModel:
     vm = ViewModel(
+        selected_menu = 'ads',
         search=iserv.search_item(keyword, category, district),
 
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
@@ -113,7 +118,8 @@ async def howWorks():
     return howWorks_viewmodel()
     
 def howWorks_viewmodel():
-        return ViewModel(
+    return ViewModel(
+        selected_menu = 'pages',
         error = None,
     )
 
@@ -129,6 +135,7 @@ async def about():
     
 def about_viewmodel():
         return ViewModel(
+        selected_menu = 'pages',
         error = None,
     )
 
@@ -145,6 +152,7 @@ async def contact():
     
 def contact_viewmodel():
         return ViewModel(
+        selected_menu = 'pages',
         error = None,
     )
 
@@ -161,5 +169,6 @@ async def faq():
     
 def faq_viewmodel():
         return ViewModel(
+        selected_menu = 'pages',
         error = None,
     )

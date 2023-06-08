@@ -1,0 +1,287 @@
+################################################################################
+##      Importing necessary modules
+################################################################################
+import select
+from typing import Optional
+from unicodedata import category
+from fastapi import APIRouter, Request, Response, Depends, responses, status
+from fastapi_chameleon import template
+from requests import Session
+from sqlalchemy import func
+from starlette.responses import RedirectResponse as RedirectResponse
+from common.common import coalesce
+from common.fastapi_utils import form_field_as_str
+from common.viewmodel import ViewModel
+from config_settings import conf
+from data.database import database_session
+from data.models import UserAccount, Item, User
+from services import (
+    item_service as iserv,
+    user_service as userv,
+    settings_service as setserv,
+)
+
+
+################################################################################
+##      Constants
+################################################################################
+
+LIST_CATEGORY_COUNT = 11
+LATEST_ITEMS_COUNT = 8
+POPULAR_ITEMS_COUNT = 8
+RANDOM_ITEMS_COUNT = 8
+LOCATION_DISTRICT_COUNT = 21
+SECTION_DISTRICT_COUNT = 3
+
+
+################################################################################
+##      Create an instance of the router
+################################################################################
+
+router = APIRouter()
+
+
+################################################################################
+##      Define a route for the index/home page
+################################################################################
+
+@router.get('/')
+@template()
+async def index():
+    return index_viewmodel()
+   
+
+
+
+@router.post('/')
+@template()
+async def index_search(request: Request):
+    vm = await index_viewmodel(request)
+    
+    if vm.error:
+        return vm
+    
+    items = await iserv.search_items(vm.keyword, vm.category, vm.location)
+    vm.items = items
+    
+    return vm
+
+@router.post('/redirect')
+async def redirect():
+    return RedirectResponse(url='/', status_code=status.HTTP_302_FOUND)
+
+
+
+
+async def index_viewmodel(request: Request = None) -> ViewModel:
+    vm = ViewModel(
+        categories_images_url = conf('CATEGORIES_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        users_images_url = conf('USERS_IMAGES_URL'),
+        num_items = iserv.item_count(),
+        num_users = userv.user_count(),
+        num_categories = setserv.count_accepted_categories(),
+        num_subcategories = setserv.subcategory_count(),
+        location_district = setserv.get_accepted_district(),
+        list_category = setserv.get_accepted_category(),
+        section_district = setserv.get_random_districts_with_items(SECTION_DISTRICT_COUNT),
+        items_in_category = setserv.count_items_in_categories(),
+        popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
+        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
+        random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
+    )
+    
+    if request and request.method == 'POST':
+        form_data = await request.form()
+        vm.keyword = form_field_as_str(form_data, 'keyword').strip()
+        vm.category = form_field_as_str(form_data, 'category').strip()
+        vm.location = form_field_as_str(form_data, 'location').strip()
+    return vm
+
+
+##############################################################################################
+
+
+
+#def user_count(
+#        concrete_type = UserAccount,
+#        db_session: Session | None = None,
+#) -> int:
+#    with database_session(db_session) as db_session:
+#        select_stm = select(func.count()).select_from(concrete_type)
+#        return db_session.execute(select_stm).scalar_one()
+#    
+#
+#def add_profile_image_to_user(
+#    user_id: int, 
+#    profile_image: str, 
+#    db_session: Session | None = None
+#) -> User:
+#    with database_session(db_session) as db_session:
+#        user = db_session.query(User).get(user_id)
+#        if not user:
+#            raise InvalidUserAttribute(f'User with id {user_id} does not exist')
+#
+#        user.profile_image = profile_image
+#        
+#        db_session.commit()
+#        db_session.refresh(user)
+#        return user
+#
+#
+#def search(
+#    keyword: str, 
+#    db_session: Session | None = None
+#) -> User:
+#    with database_session(db_session) as db_session:
+#        user = db_session.query(User).get(user_id)
+#        if not user:
+#            raise InvalidUserAttribute(f'User with id {user_id} does not exist')
+#
+#        user.profile_image = profile_image
+#        
+#        db_session.commit()
+#        db_session.refresh(user)
+#        return user
+#)
+#
+#
+#async def search_items(
+#    keyword: str = None, 
+#    category: str = None, 
+#    district: str = None, 
+#    db_session: Session | None = None
+#):
+#    query = Item.query
+#
+#    if keyword:
+#        query = query.filter(Item.title.ilike(f"%{keyword}%"))
+#
+#    if category:
+#        query = query.join(Subcategory).join(Category).filter(Category.name == category)
+#
+#    if district:
+#        query = query.join(District).filter(District.name == district)
+#
+#    return await query.limit(MAX_ITEMS_SEARCH).all()
+#
+#
+#
+#async def search(
+#    keyword: str = None, 
+#    db_session: Session | None = None
+#):
+#    query = Item.query
+#
+#    if keyword:
+#        query = query.filter(Item.title.ilike(f"%{keyword}%"))
+#
+#    return await query.limit(MAX_ITEMS_SEARCH).all()
+#    
+#    
+#    
+#@router.get('/search')
+#@template(template_file='adPost/adPost.html')
+#def search_items(request: Request, keyword: Optional[str], db_session: Session = Depends(get_db)):
+#    is_logged_in = False
+#    items = db_session.query(Item).filter(Item.title).contains(keyword).all()
+#    return {"request": request, "items": items, "is_logged_in": is_logged_in}
+
+
+
+
+
+#from fastapi import FastAPI, Request
+#
+#from starlette.requests import Request
+#from typing import Any
+#
+## Função para armazenar um valor na sessão
+#def set_session(key: str, value: Any, session_attr='session') -> None:
+#    request = get_request()
+#    session = getattr(request, session_attr)
+#    session[key] = value
+#
+## Função para obter a instância da solicitação atual
+#def get_request(session_attr='session') -> Request:
+#    return getattr(global_request.get(), session_attr)
+#
+#@router.get('/search')
+#@template(template_file='adPost/adPost_search.html')
+#def search(request: Request, keyword: str):
+#    keyword = request.query_params.get('keyword')  # Obtenha a palavra-chave da consulta de pesquisa
+#    set_session('keyword', keyword)  # Armazene a palavra-chave na sessão
+#    return search_viewmodel()
+#
+#
+#def search_viewmodel():
+#    keyword = get_session().get('keyword')  # Obtenha a palavra-chave da sessão
+#    items = iserv.search_item(keyword)  # Obtenha os itens correspondentes à palavra-chave de pesquisa
+#    return ViewModel(
+#        keyword=keyword,
+#        items=items,
+#        categories_images_url=conf('CATEGORIES_IMAGES_URL'),
+#        districts_images_url=conf('DISTRICTS_IMAGES_URL'),
+#        items_images_url=conf('ITEMS_IMAGES_URL'),
+#        users_images_url=conf('USERS_IMAGES_URL'),
+#        num_items=iserv.item_count(),
+#        num_users=userv.user_count(),
+#        num_categories=setserv.count_accepted_categories(),
+#        num_subcategories=setserv.subcategory_count(),
+#        location_district=setserv.get_accepted_district(),
+#        list_category=setserv.get_accepted_category(),
+#        section_district=setserv.get_random_districts_with_items(SECTION_DISTRICT_COUNT),
+#        items_in_category=setserv.count_items_in_categories(),
+#        popular_items=iserv.most_popular_items(POPULAR_ITEMS_COUNT),
+#        latest_items=iserv.get_latest_items(LATEST_ITEMS_COUNT),
+#        random_items=iserv.get_random_items(RANDOM_ITEMS_COUNT),
+#    )
+#
+
+
+
+@router.get('/search')
+@template(template_file='adPost/adPost.html')
+async def search(request: Request):
+    keyword = request.query_params.get('keyword')
+    if keyword is not None:
+        viewmodel = search_viewmodel(keyword)
+        if viewmodel['keyword'] is not None:
+            return viewmodel 
+        else:
+            return Response(content="Nenhum resultado encontrado", status_code=200)
+    else:
+        return Response(content="Palavra-chave não encontrada", status_code=400)
+
+
+def search_viewmodel(keyword: str | None) -> ViewModel:
+    return ViewModel(
+        keyword=iserv.search_item(keyword),
+        
+        categories_images_url = conf('CATEGORIES_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        num_categories = setserv.count_accepted_categories(),
+        num_items = iserv.item_count(),
+        location_district = setserv.get_accepted_district(),
+        list_category = setserv.get_accepted_category(),
+        items_in_category = setserv.count_items_in_categories(),
+        latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
+    )
+
+
+def search_item(
+    keyword: str | None = None,
+    category: str | None = None,
+    district: str | None = None, 
+    db_session: Session | None = None
+) -> list[Item] | None:
+    with database_session(db_session) as db_session:   
+        select_stmt = (
+            select(Item).where(Item.status_id == ItemStatusEnum.Active.id)
+                        .where(or_(Item.title.ilike(f'%{keyword}%'), Item.description.ilike(f'%{keyword}%')))
+                        .join(Subcategory).join(Category).filter(Category.name == category)
+                        .join(District).filter(District.name == district)
+        )
+        return db_session.execute(select_stmt).scalars().all()

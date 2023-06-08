@@ -256,7 +256,6 @@ def insert_users():
                 'address_line': 'Rua Pimenta da Cruz, Lote 33 - 1o Esquerdo',
                 'zip_code': '2200-033 Águeda',
                 'district_id': distr('Aveiro').id,
-                #'profile_image': 'profile_image1.jpg',
             },
             {
                 'name': 'Avelino Américo',
@@ -265,7 +264,6 @@ def insert_users():
                 'address_line': 'Av. Da Esperança, Lote 21 - 4o Direito',
                 'zip_code': '1010-100 Amarante',
                 'district_id': distr('Porto').id,
-                #'profile_image': 'profile_image2.jpg',
             },
             {
                 'name': 'Beatriz Batista',
@@ -274,7 +272,6 @@ def insert_users():
                 'address_line': 'Rua das Flores, Lote 14 - 2o Esquerdo',
                 'zip_code': '2750-327 Cascais',
                 'district_id': distr('Lisboa').id,
-                #'profile_image': 'profile_image3.jpg',
             },
             {
                 'name': 'Carlos Carvalho',
@@ -283,7 +280,6 @@ def insert_users():
                 'address_line': 'Av. da Liberdade, Lote 81 - 3o Direito',
                 'zip_code': '1250-100 Lisboa',
                 'district_id': distr('Lisboa').id,
-                #'profile_image': 'profile_image4.jpg',
             },
             {
                 'name': 'Diego Domingues',
@@ -292,7 +288,6 @@ def insert_users():
                 'address_line': 'Rua do Sol, Lote 6 - 4o Esquerdo',
                 'zip_code': '4000-392 Porto',
                 'district_id': distr('Porto').id,
-                #'profile_image': 'profile_image5.jpg',
             },
             {
                 'name': 'Eva Esteves',
@@ -301,7 +296,6 @@ def insert_users():
                 'address_line': 'Rua dos Moinhos, Lote 9 - 1o Direito',
                 'zip_code': '4900-341 Viana do Castelo',
                 'district_id': distr('Viana do Castelo').id,
-                #'profile_image': 'profile_image6.jpg',
             },
             {
                 'name': 'Fábio Fernandes',
@@ -310,7 +304,6 @@ def insert_users():
                 'address_line': 'Rua Nova, Lote 19 - 2o Esquerdo',
                 'zip_code': '8000-020 Faro',
                 'district_id': distr('Faro').id,
-                #'profile_image': 'profile_image7.jpg',
             },
             {
                 'name': 'Gabriela Gomes',
@@ -319,7 +312,6 @@ def insert_users():
                 'address_line': 'Av. da Praia, Lote 8 - 1o Esquerdo',
                 'zip_code': '2520-038 Peniche',
                 'district_id': distr('Leiria').id,
-                #'profile_image': 'profile_image8.jpg',
             },
             {
                 'name': 'José Faria',
@@ -328,7 +320,6 @@ def insert_users():
                 'address_line': 'Rua da Carreira',
                 'zip_code': '9000-036 Funchal',
                 'district_id': distr('Ilha da Madeira').id,
-                #'profile_image': 'profile_image9.jpg',
             },    
         ),
     )

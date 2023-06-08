@@ -66,12 +66,12 @@ def account_viewmodel():
        
     return ViewModel(
         name = user.name,
-        email_addr = user.email_addr,     
-        address_line = coalesce(user.address_line, ''),
-        address_line_maxlength = ADDRESS_LINE_SIZE,
-        zip_code = coalesce(user.zip_code, ''),
-        zip_code_maxlength = ZIP_CODE_SIZE,
-        choose_file_msg = "Selecionar ficheiro",
+        user = userv.get_user_actual_by_id(user.user_id),
+        email_addr = user.email_addr,
+        items_images_url = conf('ITEMS_IMAGES_URL'),     
+        users_images_url = conf('USERS_IMAGES_URL'),
+        list_user_items = userv.list_user_item(user.user_id),
+        current = "account",      
     )
         
 
@@ -187,13 +187,15 @@ async def register():
 def register_viewmodel():
     name = get_session().get('name')
     email_addr = get_session().get('email_addr')
-    return ViewModel(        
+    return ViewModel(   
+        selected_menu = '',     
         name = name,
         name_status = 'disabled' if name else '',
         email_addr = email_addr,
         email_addr_status = 'disabled' if email_addr else '',
         password = '',
         checked = False,
+        current = "new",
     )
 
 
@@ -218,6 +220,7 @@ async def post_register_viewmodel(request: Request) -> ViewModel:
     email_addr = get_session().get('email_addr')
     form_data = await request.form()
     vm = ViewModel(
+        selected_menu = '',
         name = name if name else form_field_as_str(form_data, 'name'),
         name_status = 'disabled' if name else '',
         email_addr = email_addr if email_addr else form_field_as_str(form_data, 'email_addr'),
@@ -259,6 +262,7 @@ async def login():
     
 def login_viewmodel():
     return ViewModel(
+        selected_menu = '',
         email_addr = '',
         password = '',
         external_auth_providers = setserv.get_external_auth_providers(),
@@ -283,6 +287,7 @@ async def post_login(request: Request):
 async def post_login_viewmodel(request: Request) -> ViewModel:
     form_data = await request.form()
     vm = ViewModel(
+        selected_menu = '',
         email_addr = form_field_as_str(form_data, 'email_addr'),
         password = form_field_as_str(form_data, 'password'),
         user_id = None,
@@ -333,9 +338,89 @@ async def profileSettings():
     return profileSettings_viewmodel()
     
 def profileSettings_viewmodel():
-        return ViewModel(
-        error = None
+    user = get_current_user()
+    assert user is not None
+       
+    return ViewModel(
+        selected_menu = '',
+        name = user.name,
+        user = userv.get_user_actual_by_id(user.user_id),
+        email_addr = user.email_addr,
+        items_images_url = conf('ITEMS_IMAGES_URL'),     
+        users_images_url = conf('USERS_IMAGES_URL'),
+        districts_images_url = conf('DISTRICTS_IMAGES_URL'),
+        location_district = setserv.get_accepted_district(),
+        list_user_items = userv.list_user_item(user.user_id),
+        address_line = coalesce(user.address_line, ''),
+        address_line_maxlength = ADDRESS_LINE_SIZE,
+        zip_code = coalesce(user.zip_code, ''),
+        zip_code_maxlength = ZIP_CODE_SIZE,
+        choose_file_msg = "Selecionar ficheiro",
+        current = "edit",
     )
+
+@router.post('/profileSettings', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/profileSettings.html')
+async def post_profileSettings(request: Request):
+    vm = await post_profileSettings_viewmodel(request)
+
+    if vm.error:
+        return vm
+    
+    return #update_user_account(vm.user_id)
+
+
+async def post_profileSettings_viewmodel(request: Request) -> ViewModel:
+    form_data = await request.form()
+    vm = ViewModel(
+        selected_menu = '',
+        email_addr = form_field_as_str(form_data, 'email_addr'),
+        password = form_field_as_str(form_data, 'password'),
+        user_id = None,
+        external_auth_providers = setserv.get_external_auth_providers(),
+    )
+
+    if not is_valid_email(vm.email_addr):
+        vm.error_msg = 'Palavra-passe errada ou utilizador inválido!'
+    elif not is_valid_password(vm.password):
+        vm.error_msg = 'Palavra-passe errada!'
+    elif not (user := userv.authenticate_user_by_email(vm.email_addr, vm.password)):
+        vm.error_msg = 'Palavra-passe errada ou utilizador inválido!'
+    else:
+        vm.error_msg = ''
+        vm.user_id = user.user_id
+
+    vm.error = bool(vm.error_msg)
+    
+    return vm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @router.get('/myAds', dependencies = [Depends(requires_authentication)])
@@ -345,7 +430,8 @@ async def myAds():
     
 def myAds_viewmodel():
         return ViewModel(
-        error = None
+        error = None,
+        current = "ads",
     )
     
     
@@ -357,7 +443,8 @@ async def favoritesAds():
     
 def favoritesAds_viewmodel():
         return ViewModel(
-        error = None
+        error = None,
+        current = "fav",
     )
     
     
@@ -371,6 +458,7 @@ def newAdPost_viewmodel():
     return ViewModel(
         list_category = setserv.get_accepted_category(),
         location_district = setserv.get_accepted_district(),
+        current = "new",
     )
     
     
@@ -382,7 +470,8 @@ async def messages():
     
 def messages_viewmodel():
         return ViewModel(
-        error = None
+        error = None,
+        current = "msgs",
     )
     
     
@@ -394,7 +483,8 @@ async def deleteAccount():
     
 def deleteAccount_viewmodel():
         return ViewModel(
-        error = None
+        error = None,
+        current = "close",
     )
 
         
@@ -406,5 +496,5 @@ async def mailSuccess():
     
 def mailSuccess_viewmodel():
         return ViewModel(
-        error = None
+        error = None,
     )

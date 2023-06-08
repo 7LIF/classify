@@ -1966,7 +1966,7 @@ ul, ol {
 }
 
 .search-form {
-    margin-top: 60px;
+    /*margin-top: 60px;*/
     background: #fff3;
     border-radius: 6px;
     padding: 30px;
@@ -3641,7 +3641,17 @@ blockquote .shape {
     position: relative
 }
 
-.category-sidebar .single-widget.search form input {
+.category-sidebar .single-widget.search form input #search-bar {
+    height: 50px;
+    width: 100%;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    color: #081828;
+    padding: 0 15px;
+    padding-right: 50px
+}
+
+#search-bar {
     height: 50px;
     width: 100%;
     border: 1px solid #eee;
@@ -4584,7 +4594,7 @@ blockquote .shape {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
-    background-image: linear-gradient(45deg, #5d45fd, #6197ff)
+    background-image: linear-gradient(45deg, #5d45fd, #5830e0)
 }
 
 .dashboard .main-content .details-lists .single-list.three .list-icon {

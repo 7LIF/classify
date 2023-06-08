@@ -70,19 +70,59 @@
                                     
                                     <!-- Start NavBar Button Pages -->
                                     <li class="nav-item">
-                                        <a class=" active dd-menu collapsed" href="/" aria-label="Toggle navigation">Página Inicial</a>
+                                        <a tal:condition="selected_menu == 'home'" tal:attributes="class 'active'" class="dd-menu collapsed" href="/" aria-label="Toggle navigation">Página Inicial</a>
+                                        <a
+                        tal:condition="selected_menu != 'home'"
+                        class="dd-menu collapsed"
+                        href="/"
+                        aria-label="Toggle navigation"
+                        >Página Inicial</a
+                      >
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class=" dd-menu collapsed" href="/adPost" aria-label="Toggle navigation">Pesquisar Anúncios</a>
+                                        <a
+                        tal:condition="selected_menu == 'ads'"
+                        tal:attributes="class 'active'"
+                        class="dd-menu collapsed"
+                        href="/adPost"
+                        aria-label="Toggle navigation"
+                        >Pesquisar Anúncios
+                      </a>
+                      <a
+                        tal:condition="selected_menu != 'ads'"
+                        class="dd-menu collapsed"
+                        href="/adPost"
+                        aria-label="Toggle navigation"
+                        >Pesquisar Anúncios
+                      </a>
                                     </li>
                                     
                                     <li class="nav-item">
-                                        <a class=" dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Páginas
-                                        </a>
+
+                                        <a
+                        tal:condition="selected_menu == 'pages'"
+                        tal:attributes="class 'active'"
+                        class="dd-menu collapsed"
+                        href="javascript:void(0)"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#submenu-1-4"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                        >Páginas
+                      </a>
+                      <a
+                        tal:condition="selected_menu != 'pages'"
+                        class="dd-menu collapsed"
+                        href="javascript:void(0)"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#submenu-1-4"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                        >Páginas
+                      </a>
                                         <ul class="sub-menu collapse" id="submenu-1-4">
                                             <li class="nav-item"><a href="/about">About Us</a></li>
                                             <li class="nav-item"><a href="/account/register">Sign Up</a></li>
@@ -112,8 +152,9 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </div> <!-- navbar collapse -->
-                            <!---
+                            </div> 
+
+                            <!-- navbar collapse -->
                             <div class="login-button">
                                 <ul>
                                     <li>
@@ -122,7 +163,7 @@
                                     </li>
                                     <li>
                                         <a tal:condition="not is_logged_in" href="/account/register"><i class="lni lni-user"></i> Registo Gratuito</a>
-                                        <a tal:condition="is_logged_in" href="/account"><i class="lni lni-user"></i> Minha Conta</a>
+                                        <a tal:condition="is_logged_in" href="/account"><i class="lni lni-user"></i> ${user.name}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -131,7 +172,7 @@
                                 <a tal:condition="not is_logged_in" href="/account/register" class="btn">Publicar Anúncio</a>
                                 <a tal:condition="is_logged_in" href="/account/newAdPost" class="btn">Publicar Anúncio</a>
                             </div>
-                        -->
+                        
                         </nav> <!-- navbar -->
                     </div>
                 </div>

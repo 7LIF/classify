@@ -50,7 +50,7 @@ async def search(request: Request):
 async def search_viewmodel(keyword: str | None, category: str | None, district: str | None,  price: str | None) -> ViewModel:
     vm = ViewModel(
         search=iserv.search_item(keyword, category, district, price),
-
+        selected_menu = 'ads',
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
         items_images_url = conf('ITEMS_IMAGES_URL'),
@@ -88,6 +88,7 @@ async def adPostDetails(item_id: int):
 def adPostDetails_viewmodel(item_id: int) -> ViewModel:
     if item := iserv.get_item_by_id(item_id):
         return ViewModel(
+            selected_menu = 'ads',
             item = item,
             items_images_url = conf('ITEMS_IMAGES_URL'),
             users_images_url = conf('USERS_IMAGES_URL'),

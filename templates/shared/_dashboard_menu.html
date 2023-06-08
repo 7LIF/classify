@@ -9,35 +9,67 @@
 			<div class="col-lg-3 col-md-4 col-12">
 				<div class="dashboard-sidebar">
 					<div class="user-image">
-						<img src="/static/assets/images/dashboard/user-image.jpg" alt="#" />
-						<h3>
-							Liliana Mateus
-							<span><a href="javascript:void(0)">@LiliMateus94</a></span>
-						</h3>
+						<img src="${users_images_url}/${user.profile_image}" alt="#" />
+						<h3>${name}</h3>
 					</div>
 					<div class="dashboard-menu">
 						<ul>
-							<li>
-								<a class="active" href="/account"><i class="lni lni-dashboard"></i> Perfil</a>
-							</li>
-							<li>
-								<a href="/account/profileSettings"><i class="lni lni-pencil-alt"></i> Editar Perfil</a>
-							</li>
-							<li>
-								<a href="/account/myAds"><i class="lni lni-bolt-alt"></i> Meus Anúncios</a>
-							</li>
-							<li>
-								<a href="/account/favoritesAds"><i class="lni lni-heart"></i> Favoritos</a>
-							</li>
-							<li>
-								<a href="/account/newAdPost"><i class="lni lni-circle-plus"></i> Postar Anúncios</a>
-							</li>
-							<li>
-								<a href="/account/messages"><i class="lni lni-envelope"></i> Mensagens</a>
-							</li>
-							<li>
-								<a href="/account/deleteAccount"><i class="lni lni-trash"></i> Fechar conta</a>
-							</li>
+							<li tal:condition="exists: current">
+								<a 
+								  tal:attributes="class 'active' if current == 'account' else ''"
+								  href="/account"
+								>
+								  <i class="lni lni-dashboard"></i> Perfil
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'edit' else ''"
+								  href="/account/profileSettings"
+								>
+								  <i class="lni lni-pencil-alt"></i> Editar Perfil
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'ads' else ''"
+								  href="/account/myAds"
+								>
+								  <i class="lni lni-pencil-alt"></i>Meus Anúncios
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'fav' else 'dd'"
+								  href="/account/favoritesAds"
+								>
+								  <i class="lni lni-bolt-alt"></i> Favoritos
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'new' else 'dd'"
+								  href="/account/newAdPost"
+								>
+								  <i class="lni lni-heart"></i> Postar Anúncios
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'msgs' else 'dd'"
+								  href="/account/messages"
+								>
+								  <i class="lni lni-envelope"></i>Mensagens
+								</a>
+							  </li>
+							  <li tal:condition="exists: current">
+								<a
+								  tal:attributes="class 'active' if current == 'close' else 'dd'"
+								  href="/account/deleteAccount"
+								>
+								  <i class="lni lni-trash"></i> Fechar conta
+								</a>
+							  </li>
 							<!-- OPCIONAL
 							<li>
 								<a href="/account/invoice" ><i class="lni lni-printer"></i> Histórico de Compras</a>

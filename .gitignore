@@ -158,3 +158,4 @@ dmypy.json
 
 # SQLite
 web/**/*.db
+/data/classify.db

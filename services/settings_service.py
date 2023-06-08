@@ -96,6 +96,27 @@ def count_items_in_categories(db_session: Session | None = None) -> dict[str, in
 
 
 
+def count_items_in_districts(db_session: Session | None = None) -> dict[str, int]:
+    with database_session(db_session) as db_session:
+        stmt = select(District)
+        districts = db_session.execute(stmt).scalars().all()
+
+        items_per_district = {}
+
+        for district in districts:
+            district_items = (
+                db_session.query(Item)
+                .filter(Item.district_id == district.id)
+                .count()
+            )
+
+            items_per_district[district.name] = district_items
+
+        return items_per_district
+
+
+
+
 def get_random_districts_with_items(
     count: int,
     db_session: Session | None = None

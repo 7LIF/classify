@@ -64,7 +64,7 @@ def config_exception_handlers(app: FastAPI):
     async def unauthorized_access_handler(*_, **__):
         error_template_path = config_value('ERROR_TEMPLATE_PATH')
         template = PageTemplateFile(f'{error_template_path}/error404.html')
-        content = template(**ViewModel())
+        content = template(**ViewModel(selected_menu = ''))
         return responses.HTMLResponse(content, status_code = status.HTTP_404_NOT_FOUND)
     
 

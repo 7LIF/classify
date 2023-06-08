@@ -126,7 +126,9 @@
 									</div>
 									<div class="content">
 										<h4 class="name"> ${district.name}
-											<span>155 Ads</span>
+											<span tal:define="item_count python: items_in_district[district.name]">
+												${items_in_district[district.name]} ${'anúncio disponível' if item_count == 1 else 'anúncios disponíveis'}
+											</span>
 										</h4>
 									</div>
 									<div class="more-btn">
@@ -248,8 +250,7 @@
 							<!--/ End Latest Adds -->
 
 							<!-- Start Popular Adds -->
-							<div class="tab-pane fade" id="nav-popular" role="tabpanel"
-								aria-labelledby="nav-popular-tab">
+							<div class="tab-pane fade" id="nav-popular" role="tabpanel"	aria-labelledby="nav-popular-tab">
 								<div class="row">
 									<!-- Start Repeat Popular Adds (Loop For) -->
 									<__repeat__ tal:repeat="item popular_items" tal:omit-tag="True">

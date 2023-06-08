@@ -137,10 +137,26 @@ def get_user_by_id(
     with database_session(db_session) as db_session:
         select_stmt = (
             select(UserAccount)
+            .join(User)
             .join(UserLoginData)
             .where(UserAccount.user_id == user_id)
         )
         return db_session.execute(select_stmt).scalar_one_or_none()
+
+
+
+
+def get_user_actual_by_id(
+        user_id: int,
+        db_session: Session | None = None,
+) -> User | None:
+    with database_session(db_session) as db_session:
+        select_stmt = (
+            select(User)
+            .where(User.user_id == user_id)
+        )
+        return db_session.execute(select_stmt).scalar_one_or_none()
+
 
 
 
@@ -151,6 +167,7 @@ def get_user_id_by_name(
     with database_session(db_session) as db_session:
         select_stmt = (
             select(UserAccount)
+            .join(User)
             .join(UserLoginData)
             .where(UserAccount.name == name)
         )
@@ -165,6 +182,7 @@ def get_user_by_external_id(
     with database_session(db_session) as db_session:
         select_stmt = (
             select(UserAccount)
+            .join(User)
             .join(UserLoginDataExternal)
             .join(ExternalProvider)
             .where(UserLoginDataExternal.external_user_id == external_user_id)
@@ -228,32 +246,7 @@ def ensure_user_is(
         return user
 
 
-async def add_profile_image(
-        user_or_id: UserAccount | int, 
-        image_async_file,
-        extension: str = '',
-        content_type: str = '',
-        db_session: Session | None = None
-) -> UserAccount:
-    with database_session(db_session) as db_session:
-        user = ensure_user_is(user_or_id, UserAccount, db_session)
 
-        if not (extension or content_type):
-            raise ValueError('No extension or content type were given')
-
-        extension = (
-            extension if extension else 
-            IMAGE_CONTENT_TYPE_TO_EXTENSION.get(content_type, '')
-        )
-        image_file_path = f"./{USERS_IMAGES_URL}/{user.user_id}.{extension}"
-
-        async with aiofiles.open(image_file_path, "wb") as out_file:
-            await out_file.write(await image_async_file.read())
-
-        user.profile_image = image_file_path   
-        db_session.commit()
-        db_session.refresh(user)
-        return user
 
 
 
@@ -349,9 +342,41 @@ def add_profile_image_to_user(
 
 
 
+async def add_profile_image(
+        user_or_id: UserAccount | int, 
+        image_async_file,
+        extension: str = '',
+        content_type: str = '',
+        db_session: Session | None = None
+) -> UserAccount:
+    with database_session(db_session) as db_session:
+        user = ensure_user_is(user_or_id, UserAccount, db_session)
+
+        if not (extension or content_type):
+            raise ValueError('No extension or content type were given')
+
+        extension = (
+            extension if extension else 
+            IMAGE_CONTENT_TYPE_TO_EXTENSION.get(content_type, '')
+        )
+        image_file_path = f"./{USERS_IMAGES_URL}/{user.user_id}.{extension}"
+
+        async with aiofiles.open(image_file_path, "wb") as out_file:
+            await out_file.write(await image_async_file.read())
+
+        user.profile_image = image_file_path   
+        db_session.commit()
+        db_session.refresh(user)
+        return user
+
+
+
+
+
 def update_user_account(
         user_or_id: int | User,
         current_password: str,
+        new_name: str | None = None,
         new_email: str | None = None,
         new_password: str | None = None,
         new_address_line: str | None = None,
@@ -377,13 +402,22 @@ def update_user_account(
                 )
             user.password_hash = userv.hash_password(new_password)
 
-        user.address_line = coalesce(new_address_line, user.address_line)
-        user.zip_code = coalesce(new_zip_code, user.zip_code)
-        user.district_id = coalesce(new_district_id, user.district_id)
+        user.name = coalesce(new_name, user.name)
+        #user.address_line = coalesce(new_address_line, user.address_line)
+        #user.zip_code = coalesce(new_zip_code, user.zip_code)
+        #user.district_id = coalesce(new_district_id, user.district_id)
+        
 
         db_session.commit()
         db_session.refresh(user)
         return user
+    
+    
+    
+    
+    
+    
+    
 
 
 def ensure_user(
@@ -463,3 +497,12 @@ def get_testimonials(
 #        db_session.add(favorite)
 #        db_session.commit()
 #        return favorite
+
+
+def list_user_item (
+    user_id: int, 
+    db_session: Session | None = None,
+) -> list[Item] | None:
+    with database_session(db_session) as db_session:
+        select_stmt = select(Item).where(Item.user_id == user_id)
+        return db_session.execute(select_stmt).scalars().all()
