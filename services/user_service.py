@@ -363,7 +363,7 @@ async def add_profile_image(
 
 def update_user_account(
         user_or_id: int | User,
-        current_password: str,
+        current_password: str | None = None,
         new_name: str | None = None,
         new_email: str | None = None,
         new_password: str | None = None,
@@ -375,12 +375,12 @@ def update_user_account(
     with database_session(db_session) as db_session:
         user = ensure_user(user_or_id, db_session)
 
-        if not password_matches(user, current_password):
-            raise ValueError(f"Password doesn't match.")
+        #if not password_matches(user, current_password):
+        #    raise ValueError(f"Password doesn't match.")
 
         if new_email:
-            if get_user_by_email(new_email, db_session):
-                raise InvalidUserAttribute(f'Email already {new_email} registered')
+            #if get_user_by_email(new_email, db_session):
+                #raise InvalidUserAttribute(f'Email already {new_email} registered')
             user.email_addr = new_email
 
         if new_password:

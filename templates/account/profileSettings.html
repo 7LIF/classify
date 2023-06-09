@@ -31,6 +31,7 @@
 						<div class="dashboard-block mt-0 profile-settings-block">
 							<h3 class="block-title">Configurações de Perfil</h3>
 							<div class="inner-block">
+								<div tal:condition="error" class="error-msg"> ${error_msg} </div>
 								<form id="profile_picture_form" class="default-form-style" action="/account/update_picture" method="post" enctype="multipart/form-data">
 									<div class="image form-group button mb-0">
 										<label for="profile_image">
@@ -40,18 +41,18 @@
 										<button type="submit" class="btn">Atualizar Imagem de Perfil</button>
 									</div>
 								</form>
-								<form action="/account/profileSettings" method="POST" enctype="multipart/form-data" class="profile-setting-form default-form-style">
+								<form action="/account/update_profileSettings" method="POST" enctype="multipart/form-data" class="profile-setting-form default-form-style">
 									<div class="row">
 										<div class="col-12">
 											<div class="form-group">
 												<label>Nome</label>
-												<input name="first-name" type="text" value="${name}"/>
+												<input name="name" type="text" value="${name}"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
 											<div class="form-group">
 												<label>Contato Telefónico</label>
-												<input name="email_addr" type="text" value="??????????????"/>
+												<input name="phone_number" type="text" value="??????????????"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
@@ -73,14 +74,14 @@
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
-											<div class="search-input form-group">
-												<label for="location"><i class="lni theme-color">Distrito</i></label>
+											<div class="form-group">
+												<label for="location">Distrito</label>
 												<select name="location" id="location">
 													<option value="none" selected disabled>Selecione o Distrito</option>							
 													<!-- Start List of District (Loop For) -->
 													<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
-														<option tal:condition="address_district!=district.id" value="${district.name}">${district.name}</option>
-														<option tal:condition="address_district==district.id" selected value="${district.name}">${district.name}</option>
+														<option tal:condition="address_district!=district.id" value="${district.id}">${district.name}</option>
+														<option tal:condition="address_district==district.id" selected value="${district.id}">${district.name}</option>
 													</__repeat__>
 													<!--/ End List of District (Loop For) -->
 												</select>
@@ -98,24 +99,24 @@
 						<div class="dashboard-block password-change-block">
 							<h3 class="block-title">Alterar a Palavra-passe</h3>
 							<div class="inner-block">
-								<form class="default-form-style" method="post" action="#">
+								<form class="default-form-style" method="post" action="/account/update_password">
 									<div class="row">
 										<div class="col-12">
 											<div class="form-group">
 												<label>Palavra-passe atual*</label>
-												<input name="Palavra-passe Atual" type="password" placeholder="Digite a sua palavra-passe atual"/>
+												<input name="current_password" type="password" placeholder="Digite a sua palavra-passe atual" required/>
 											</div>
 										</div>
 										<div class="col-12">
 											<div class="form-group">
 												<label>Nova palavra-passe*</label>
-												<input name="new-password" type="password" placeholder="Digite a nova palavra-passe"/>
+												<input name="new_password" type="password" placeholder="Digite a nova palavra-passe" required/>
 											</div>
 										</div>
 										<div class="col-12">
 											<div class="form-group">
 												<label>Digite novamente a palavra-passe*</label>
-												<input name="retype-password" type="password" placeholder="Digite novamente a palavra-passe"/>
+												<input name="retype_new_password" type="password" placeholder="Digite novamente a palavra-passe" required/>
 											</div>
 										</div>
 										<div class="col-12">
@@ -123,9 +124,6 @@
 												<button type="submit" class="btn">Atualizar Palavra-passe</button>
 											</div>
 										</div>
-
-										<div tal:condition="error" class="error-msg"> ${error_msg} </div>
-
 									</div>
 								</form>
 							</div>

@@ -3,6 +3,7 @@
 ################################################################################
 
 from datetime import date
+from werkzeug.utils import secure_filename
 import os
 from fastapi import APIRouter, File, HTTPException, Request, Response, Depends, UploadFile, responses, status
 from fastapi_chameleon import template
@@ -35,6 +36,7 @@ from services import (
     user_service as userv,
     settings_service as setserv,
 )
+from services.user_service import get_user_by_email, update_user_account
 
 
 ################################################################################
@@ -342,11 +344,11 @@ async def logout():
 async def profileSettings():
     return profileSettings_viewmodel()
     
-def profileSettings_viewmodel():
+def profileSettings_viewmodel(error_msg = ''):
     user = get_current_user()
     assert user is not None
        
-    return ViewModel(
+    vm = ViewModel(
         selected_menu = '',
         current = "edit",
         name = user.name,
@@ -361,74 +363,103 @@ def profileSettings_viewmodel():
         address_line_maxlength = ADDRESS_LINE_SIZE,
         zip_code = coalesce(user.zip_code, ''),
         zip_code_maxlength = ZIP_CODE_SIZE,
-        address_district = user.district_id,
-        
+        address_district = user.district_id,       
     )
-
-@router.post('/profileSettings', dependencies = [Depends(requires_authentication)])
-@template(template_file='account/profileSettings.html')
-async def post_profileSettings(request: Request):
-    vm = await post_profileSettings_viewmodel(request)
-
-    if vm.error:
-        return vm
     
-    return #update_user_account(vm.user_id)
-
-
-async def post_profileSettings_viewmodel(request: Request) -> ViewModel:
-    form_data = await request.form()
-    vm = ViewModel(
-        selected_menu = '',
-        email_addr = form_field_as_str(form_data, 'email_addr'),
-        password = form_field_as_str(form_data, 'password'),
-        user_id = None,
-        external_auth_providers = setserv.get_external_auth_providers(),
-    )
-
-    if not is_valid_email(vm.email_addr):
-        vm.error_msg = 'Palavra-passe errada ou utilizador inválido!'
-    elif not is_valid_password(vm.password):
-        vm.error_msg = 'Palavra-passe errada!'
-    elif not (user := userv.authenticate_user_by_email(vm.email_addr, vm.password)):
-        vm.error_msg = 'Palavra-passe errada ou utilizador inválido!'
-    else:
-        vm.error_msg = ''
-        vm.user_id = user.user_id
-
-    vm.error = bool(vm.error_msg)
-    
+    if error_msg != '':
+        vm.error, vm.error_msg = True, error_msg
     return vm
 
 
+@router.post('/update_profileSettings', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/profileSettings.html')
+async def update_profileSettings(request: Request):
+    form_data = await request.form()
+    new_name = form_field_as_str(form_data, 'name')
+    # todo: phone_number = form_field_as_str(form_data, 'phone_number')
+    new_email_addr = form_field_as_str(form_data, 'email_addr')
+    new_address_line = form_field_as_str(form_data, 'address_line')
+    new_zip_code = form_field_as_str(form_data, 'zip_code')
+    new_location = form_field_as_str(form_data, 'location')
+    user = get_current_user()
+    if not is_valid_name(new_name):
+        error_msg = 'Nome inválido!'
+    elif not is_valid_email(new_email_addr):
+        error_msg = 'Endereço de email inválido!'
+    elif get_user_by_email(new_email_addr) and get_user_by_email(new_email_addr)!=user:
+        error_msg = 'Endereço de email já registado!'
+    else:
+        error_msg = ''
+        userv.update_user_account(user_or_id=user.user_id, 
+                                  new_name=new_name, 
+                                  new_email=new_email_addr, 
+                                  new_address_line=new_address_line, 
+                                  new_zip_code = new_zip_code, 
+                                  new_district_id=new_location
+        )
+        
+        
+    return profileSettings_viewmodel(error_msg)
 
 
 
 
 
 
-from werkzeug.utils import secure_filename
+
+@router.post('/update_password', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/profileSettings.html')
+async def update_password(request: Request):
+    form_data = await request.form()
+    current_password = form_field_as_str(form_data, 'current_password')
+    new_password = form_field_as_str(form_data, 'new_password')
+    retype_new_password = form_field_as_str(form_data, 'retype_new_password')
+    user = get_current_user()
+    if not userv.password_matches(user, current_password):
+        error_msg = 'Palavra-passe atual incorreta!'
+    elif new_password != retype_new_password:
+        error_msg = 'Palavra-passe nova e a sua verificação não são iguais!'
+    elif not is_valid_password(new_password):
+        error_msg = 'Palavra-passe nova inválida!'
+    else:
+        error_msg = ''
+        userv.update_user_account(user_or_id=user.user_id, new_password=new_password, current_password=current_password)
+        
+        
+    return profileSettings_viewmodel(error_msg)
+
+
+
+
+
+
+
+
+
 
 ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png'}
     
 @router.post('/update_picture', dependencies = [Depends(requires_authentication)])
 @template(template_file='account/profileSettings.html')
 async def update_picture(file: UploadFile = File(...)):
+    error_msg = ''
     pic = file
     user = get_current_user()
-    if not pic:
-        return "No file uploaded", 400
     
+
     filename = secure_filename(pic.filename)
-    
+
     #save_path = os.path.join(conf('USERS_IMAGES_URL'), filename)
     file_ext = os.path.splitext(filename)[1].lstrip('.').lower()
-    
+
+    if not filename:
+        return profileSettings_viewmodel(error_msg = "Nenhuma imagem foi carregada!")
+
     if file_ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="Only JPEG, JPG, and PNG files are allowed.")
-    
-    with open("./static/assets/images/users/"+filename, "wb") as f:
-     f.write(pic.file.read())
+        return profileSettings_viewmodel(error_msg = "Apenas são permitidos ficheiros do tipo JPEG, JPG e PNG.")
+
+    with open(f"./static/assets/images/users/{filename}", "wb") as f:
+        f.write(pic.file.read())
     # Process the uploaded file as needed (e.g., update user profile)
     userv.add_profile_image_to_user(user.user_id,filename)
     return profileSettings_viewmodel()
