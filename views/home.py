@@ -42,6 +42,7 @@ async def index():
     return index_viewmodel()
 
 def index_viewmodel() -> ViewModel:
+    user = get_current_user()
     return ViewModel(
         selected_menu = 'home',
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),

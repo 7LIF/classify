@@ -3,8 +3,10 @@
 ################################################################################
 
 from datetime import date
-from fastapi import APIRouter, Request, Response, Depends, responses, status
+import os
+from fastapi import APIRouter, File, HTTPException, Request, Response, Depends, UploadFile, responses, status
 from fastapi_chameleon import template
+from requests import Session
 from common.fastapi_utils import form_field_as_str, form_field_as_file, upload_file_closing
 from common.viewmodel import ViewModel
 from config_settings import conf
@@ -27,6 +29,7 @@ from common.common import (
     find_first,
     all_except,
 )
+from data.models import UserAccount
 from services import (
     item_service as iserv,
     user_service as userv,
@@ -65,6 +68,7 @@ def account_viewmodel():
     assert user is not None
        
     return ViewModel(
+        selected_menu = '',
         name = user.name,
         user = userv.get_user_actual_by_id(user.user_id),
         email_addr = user.email_addr,
@@ -188,14 +192,15 @@ def register_viewmodel():
     name = get_session().get('name')
     email_addr = get_session().get('email_addr')
     return ViewModel(   
-        selected_menu = '',     
+        selected_menu = '',
+        current = "new",     
         name = name,
         name_status = 'disabled' if name else '',
         email_addr = email_addr,
         email_addr_status = 'disabled' if email_addr else '',
         password = '',
         checked = False,
-        current = "new",
+        
     )
 
 
@@ -343,6 +348,7 @@ def profileSettings_viewmodel():
        
     return ViewModel(
         selected_menu = '',
+        current = "edit",
         name = user.name,
         user = userv.get_user_actual_by_id(user.user_id),
         email_addr = user.email_addr,
@@ -355,8 +361,8 @@ def profileSettings_viewmodel():
         address_line_maxlength = ADDRESS_LINE_SIZE,
         zip_code = coalesce(user.zip_code, ''),
         zip_code_maxlength = ZIP_CODE_SIZE,
-        choose_file_msg = "Selecionar ficheiro",
-        current = "edit",
+        address_district = user.district_id,
+        
     )
 
 @router.post('/profileSettings', dependencies = [Depends(requires_authentication)])
@@ -401,9 +407,31 @@ async def post_profileSettings_viewmodel(request: Request) -> ViewModel:
 
 
 
+from werkzeug.utils import secure_filename
 
-
-
+ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png'}
+    
+@router.post('/update_picture', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/profileSettings.html')
+async def update_picture(file: UploadFile = File(...)):
+    pic = file
+    user = get_current_user()
+    if not pic:
+        return "No file uploaded", 400
+    
+    filename = secure_filename(pic.filename)
+    
+    #save_path = os.path.join(conf('USERS_IMAGES_URL'), filename)
+    file_ext = os.path.splitext(filename)[1].lstrip('.').lower()
+    
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Only JPEG, JPG, and PNG files are allowed.")
+    
+    with open("./static/assets/images/users/"+filename, "wb") as f:
+     f.write(pic.file.read())
+    # Process the uploaded file as needed (e.g., update user profile)
+    userv.add_profile_image_to_user(user.user_id,filename)
+    return profileSettings_viewmodel()
 
 
 

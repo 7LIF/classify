@@ -31,58 +31,59 @@
 						<div class="dashboard-block mt-0 profile-settings-block">
 							<h3 class="block-title">Configurações de Perfil</h3>
 							<div class="inner-block">
-								<div class="image">
-									<img src="${users_images_url}/${user.profile_image}" alt="#" />
-								</div>
-								<form action="/account/profileSettings" method="POST" class="profile-setting-form" method="post" action="#">
+								<form id="profile_picture_form" class="default-form-style" action="/account/update_picture" method="post" enctype="multipart/form-data">
+									<div class="image form-group button mb-0">
+										<label for="profile_image">
+											<img src="${users_images_url}/${user.profile_image}">
+										</label>
+										<input type="file" id="profile_image" name="file" style="display: none"/>
+										<button type="submit" class="btn">Atualizar Imagem de Perfil</button>
+									</div>
+								</form>
+								<form action="/account/profileSettings" method="POST" enctype="multipart/form-data" class="profile-setting-form default-form-style">
 									<div class="row">
 										<div class="col-12">
 											<div class="form-group">
 												<label>Nome</label>
-												<input name="first-name" type="text" placeholder="${name}"/>
+												<input name="first-name" type="text" value="${name}"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
 											<div class="form-group">
 												<label>Contato Telefónico</label>
-												<input name="email_addr" type="text" placeholder="${email_addr}"/>
+												<input name="email_addr" type="text" value="??????????????"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
 											<div class="form-group">
 												<label>Email</label>
-												<input name="email_addr" type="email" placeholder="${email_addr}"/>
+												<input name="email_addr" type="email" value="${email_addr}"/>
 											</div>
 										</div>
 										<div class="col-12">
 											<div class="form-group">
 												<label>Morada</label>
-												<input name="first-name" type="text" placeholder="${name}"/>
+												<input name="address_line" type="text" value="${address_line}"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
 											<div class="form-group">
 												<label>Código Postal</label>
-												<input name="email_addr" type="text" placeholder="${email_addr}"/>
+												<input name="zip_code" type="text" value="${zip_code}"/>
 											</div>
 										</div>
 										<div class="col-lg-6 col-12">
-											<div class="search-input">
+											<div class="search-input form-group">
 												<label for="location"><i class="lni theme-color">Distrito</i></label>
 												<select name="location" id="location">
 													<option value="none" selected disabled>Selecione o Distrito</option>							
 													<!-- Start List of District (Loop For) -->
 													<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
-														<option value="${district.name}">${district.name}</option>
+														<option tal:condition="address_district!=district.id" value="${district.name}">${district.name}</option>
+														<option tal:condition="address_district==district.id" selected value="${district.name}">${district.name}</option>
 													</__repeat__>
 													<!--/ End List of District (Loop For) -->
 												</select>
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-group upload-image">
-												<label>Imagem de Perfil</label>
-												<input name="profile-image" type="file" placeholder="Upload Image"/>
 											</div>
 										</div>
 										<div class="col-12">

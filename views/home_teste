@@ -285,3 +285,35 @@ def search_item(
                         .join(District).filter(District.name == district)
         )
         return db_session.execute(select_stmt).scalars().all()
+
+
+
+
+
+
+async def add_profile_image(
+        user_or_id: UserAccount | int, 
+        image_async_file,
+        extension: str = '',
+        content_type: str = '',
+        db_session: Session | None = None
+) -> UserAccount:
+    with database_session(db_session) as db_session:
+        user = ensure_user_is(user_or_id, UserAccount, db_session)
+
+        if not (extension or content_type):
+            raise ValueError('No extension or content type were given')
+
+        extension = (
+            extension if extension else 
+            IMAGE_CONTENT_TYPE_TO_EXTENSION.get(content_type, '')
+        )
+        image_file_path = f"./{USERS_IMAGES_URL}/{user.user_id}.{extension}"
+
+        async with aiofiles.open(image_file_path, "wb") as out_file:
+            await out_file.write(await image_async_file.read())
+
+        user.profile_image = image_file_path   
+        db_session.commit()
+        db_session.refresh(user)
+        return user

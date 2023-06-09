@@ -21,6 +21,7 @@ __all__ = (
 
 
 import aiofiles
+from fastapi import UploadFile
 import passlib.hash as passlib_hash
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -344,27 +345,14 @@ def add_profile_image_to_user(
 
 async def add_profile_image(
         user_or_id: UserAccount | int, 
-        image_async_file,
-        extension: str = '',
-        content_type: str = '',
+        image_async_file: UploadFile,
         db_session: Session | None = None
 ) -> UserAccount:
     with database_session(db_session) as db_session:
         user = ensure_user_is(user_or_id, UserAccount, db_session)
 
-        if not (extension or content_type):
-            raise ValueError('No extension or content type were given')
-
-        extension = (
-            extension if extension else 
-            IMAGE_CONTENT_TYPE_TO_EXTENSION.get(content_type, '')
-        )
-        image_file_path = f"./{USERS_IMAGES_URL}/{user.user_id}.{extension}"
-
-        async with aiofiles.open(image_file_path, "wb") as out_file:
-            await out_file.write(await image_async_file.read())
-
-        user.profile_image = image_file_path   
+        image_data = await image_async_file.read()
+        user.profile_image = image_data
         db_session.commit()
         db_session.refresh(user)
         return user
@@ -403,9 +391,10 @@ def update_user_account(
             user.password_hash = userv.hash_password(new_password)
 
         user.name = coalesce(new_name, user.name)
-        #user.address_line = coalesce(new_address_line, user.address_line)
-        #user.zip_code = coalesce(new_zip_code, user.zip_code)
-        #user.district_id = coalesce(new_district_id, user.district_id)
+        #user.phone_number =  coalesce(new_phone_number, user.phone_number)
+        user.address_line = coalesce(new_address_line, user.address_line)
+        user.zip_code = coalesce(new_zip_code, user.zip_code)
+        user.district_id = coalesce(new_district_id, user.district_id)
         
 
         db_session.commit()

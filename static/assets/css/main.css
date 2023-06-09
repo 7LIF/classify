@@ -1242,7 +1242,6 @@ ul, ol {
 }
 
 .header .login-button ul {
-    padding: 14px 20px;
     border-radius: 30px
 }
 
@@ -1861,6 +1860,10 @@ ul, ol {
     font-size: 14px;
     display: inline-block;
     margin-right: 5px
+}
+
+.section-heading{
+    padding-bottom: 100px;
 }
 
 .hero-area {
@@ -4943,7 +4946,8 @@ blockquote .shape {
 .profile-settings-block .image img {
     height: 150px;
     width: 150px;
-    border-radius: 6px
+    border-radius: 6px;
+    margin: 10px
 }
 
 .profile-settings-block .profile-setting-form {
@@ -5000,8 +5004,7 @@ blockquote .shape {
 }
 
 .default-form-style .form-group.button .btn {
-    padding: 13px 30px;
-    margin-left: 10px
+    padding: 13px 30px
 }
 
 .default-form-style .form-group.button .btn.alt-btn {
@@ -6532,7 +6535,8 @@ blockquote .shape {
 }
 
 .how-works {
-    background-color: #f9f9f9
+    background-color: #f9f9f9;
+    padding-bottom: 65px;
 }
 
 .how-works .single-work {
@@ -6540,7 +6544,8 @@ blockquote .shape {
     padding: 40px;
     background-color: #fff;
     border: 1px solid #eee;
-    border-radius: 6px
+    border-radius: 6px;
+    height: 300px
 }
 
 .how-works .single-work .serial {
@@ -8733,8 +8738,14 @@ blockquote .shape {
 
 
 
+#btn-exit {
+    margin-top: -32px;
+}
 
-
+#exit-li{
+    height: 30px;
+    margin-top: 33px;
+}
 
 
 
