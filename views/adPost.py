@@ -4,6 +4,7 @@
 import decimal as dec
 from fastapi import APIRouter, Request
 from fastapi_chameleon import template
+from common.auth import get_current_user
 from common.common import format_date
 from common.viewmodel import ViewModel
 from config_settings import conf
@@ -48,6 +49,12 @@ async def search(request: Request):
     
 
 async def search_viewmodel(keyword: str | None, category: str | None, district: str | None,  price: str | None) -> ViewModel:
+    
+    user = get_current_user()
+    if user is None:
+        favorites = []
+    else:
+        favorites = userv.get_user_favorites_ids(user.user_id)
     vm = ViewModel(
         search=iserv.search_item(keyword, category, district, price),
         selected_menu = 'ads',
@@ -60,6 +67,7 @@ async def search_viewmodel(keyword: str | None, category: str | None, district: 
         list_category = setserv.get_accepted_category(),
         items_in_category = setserv.count_items_in_categories(),
         latest_items = '',
+        favorites = favorites
     )
 
     if keyword is None or keyword == '' and category is None and district is None and price is None:

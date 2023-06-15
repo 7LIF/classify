@@ -1,5 +1,6 @@
 from decimal import Decimal as dec
 from random import sample
+from typing import Optional
 from sqlalchemy import Float, select, or_, and_, func
 from sqlalchemy.orm import Session
 from data.database import database_session
@@ -13,7 +14,7 @@ __all__ = (
     'available_items',
     'get_item_by_id',
     'get_district_name_from_item',
-    'search_items',
+    'search_item',
 )
 
 
@@ -62,6 +63,60 @@ def create_item(
             )
         )
         item.status = status
+        db_session.commit()
+        return item
+    
+
+def edit_item(
+        item_id: str,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        main_image_url: Optional[str] = None,
+        image1_url: Optional[str] = None,
+        image2_url: Optional[str] = None,
+        image3_url: Optional[str] = None,
+        image4_url: Optional[str] = None,
+        address_line: Optional[str] = None,
+        zip_code: Optional[str] = None,
+        district_id: Optional[str] = None,
+        subcategory_id: Optional[str] = None,
+        price: Optional[dec] = None,
+        status: Optional[ItemStatusEnum] = None,
+        db_session: Session | None = None,
+) -> Item:
+    with database_session(db_session) as db_session:
+        item = db_session.query(Item).get(item_id)
+        if not item:
+            raise ValueError("Item does not exist")  # or handle the error in an appropriate way
+
+        # Update the fields with the provided values
+        if title is not None:
+            item.title = title
+        if description is not None:
+            item.description = description
+        if main_image_url is not None and main_image_url != '':
+            item.main_image_url = main_image_url
+        if image1_url is not None and image1_url != '':
+            item.image1_url = image1_url
+        if image2_url is not None and image2_url != '':
+            item.image2_url = image2_url
+        if image3_url is not None and image3_url != '':
+            item.image3_url = image3_url
+        if image4_url is not None and image4_url != '':
+            item.image4_url = image4_url
+        if address_line is not None:
+            item.address_line = address_line
+        if zip_code is not None:
+            item.zip_code = zip_code
+        if district_id is not None:
+            item.district_id = district_id
+        if subcategory_id is not None:
+            item.subcategory_id = subcategory_id
+        if price is not None:
+            item.price = str(price)
+        if status is not None:
+            item.status = status
+
         db_session.commit()
         return item
 
@@ -171,3 +226,50 @@ def search_item(
             query = query.filter(func.cast(Item.price, Float) <= float(price))
             
         return query.all()
+    
+    
+    
+    
+def delete_item(
+        item_id = int, 
+        db_session: Session | None = None,
+) -> None:
+    with database_session(db_session) as db_session:
+        item = db_session.query(Item).get(item_id)
+    if item:
+        db_session.delete(item)
+        db_session.commit()
+        
+        
+        
+def item_belongs_to_user(
+    item_id: int,
+    user_id: int,
+    db_session: Session | None = None
+) -> bool | None:
+    with database_session(db_session) as db_session:
+        item = db_session.query(Item).filter_by(id=item_id, user_id=user_id).first()
+        return item is not None if item else None
+
+           
+def remove_image_from_item(
+    item_id: int,
+    user_id: int,
+    img: str,
+    type_image:str,
+    db_session: Session | None = None
+) -> bool | None:
+    with database_session(db_session) as db_session:
+        item = db_session.query(Item).filter_by(id=item_id, user_id=user_id).first()
+        if item is not None:
+            if getattr(item, type_image) == img:
+                # Update the dynamically named column to remove the value
+                setattr(item, type_image, None)
+                db_session.commit()
+                return True
+            else:
+                return False
+        else:
+            return None
+     
+    

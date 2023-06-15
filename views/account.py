@@ -3,6 +3,8 @@
 ################################################################################
 
 from datetime import date
+from typing import List
+import uuid
 from werkzeug.utils import secure_filename
 import os
 from fastapi import APIRouter, File, HTTPException, Request, Response, Depends, UploadFile, responses, status
@@ -30,13 +32,13 @@ from common.common import (
     find_first,
     all_except,
 )
-from data.models import UserAccount
+from data.models import Item, PHONE_NUMBER_SIZE, UserAccount
 from services import (
     item_service as iserv,
     user_service as userv,
     settings_service as setserv,
 )
-from services.user_service import get_user_by_email, update_user_account
+from services.user_service import get_user_by_email, update_user_account, user_has_favorite
 
 
 ################################################################################
@@ -47,6 +49,7 @@ ADDRESS_LINE_SIZE = 60
 ZIP_CODE_SIZE = 20
 LIST_CATEGORY_COUNT = 11
 LOCATION_DISTRICT_COUNT = 21
+ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png'}
 
 
 ################################################################################
@@ -321,7 +324,6 @@ def exec_login(user_id: int) -> Response:
     return response
 
 
-
   
 ################################################################################
 ##      Define a route and View model for the logout page
@@ -336,7 +338,7 @@ async def logout():
 
 
 ################################################################################
-##      Define a route and View model for the dashboard page and all pages submenus
+##      Define a route and View model for the profileSettings page
 ################################################################################
     
 @router.get('/profileSettings', dependencies = [Depends(requires_authentication)])
@@ -354,6 +356,7 @@ def profileSettings_viewmodel(error_msg = ''):
         name = user.name,
         user = userv.get_user_actual_by_id(user.user_id),
         email_addr = user.email_addr,
+        phone_number = user.phone_number,
         items_images_url = conf('ITEMS_IMAGES_URL'),     
         users_images_url = conf('USERS_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
@@ -376,7 +379,7 @@ def profileSettings_viewmodel(error_msg = ''):
 async def update_profileSettings(request: Request):
     form_data = await request.form()
     new_name = form_field_as_str(form_data, 'name')
-    # todo: phone_number = form_field_as_str(form_data, 'phone_number')
+    new_phone_number = form_field_as_str(form_data, 'phone_number')
     new_email_addr = form_field_as_str(form_data, 'email_addr')
     new_address_line = form_field_as_str(form_data, 'address_line')
     new_zip_code = form_field_as_str(form_data, 'zip_code')
@@ -384,26 +387,48 @@ async def update_profileSettings(request: Request):
     user = get_current_user()
     if not is_valid_name(new_name):
         error_msg = 'Nome inválido!'
+    elif len(new_phone_number)!=PHONE_NUMBER_SIZE:
+        error_msg = 'Insira um número de de telefone válido!'
     elif not is_valid_email(new_email_addr):
         error_msg = 'Endereço de email inválido!'
-    elif get_user_by_email(new_email_addr) and get_user_by_email(new_email_addr)!=user:
+    elif get_user_by_email(new_email_addr) and get_user_by_email(new_email_addr).user_id!=user.user_id:
         error_msg = 'Endereço de email já registado!'
     else:
         error_msg = ''
         userv.update_user_account(user_or_id=user.user_id, 
                                   new_name=new_name, 
+                                  new_phone_number = new_phone_number,
                                   new_email=new_email_addr, 
                                   new_address_line=new_address_line, 
                                   new_zip_code = new_zip_code, 
                                   new_district_id=new_location
         )
         
-        
     return profileSettings_viewmodel(error_msg)
 
 
+    
+@router.post('/update_picture', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/profileSettings.html')
+async def update_picture(file: UploadFile = File(...)):
+    error_msg = ''
+    pic = file
+    user = get_current_user()
+    filename = secure_filename(pic.filename)
+    #save_path = os.path.join(conf('USERS_IMAGES_URL'), filename)
+    file_ext = os.path.splitext(filename)[1].lstrip('.').lower()
 
+    if not filename:
+        return profileSettings_viewmodel(error_msg = "Nenhuma imagem foi carregada!")
 
+    if file_ext not in ALLOWED_EXTENSIONS:
+        return profileSettings_viewmodel(error_msg = "Apenas são permitidos ficheiros do tipo JPEG, JPG e PNG.")
+
+    with open(f"./static/assets/images/users/{filename}", "wb") as f:
+        f.write(pic.file.read())
+    # Process the uploaded file as needed (e.g., update user profile)
+    userv.add_profile_image_to_user(user.user_id,filename)
+    return profileSettings_viewmodel()
 
 
 
@@ -425,115 +450,389 @@ async def update_password(request: Request):
         error_msg = ''
         userv.update_user_account(user_or_id=user.user_id, new_password=new_password, current_password=current_password)
         
-        
     return profileSettings_viewmodel(error_msg)
 
 
 
 
-
-
-
-
-
-
-ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png'}
-    
-@router.post('/update_picture', dependencies = [Depends(requires_authentication)])
-@template(template_file='account/profileSettings.html')
-async def update_picture(file: UploadFile = File(...)):
-    error_msg = ''
-    pic = file
-    user = get_current_user()
-    
-
-    filename = secure_filename(pic.filename)
-
-    #save_path = os.path.join(conf('USERS_IMAGES_URL'), filename)
-    file_ext = os.path.splitext(filename)[1].lstrip('.').lower()
-
-    if not filename:
-        return profileSettings_viewmodel(error_msg = "Nenhuma imagem foi carregada!")
-
-    if file_ext not in ALLOWED_EXTENSIONS:
-        return profileSettings_viewmodel(error_msg = "Apenas são permitidos ficheiros do tipo JPEG, JPG e PNG.")
-
-    with open(f"./static/assets/images/users/{filename}", "wb") as f:
-        f.write(pic.file.read())
-    # Process the uploaded file as needed (e.g., update user profile)
-    userv.add_profile_image_to_user(user.user_id,filename)
-    return profileSettings_viewmodel()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+################################################################################
+##      Define a route and View model for the myAds page
+################################################################################
 
 @router.get('/myAds', dependencies = [Depends(requires_authentication)])
 @template()
 async def myAds():
     return myAds_viewmodel()
     
-def myAds_viewmodel():
-        return ViewModel(
-        error = None,
+def myAds_viewmodel(error_msg = ''):
+    user = get_current_user()
+    assert user is not None
+    vm = ViewModel(
+        selected_menu = '',
         current = "ads",
+        users_images_url = conf('USERS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        user = userv.get_user_actual_by_id(user.user_id),
+        list_user_items = userv.list_user_item(user.user_id),
+        name = user.name,
     )
+    if error_msg != '':
+        vm.error, vm.error_msg = True, error_msg
+    return vm
+
+
+@router.get('/delete_Ad', dependencies=[Depends(requires_authentication)])
+@template(template_file='account/myAds.html')
+async def delete_Ad(request: Request):
+    user = get_current_user()
+    assert user is not None
     
+    item_id = request.query_params.get('item_id')
+    if not iserv.item_belongs_to_user(item_id, user.user_id):
+        return myAds_viewmodel(error_msg = 'Sem permissões para apagar esse item')
+    elif item_id:
+        iserv.delete_item(item_id)
+    return myAds_viewmodel()
     
-    
-@router.get('/favoritesAds', dependencies = [Depends(requires_authentication)])
-@template()
-async def favoritesAds():
-    return favoritesAds_viewmodel()
-    
-def favoritesAds_viewmodel():
-        return ViewModel(
-        error = None,
-        current = "fav",
-    )
-    
-    
+
+
+
+################################################################################
+##      Define a route and View model for the newAdPost page
+################################################################################    
     
 @router.get('/newAdPost', dependencies = [Depends(requires_authentication)])
 @template()
-async def newAdPost():
-    return newAdPost_viewmodel()
-   
-def newAdPost_viewmodel():
-    return ViewModel(
-        list_category = setserv.get_accepted_category(),
-        location_district = setserv.get_accepted_district(),
+async def newAdPost(request: Request):     
+    return newAdPost_viewmodel(request)
+
+
+def newAdPost_viewmodel(request: Request,error_msg = '', success = False):
+    user = get_current_user()
+    assert user is not None   
+    item_id = request.query_params.get('item_id')
+     
+    if item_id and  iserv.item_belongs_to_user(item_id,user.user_id):           
+        item = iserv.get_item_by_id(item_id)
+        address_line = item.address_line
+        zip_code = item.zip_code
+        district = item.district_id
+        title=item.title
+        add_subcategory = item.subcategory_id
+        price = item.price
+        files1 = item.main_image_url        
+        files2 = item.image1_url        
+        files3 = item.image2_url        
+        files4 = item.image3_url        
+        files5 = item.image4_url   
+        description = item.description
+        edit = True  
+        success_msg = "Anuncio alterado com sucesso"
+    else:
+        if item_id:
+            error_msg = "Não tem permissões para editar este Item"
+        address_line = user.address_line
+        zip_code = user.zip_code
+        district = user.district_id
+        title=''
+        add_subcategory = ''
+        price = ''
+        files1 = ''      
+        files2 = ''      
+        files3 = ''      
+        files4 = ''      
+        files5 = '' 
+        description = ''
+        edit=False
+        item_id=""
+        success_msg = "Anuncio adicionado com sucesso"
+    vm = ViewModel(
+        selected_menu = '',
         current = "new",
+        users_images_url = conf('USERS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        list_subcategory = setserv.get_accepted_subcategory(),
+        user = userv.get_user_actual_by_id(user.user_id),
+        list_user_items = userv.list_user_item(user.user_id),
+        item_id=item_id,
+        name = user.name,
+        address_line = address_line,
+        zip_code = zip_code,
+        title=title,
+        price = price,
+        add_subcategory = add_subcategory,
+        address_district = district,
+        files1 = files1,
+        files2 = files2 ,     
+        files3 = files3 ,     
+        files4 = files4 ,     
+        files5 = files5,
+        description = description,
+        location_district = setserv.get_accepted_district(),
+        checked = False,
+        success = False,
+        edit = edit,
+        success_msg=success_msg
     )
+    if error_msg != '':
+        vm.error, vm.error_msg = True, error_msg
+    if success:
+        vm.success=True,
+    return vm
+    
+def upload_item_image(pic) ->str | None:    
+    filename = secure_filename(pic.filename)
+    file_ext = os.path.splitext(filename)[1].lstrip('.').lower()
+    # Generate a unique filename for each file
+    unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(filename)[1]}"
+    save_path = os.path.join("./"+conf('ITEMS_IMAGES_URL'), unique_filename)
+    if not filename:
+        return ''
+    if file_ext not in ALLOWED_EXTENSIONS:
+        return None
+
+    with open(save_path, "wb") as f:
+        f.write(pic.file.read())
+    return unique_filename
+
+@router.post('/create_Ad', dependencies=[Depends(requires_authentication)])
+@template(template_file='account/newAdPost.html')
+async def create_Ad(request: Request, files1: UploadFile = File(...), files2: UploadFile = File(...), files3: UploadFile = File(...), files4: UploadFile = File(...),files5: UploadFile = File(...),):
+    user = get_current_user()
+    assert user is not None
+    form_data = await request.form()  
+    title = form_field_as_str(form_data, 'title')  
+    price = form_field_as_str(form_data, 'price')
+    main_image_url =''
+    image1_url = ''
+    image2_url = ''
+    image3_url = ''
+    image4_url = ''
+    address_line = form_field_as_str(form_data, 'address_line')
+    zip_code = form_field_as_str(form_data, 'zip_code')
+    district_id = form_field_as_str(form_data, 'location')
+    subcategory_id = form_field_as_str(form_data, 'subcategory')
+    price = form_field_as_str(form_data, 'price')
+    description= form_field_as_str(form_data, 'message')
+    user_id = user.user_id   
+    
+    if not title:
+       error_msg = 'Insira um título'
+    elif not subcategory_id:
+       error_msg = 'Selecione uma subcategoria' 
+    elif not price:
+       error_msg = 'Insira o preço'  
+    elif not description:
+       error_msg = 'Insira a descrição'
+    elif not district_id:
+       error_msg = 'Selecione um distrito'
+    elif not files1.filename: 
+       error_msg = 'Adicione a foto principal'  
+    else:
+       error_msg = ''
+
+    
+    
+
+    file_list = [files1, files2, files3, files4, files5]
+    image_urls = []
+
+    for files in file_list:
+        image_url = upload_item_image(files)
+        if image_url is None:
+            error_msg = "Apenas são permitidos ficheiros do tipo JPEG, JPG e PNG"
+            break
+        image_urls.append(image_url)
+    
+    if error_msg == '':
+        main_image_url = image_urls[0]
+        image1_url = image_urls[1]
+        image2_url = image_urls[2]
+        image3_url = image_urls[3]
+        image4_url = image_urls[4]
+    
+    if error_msg == '':
+        new_ad = iserv.create_item(
+            title,
+            description,  
+            main_image_url,
+            image1_url,
+            image2_url,
+            image3_url,
+            image4_url,
+            address_line,
+            zip_code,
+            district_id,
+            subcategory_id,
+            price,
+            user_id,
+        )
+        return newAdPost_viewmodel(request,error_msg = error_msg, success= True)
+    
+    return newAdPost_viewmodel(request,error_msg = error_msg)
+    
+
+
+@router.post('/edit_Ad', dependencies=[Depends(requires_authentication)])
+@template(template_file='account/newAdPost.html')
+async def create_Ad(request: Request, files1: UploadFile = File(...), files2: UploadFile = File(...), files3: UploadFile = File(...), files4: UploadFile = File(...),files5: UploadFile = File(...)):
+    
+    item_id = request.query_params.get('item_id')
+    user = get_current_user()
+    assert user is not None
+    form_data = await request.form()  
+    title = form_field_as_str(form_data, 'title')  
+    price = form_field_as_str(form_data, 'price')
+    address_line = form_field_as_str(form_data, 'address_line')
+    zip_code = form_field_as_str(form_data, 'zip_code')
+    district_id = form_field_as_str(form_data, 'location')
+    subcategory_id = form_field_as_str(form_data, 'subcategory')
+    price = form_field_as_str(form_data, 'price')
+    description= form_field_as_str(form_data, 'message')
+    user_id = user.user_id   
+    main_image_url =''
+    image1_url = ''
+    image2_url = ''
+    image3_url = ''
+    image4_url = ''
+    
+    if not title:
+       error_msg = 'Insira um título'
+    elif not subcategory_id:
+       error_msg = 'Selecione uma subcategoria' 
+    elif not price:
+       error_msg = 'Insira o preço'  
+    elif not description:
+       error_msg = 'Insira a descrição'
+    elif not district_id:
+       error_msg = 'Selecione um distrito' 
+    else:
+       error_msg = ''    
+    
+    file_list = [files1, files2, files3, files4, files5]
+    image_urls = []
+
+    for files in file_list:
+        image_url = upload_item_image(files)
+        if image_url is None:
+            error_msg = "Apenas são permitidos ficheiros do tipo JPEG, JPG e PNG"
+            break
+        image_urls.append(image_url)
+    
+    if error_msg == '':
+        main_image_url = image_urls[0]
+        image1_url = image_urls[1]
+        image2_url = image_urls[2]
+        image3_url = image_urls[3]
+        image4_url = image_urls[4]
+   
+    
+    if error_msg == '':
+        new_ad = iserv.edit_item(
+            item_id=item_id,
+            title= title,
+            description= description,
+            main_image_url =main_image_url,
+            image1_url = image1_url,
+            image2_url = image2_url,
+            image3_url = image3_url,
+            image4_url = image4_url, 
+            address_line= address_line,
+            zip_code=zip_code,
+            district_id=district_id,
+            subcategory_id=subcategory_id,
+            price=price,
+        )
+        return newAdPost_viewmodel(request,error_msg = error_msg, success= True)
+    
+    return newAdPost_viewmodel(request,error_msg = error_msg) 
+
+@router.post("/removeImage")
+async def removeImage(request_data: dict):
+    # Process the AJAX request data
+    # You can access the request data using the `request_data` parameter
+    # Perform necessary operations and return the response
+    user = get_current_user()
+    assert user is not None
+    type_image = request_data['type']
+    item_id = request_data['item']
+    img = request_data['dataImg']
+    if type_image == "main_image_url":
+        return "success"
+    if not iserv.item_belongs_to_user(item_id,user.user_id):
+        return "Nao tem permissoes para editar esse item"
+    if iserv.remove_image_from_item(item_id,user.user_id,img,type_image):
+
+        response_data = "success"
+    else:
+        response_data = "something went wrong"
+    return response_data
+
+@router.post("/toggle_favorite")
+async def toggle_favorite(request_data: dict):
+    # Process the AJAX request data
+    # You can access the request data using the `request_data` parameter
+    # Perform necessary operations and return the response
+    user = get_current_user()
+    assert user is not None
+    item_id = request_data['item_id']
+    if not userv.user_has_favorite(user.user_id,item_id):
+        userv.add_favorite_item_to_user(user.user_id,item_id)
+        return "add"
+    else:
+        userv.remove_favorite_item_from_user(user_id=user.user_id,item_id=item_id)
+        return "remove"
+    
+@router.get("/remove_favorite")
+@template(template_file='account/favoritesAds.html')
+async def remove_favorite(request: Request):
+    user = get_current_user()
+    assert user is not None
+    
+    item_id = request.query_params.get('item_id')
+    userv.remove_favorite_item_from_user(user_id=user.user_id,item_id=item_id)
+    return favoritesAds_viewmodel() 
+    
+       
     
     
     
-@router.get('/messages', dependencies = [Depends(requires_authentication)])
-@template()
-async def messages():
-    return messages_viewmodel()
-    
-def messages_viewmodel():
-        return ViewModel(
-        error = None,
-        current = "msgs",
-    )
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+##      Define a route and View model for the deleteAccount page
+################################################################################  
     
 @router.get('/deleteAccount', dependencies = [Depends(requires_authentication)])
 @template()
@@ -546,7 +845,11 @@ def deleteAccount_viewmodel():
         current = "close",
     )
 
-        
+
+
+################################################################################
+##      Define a route and View model for the mailSuccess page
+################################################################################        
         
 @router.get('/mailSuccess', dependencies = [Depends(requires_authentication)])
 @template()
@@ -556,4 +859,49 @@ async def mailSuccess():
 def mailSuccess_viewmodel():
         return ViewModel(
         error = None,
+    )
+        
+        
+################################################################################
+##      Define a route and View model for the favoritesAds page
+################################################################################
+
+
+@router.get('/favoritesAds', dependencies = [Depends(requires_authentication)])
+@template()
+async def favoritesAds():
+    return favoritesAds_viewmodel()
+    
+def favoritesAds_viewmodel(error_msg = ''):
+    user = get_current_user()
+    assert user is not None
+    vm = ViewModel(
+        selected_menu = '',
+        current = "fav",
+        users_images_url = conf('USERS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        user = userv.get_user_actual_by_id(user.user_id),
+        list_user_items = userv.list_user_item(user.user_id),
+        name = user.name,
+        items = userv.get_user_favorites(user.user_id)
+    )
+    if error_msg != '':
+        vm.error, vm.error_msg = True, error_msg
+    return vm
+
+
+################################################################################
+##      Define a route and View model for the messages page
+################################################################################
+
+@router.get('/messages', dependencies = [Depends(requires_authentication)])
+@template()
+async def messages():
+    return messages_viewmodel()
+    
+def messages_viewmodel():
+        return ViewModel(
+        error = None,
+        current = "msgs",
+        selected_menu = '',
     )

@@ -29,178 +29,189 @@
 				<div class="col-lg-9 col-md-8 col-12">
 					<div class="main-content">
 						<div class="dashboard-block mt-0">
-							<h3 class="block-title">Post Ad</h3>
+							<h3 class="block-title">Informação do Anúncio</h3>
+							
+							<div tal:condition="error" class="error-msg"> ${error_msg} </div>
+							<div tal:condition="success" class="success-msg"> ${success_msg} </div>
 							<div class="inner-block">
 								<div class="post-ad-tab">
-									<nav>
-										<div class="nav nav-tabs" id="nav-tab" role="tablist">
-											<button	class="nav-link active"	
-												id="nav-item-info-tab" 
-												data-bs-toggle="tab" 
-												data-bs-target="#nav-item-info"
-												type="button"
-												role="tab"
-												aria-controls="nav-item-info"
-												aria-selected="true"
-												><span class="serial">01</span>Step<span class="sub-title">Ad Information</span>
-											</button>
-											<button
-												class="nav-link"
-												id="nav-item-details-tab"
-												data-bs-toggle="tab"
-												data-bs-target="#nav-item-details"
-												type="button"
-												role="tab"
-												aria-controls="nav-item-details"
-												aria-selected="false"
-												><span class="serial">02</span>Step<span class="sub-title">Ad Details</span>
-											</button>
-											<button
-												class="nav-link"
-												id="nav-user-info-tab"
-												data-bs-toggle="tab"
-												data-bs-target="#nav-user-info"
-												type="button"
-												role="tab"
-												aria-controls="nav-user-info"
-												aria-selected="false"
-												><span class="serial">03</span>Step<span class="sub-title">User Information</span>
-											</button>
-										</div>
-									</nav>
 									<div class="tab-content" id="nav-tabContent">
 										<div class="tab-pane fade show active" id="nav-item-info" role="tabpanel" aria-labelledby="nav-item-info-tab">
 											<div class="step-one-content">
-												<form class="default-form-style" method="post" action="#">
-													<div class="row">
+												<form class="default-form-style" method="post" enctype="multipart/form-data" tal:attributes="action python: '/account/' + ('edit_Ad?item_id=' + str(item_id) if edit and item_id else 'create_Ad')">
+														<div class="row">
 														<div class="col-12">
 															<div class="form-group">
-																<label>Add Title*</label>
-																<input name="title" type="text" placeholder="Enter Title"/>
+																<label>Título do Anúncio*</label>
+																<input value="${title}" name="title" type="text" placeholder="Adiciona um título para o Anúncio" required/>
 															</div>
 														</div>
 														<div class="col-12">
 															<div class="form-group">
-																<label>Category*</label>
+																<label>Subcategoria*</label>
 																<div class="selector-head">
 																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Select a Category</option>
-																		<__repeat__ tal:repeat="category list_category" tal:omit-tag="True">
-																			<option value="none">${category.name}</option>
+																	<select 	name="subcategory" class="user-chosen-select" required>
+																		<option value="none">Selecione uma Subcategoria</option>
+																		<__repeat__ tal:repeat="subcategory list_subcategory" tal:omit-tag="True">
+																			<option tal:condition="add_subcategory!=subcategory.id" value="${subcategory.id}">${subcategory.name}</option>
+																			<option tal:condition="add_subcategory==subcategory.id" selected value="${subcategory.id}">${subcategory.name}</option>
 																		</__repeat__>
 																	</select>
 																</div>
 															</div>
 														</div>
-														<div class="col-12">
-															<div class="form-group button mb-0">
-																<button type="submit" class="btn">Next Step</button>
-															</div>
-														</div>
-													</div>
-												</form>
-											</div>
-										</div>
-										<div class="tab-pane fade" id="nav-item-details" role="tabpanel" aria-labelledby="nav-item-details-tab">
-											<div class="step-two-content">
-												<form class="default-form-style" method="post" action="#">
-													<div class="row">
-														<div class="col-12">
-															<div class="form-group">
-																<label>Add Price*</label>
-																<input name="price" type="text" placeholder="Enter Price"/>
-															</div>
-														</div>
-														<div class="col-12">
-															<div class="form-group">
-																<label>Price Type*</label>
-																<div class="selector-head">
-																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Select an option</option>
-																		<option value="none">Fixed</option>
-																		<option value="none">Price On Call</option>
-																	</select>
+
+														<div class="row">
+															<div class="col-12">
+																<div class="form-group">
+																	<label>Preço em euros (€)*</label>
+																	<input value="${price}" name="price" type="text" placeholder="0.00" required/>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-6 col-12">
-															<div class="upload-input">
-																<input type="file" id="upload" name="upload"/>
-																<label for="upload"	class="text-center content">
-																	<span class="text">
-																		<span class="d-block mb-15">Drop files anywhere to Upload</span>
-																		<span class="mb-15 plus-icon"><i class="lni lni-plus"></i></span>
-																		<span class="main-btn d-block btn-hover">Select File</span>
-																		<span class="d-block">Maximum upload file size 10Mb</span>
-																	</span>
-																</label>
-															</div>
-														</div>
-														<div class="col-12">
-															<div class="form-group mt-30">
-																<label>Ad Description*</label>
-																<textarea name="message" placeholder="Input ad description"></textarea>
-															</div>
-														</div>
-														<div class="col-lg-6 col-12">
-															<div class="form-group">
-																<label>Type of Ad*</label>
-																<div class="selector-head">
-																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Select an option</option>
-																		<option value="none">Option 1</option>
-																		<option value="none">Option 2</option>
-																		<option value="none">Option 3</option>
-																	</select>
+															<!-- ainda não aplicado
+															<div class="col-12">
+																<div class="form-group">
+																	<label>Price Type*</label>
+																	<div class="selector-head">
+																		<span class="arrow"><i class="lni lni-chevron-down"></i></span>
+																		<select class="user-chosen-select">
+																			<option value="none">Select an option</option>
+																			<option value="none">Fixed</option>
+																			<option value="none">Price On Call</option>
+																		</select>
+																	</div>
 																</div>
 															</div>
-														</div>
-														<div class="col-lg-6 col-12">
-															<div class="form-group">
-																<label>Item Condition*</label>
-																<div class="selector-head">
-																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Select an option</option>
-																		<option value="none">Used</option>
-																		<option value="none">Brand New</option>
-																	</select>
+															-->
+															<div class="col-lg-12 col-12">
+																<div tal:condition="not edit" class="upload-input" >																	
+																	<div class="edit-image">
+																		<label id="main_image_label" for="main_image">Imagem principal *</label>
+																		<input type="file" id="main_image" name="files1" />
+																	</div>																		
+																	<div class="edit-image">
+																		<label id="image1_label" for="image1">Segunda Imagem</label>
+																		<input type="file" id="image1" name="files2"/>
+																	</div>																		
+																	<div class="edit-image">
+																		<label id="image2_label" for="image2">Terceira Imagem</label>
+																		<input type="file" id="image2" name="files3"/>
+																	</div>																		
+																	<div class="edit-image">
+																		<label id="image3_label" for="image3">Quarta Imagem</label>
+																		<input type="file" id="image3" name="files4"/>
+																	</div>																		
+																	<div class="edit-image">
+																		<label id="image4_label" for="image4">Quinta Imagem</label>
+																		<input type="file" id="image4" name="files5"/>
+																	</div>
+																</div>
+																<div tal:condition="edit" class="images-div" >
+																	<div class="edit-image">
+																		<div class="image-container delete_image_click" data-img="${files1}" data-type="main_image">
+																			<img src="${items_images_url}\${files1}" id="img"  alt=""/>
+																			<div class="overlay-edit-item">
+																				<i class="lni lni-trash"></i>
+																			</div>
+																		</div>
+																		<label id="main_image_label" for="main_image">Imagem principal *</label>
+																		<input type="file" id="main_image" name="files1" />
+																	</div>
+																	<div class="edit-image">
+																		<div tal:condition="files2" class="image-container delete_image_click" data-img="${files2}" data-type="image1">
+																			<img  id="img2" src="${items_images_url}/${files2}" alt=""/>
+																			<div class="overlay-edit-item">
+																				<i class="lni lni-trash"></i>
+																			</div>
+																		</div>
+																		<label id="image1_label" for="image1">Segunda Imagem</label>
+																		<input type="file" id="image1" name="files2"/>
+																	</div>
+																	<div class="edit-image">
+																		<div tal:condition="files3" class="image-container delete_image_click" data-img="${files3}" data-type="image2">
+																			<img  id="img3" src="${items_images_url}/${files3}" alt=""/>
+																			<div class="overlay-edit-item">
+																				<i class="lni lni-trash"></i>
+																			</div>
+																		</div>
+																		<label id="image2_label" for="image2">Terceira Imagem</label>
+																		<input type="file" id="image2" name="files3"/>
+																	</div>
+																	<div class="edit-image">																	
+																		<div tal:condition="files4" class="image-container delete_image_click" data-img="${files4}" data-type="image3">	
+																			<img id="img4" src="${items_images_url}/${files4}" alt=""/>
+																			<div class="overlay-edit-item">
+																				<i class="lni lni-trash"></i>
+																			</div>
+																		</div>
+																		<label id="image3_label" for="image3">Quarta Imagem</label>
+																		<input type="file" id="image3" name="files4"/>
+																	</div>
+																	<div class="edit-image">																	
+																		<div tal:condition="files5" class="image-container delete_image_click" data-img="${files5}" data-type="image4"> 
+																			<img id="img5" src="${items_images_url}/${files5}" alt=""/>
+																			<div class="overlay-edit-item">
+																				<i class="lni lni-trash"></i>
+																			</div>
+																		</div>
+																		<label id="image4_label" for="image4">Quinta Imagem</label>
+																		<input type="file" id="image4" name="files5"/>
+																	</div>
 																</div>
 															</div>
+															<div class="col-12">
+																<div class="form-group mt-30">
+																	<label>Descrição*</label>
+																	<textarea  name="message" placeholder="Adiciona uma descrição">${description}</textarea>
+																</div>
+															</div>
+															<!--
+															<div class="col-lg-6 col-12">
+																<div class="form-group">
+																	<label>Type of Ad*</label>
+																	<div class="selector-head">
+																		<span class="arrow"><i class="lni lni-chevron-down"></i></span>
+																		<select class="user-chosen-select">
+																			<option value="none">Select an option</option>
+																			<option value="none">Option 1</option>
+																			<option value="none">Option 2</option>
+																			<option value="none">Option 3</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-6 col-12">
+																<div class="form-group">
+																	<label>Item Condition*</label>
+																	<div class="selector-head">
+																		<span class="arrow"><i class="lni lni-chevron-down"></i></span>
+																		<select class="user-chosen-select">
+																			<option value="none">Select an option</option>
+																			<option value="none">Used</option>
+																			<option value="none">Brand New</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+															<div class="col-12">
+																<div class="form-group">
+																	<label class="tag-label">Tags*<span>Comma(,) separated</span></label>
+																	<input name="tag" type="text" placeholder="Type Product tag"/>
+																</div>
+															</div>
+															-->
 														</div>
 														<div class="col-12">
 															<div class="form-group">
-																<label class="tag-label">Tags*<span>Comma(,) separated</span></label>
-																<input name="tag" type="text" placeholder="Type Product tag"/>
-															</div>
-														</div>
-														<div class="col-12">
-															<div class="form-group button mb-0">
-																<button type="submit" class="btn alt-btn">Previous</button>
-																<button type="submit" class="btn">Next Step</button>
-															</div>
-														</div>
-													</div>
-												</form>
-											</div>
-										</div>
-										<div class="tab-pane fade" id="nav-user-info" role="tabpanel" aria-labelledby="nav-user-info-tab">
-											<div class="step-three-content">
-												<form class="default-form-style" method="post" action="#">
-													<div class="row">
-														<div class="col-lg-6 col-12">
-															<div class="form-group">
-																<label>Name*</label>
-																<input name="name" type="text" placeholder="Enter your name"/>
+																<label>Morada da Localizão do Anúncio</label>
+																<input name="address_line" type="text" placeholder="Adicione a localização do artigo do anúncio" value="${address_line}"/>
 															</div>
 														</div>
 														<div class="col-lg-6 col-12">
 															<div class="form-group">
-																<label>Mobile Numbe*</label>
-																<input name="number" type="text" placeholder="Enter mobile number"/>
+																<label>Código Postal</label>
+																<input name="zip_code" type="text" placeholder="0000-000 Lisboa" value="${zip_code}"/>
 															</div>
 														</div>
 														<div class="col-lg-6 col-12">
@@ -208,74 +219,56 @@
 																<label>Distrito*</label>
 																<div class="selector-head">
 																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Selecione o Distrito</option>
-																		<__repeat__ tal:repeat="location location_district" tal:omit-tag="True">
-																			<option value="none">${location.district_name}</option>
+																	<select class="user-chosen-select" name="location" id="location" required>
+																		<option value="none" selected disabled>Selecione o Distrito</option>
+																		<!-- Start List of District (Loop For) -->
+																		<__repeat__ tal:repeat="district location_district" tal:omit-tag="True">
+																			<option tal:condition="address_district!=district.id" value="${district.id}">${district.name}</option>
+																			<option tal:condition="address_district==district.id" selected value="${district.id}">${district.name}</option>
 																		</__repeat__>
+																		<!--/ End List of District (Loop For) -->
 																	</select>
 																</div>
 															</div>
 														</div>
-														<div class="col-lg-6 col-12">
-															<div class="form-group">
-																<label>Freguesia*</label>
-																<div class="selector-head">
-																	<span class="arrow"><i class="lni lni-chevron-down"></i></span>
-																	<select class="user-chosen-select">
-																		<option value="none">Selecione a Freguesia</option>
-																		<option value="none">New York</option>
-																		<option value="none">Texas</option>
-																		<option value="none">Arizona</option>
-																		<option value="none">Florida</option>
-																		<option value="none">Washington</option>
-																	</select>
+													</div>
+													
+													<div class="col-12">
+														<div class="google-map">
+															<div class="mapouter">
+																<div class="gmap_canvas">
+																	<iframe
+																		width="100%"
+																		height="300"
+																		id="gmap_canvas"
+																		src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
+																		frameborder="0"
+																		scrolling="no"
+																		marginheight="0"
+																		marginwidth="0"
+																	></iframe>
+																	<a href="https://123movies-to.org"></a><br />
+																	<style>	.mapouter {position: relative; text-align: right; height: 300px; width: 100%;}</style>
+																	<a href="https://www.embedgooglemap.net">embed google maps wordpress</a>
+																	<style>	.gmap_canvas {overflow: hidden;	background: none !important; height: 300px;	width: 100%;}</style>
 																</div>
 															</div>
 														</div>
-														<div class="col-12">
-															<div class="form-group">
-																<label>Address*</label>
-																<input name="address" type="text" placeholder="Enter a location"/>
-															</div>
+													</div>
+													<div class="col-12">
+														<div class="form-check">
+															<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+															<label class="form-check-label" for="flexCheckDefault"> Concordo com todos os Termos de Uso e Regras de Publicação.</label>
 														</div>
-														<div class="col-12">
-															<div class="google-map">
-																<div class="mapouter">
-																	<div class="gmap_canvas">
-																		<iframe
-																			width="100%"
-																			height="300"
-																			id="gmap_canvas"
-																			src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
-																			frameborder="0"
-																			scrolling="no"
-																			marginheight="0"
-																			marginwidth="0"
-																		></iframe>
-																		<a href="https://123movies-to.org"></a><br />
-																		<style>	.mapouter {position: relative; text-align: right; height: 300px; width: 100%;}</style>
-																		<a href="https://www.embedgooglemap.net">embed google maps wordpress</a>
-																		<style>	.gmap_canvas {overflow: hidden;	background: none !important; height: 300px;	width: 100%;}</style>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-12">
-															<div class="form-check">
-																<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-																<label class="form-check-label" for="flexCheckDefault">I agree to all Terms of Use & Posting Rules</label>
-															</div>
-															<div class="form-group button mb-0">
-																<button type="submit" class="btn alt-btn">Previous</button>
-																<button type="submit" class="btn">Submit Ad</button>
-															</div>
+														<div class="form-group button mb-0">
+															<button type="submit" class="btn" required>Publicar Anúncio</button>
 														</div>
 													</div>
 												</form>
 											</div>
 										</div>
 									</div>
+
 								</div>
 							</div>
 						</div>

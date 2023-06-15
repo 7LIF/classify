@@ -202,6 +202,14 @@ def subcategory_count(db_session: Session | None = None) -> int:
         return db_session.execute(select_stm).scalar_one()
 
 
+def get_accepted_subcategory(
+        db_session: Session | None = None,
+) -> list[Subcategory]:
+    with database_session(db_session) as db_session:
+        select_stmt = select(Subcategory)
+        return db_session.execute(select_stmt).scalars().all()
+
+
 
 def accept_external_auth_provider(
         name: str,

@@ -35,6 +35,7 @@ USER_EXTERNAL_ID_TOKEN_MAX_SIZE = 255
 EMAIL_REGEXP = r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
 NAME_REGEXP = r'^[^\W_0-9]{2,}(\s[^\W_0-9]{2,})+$'
 NAME_SIZE = 100                         # FULLNAME
+PHONE_NUMBER_SIZE = 9
 ADDRESS_LINE_SIZE = 60
 ZIP_CODE_SIZE = 10
 PASSWORD_HASH_SIZE = 130
@@ -134,6 +135,7 @@ class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
     user_id = Column(Integer, Identity(always = True, start = 1), primary_key = True)
     type = Column(String(50))
     name = Column(String(NAME_SIZE), nullable = False)
+    phone_number = Column(String(PHONE_NUMBER_SIZE))
     address_line = Column(String(ADDRESS_LINE_SIZE))
     zip_code = Column(String(ZIP_CODE_SIZE))
     district_id = Column(Integer, ForeignKey('District.id'))
@@ -190,10 +192,12 @@ class User(UserAccount):
 
     user_id = Column(Integer, ForeignKey("UserAccount.user_id"), primary_key = True)
     profile_image = Column(String(URL_SIZE), unique = True)
+    favorites = relationship("Item")
     
     items = relationship('Item', back_populates = 'user')
     testimonials = relationship('Testimonial', back_populates = 'user')
-    #items = relationship('Favorite', back_populates = 'user')
+    favorites = relationship("Favorite", back_populates="user", overlaps="favorite_items")
+    favorite_items = relationship('Item', secondary='Favorite', back_populates='favorited_by', overlaps="favorites")
 
     __mapper_args__ = {
         'polymorphic_identity': 'User',
@@ -300,7 +304,7 @@ class Item(SqlAlchemyBase, ItemStatusMixin):
     subcategory = relationship('Subcategory', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
     user = relationship('User', back_populates = 'items', innerjoin = True, lazy = 'immediate',)
     district = relationship('District', back_populates = 'items', lazy = 'immediate')
-    #user = relationship('Favorite', back_populates = 'item')
+    favorited_by = relationship('User', secondary='Favorite', back_populates='favorite_items', overlaps="favorites")
     
     __table_args__ = (
         CheckConstraint(
@@ -310,18 +314,19 @@ class Item(SqlAlchemyBase, ItemStatusMixin):
     )
 
 
+class Favorite(SqlAlchemyBase):
+    __tablename__ = 'Favorite'
 
-#class Favorite(SqlAlchemyBase):
-#    __tablename__ = "Favorite"
-
-#    id = Column(Integer, Identity(start = 1), primary_key = True)
-#    user_id = Column(ForeignKey('User.user_id'), nullable = False)
-#    item_id = Column(ForeignKey('Item.id'), nullable = False)
-
-#    user = relationship('User', back_populates = 'items')
-#    item = relationship('Item', back_populates = 'users')
-
-#    UniqueConstraint('user_id', 'item_id', name = 'UserItemIDX')
+    id = Column(Integer, Identity(start=1), primary_key=True)
+    item_id = Column(Integer, ForeignKey("Item.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
+    
+    user = relationship('User', overlaps='favorite_items, favorited_by')
+    item = relationship('Item', overlaps='favorite_items, favorited_by')
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'item_id'),
+    )
 
 
 ################################################################################

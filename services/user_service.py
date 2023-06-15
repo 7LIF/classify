@@ -20,11 +20,12 @@ __all__ = (
 )
 
 
+from typing import List
 import aiofiles
 from fastapi import UploadFile
 import passlib.hash as passlib_hash
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from config_settings import conf
 from common.common import coalesce, is_valid_email, find_first, is_valid_password #find_in
 from data.database import database_session
@@ -35,6 +36,7 @@ from services import (
 )
 from data.models import (
     District,
+    Favorite,
     User,
     Item,
     Testimonial,
@@ -287,7 +289,8 @@ MAX_TESTIMONIALS = 10
 def create_user_account(
         name: str,
         email_addr: str,
-        password: str,  
+        password: str,
+        phone_number: str | None = None,  
         address_line: str | None = None,
         zip_code: str | None = None,
         district_id: str | None = None,
@@ -302,6 +305,7 @@ def create_user_account(
             user := User(
                 type = User.__name__,
                 name = name,
+                phone_number = phone_number,
                 address_line = address_line,
                 zip_code = zip_code,
                 district_id = district_id,
@@ -365,6 +369,7 @@ def update_user_account(
         user_or_id: int | User,
         current_password: str | None = None,
         new_name: str | None = None,
+        new_phone_number: str |None = None,
         new_email: str | None = None,
         new_password: str | None = None,
         new_address_line: str | None = None,
@@ -391,7 +396,7 @@ def update_user_account(
             user.password_hash = userv.hash_password(new_password)
 
         user.name = coalesce(new_name, user.name)
-        #user.phone_number =  coalesce(new_phone_number, user.phone_number)
+        user.phone_number =  coalesce(new_phone_number, user.phone_number)
         user.address_line = coalesce(new_address_line, user.address_line)
         user.zip_code = coalesce(new_zip_code, user.zip_code)
         user.district_id = coalesce(new_district_id, user.district_id)
@@ -495,3 +500,76 @@ def list_user_item (
     with database_session(db_session) as db_session:
         select_stmt = select(Item).where(Item.user_id == user_id)
         return db_session.execute(select_stmt).scalars().all()
+    
+def add_favorite_item_to_user(
+    user_id: int,
+    item_id: int,  
+    db_session: Session | None = None,
+) -> None:
+    with database_session(db_session) as db_session:
+        user = db_session.query(User).get(user_id)
+        item = db_session.query(Item).get(item_id)
+
+        if user and item:
+            favorite = Favorite(item=item, user=user)
+            db_session.add(favorite)
+            db_session.commit()
+
+def has_item_as_favorite(
+ user_id: int,
+    item_id: int,  
+    db_session: Session | None = None,
+) -> bool:
+    
+    with database_session(db_session) as db_session:
+        favorite = (
+                db_session.query(Favorite)
+                .filter_by(user_id=user_id, item_id=item_id)
+                .first()
+            )
+        return favorite is not None
+    
+def remove_favorite_item_from_user(
+    user_id: int,
+    item_id: int,
+    db_session: Session | None = None,
+) -> None:
+    with database_session(db_session) as db_session:
+        favorite = db_session.query(Favorite).filter_by(user_id=user_id, item_id=item_id).first()
+
+        if favorite:
+            db_session.delete(favorite)
+            db_session.commit()
+
+def user_has_favorite(
+        user_id: int, 
+        item_id: int, 
+        db_session: Session | None = None
+        ) -> bool:
+    with database_session(db_session) as db_session:
+        favorite = db_session.query(Favorite).filter_by(user_id=user_id, item_id=item_id).first()
+        return favorite is not None
+
+def get_user_favorites_ids(
+        user_id: int, 
+        db_session: Session | None = None
+        ) -> List[Item]:
+    with database_session(db_session) as db_session:
+        favorites = db_session.query(Favorite). \
+            filter_by(user_id=user_id). \
+            options(joinedload(Favorite.item)). \
+            all()
+
+        return [favorite.item.id for favorite in favorites]
+
+def get_user_favorites(
+        user_id: int, 
+        db_session: Session | None = None
+        ) -> List[Item]:
+    with database_session(db_session) as db_session:
+        favorites = db_session.query(Favorite). \
+            filter_by(user_id=user_id). \
+            options(joinedload(Favorite.item)). \
+            all()
+
+        return [favorite.item for favorite in favorites]

@@ -317,3 +317,19 @@ async def add_profile_image(
         db_session.commit()
         db_session.refresh(user)
         return user
+    
+    
+    
+    class Favorite(SqlAlchemyBase):
+    __tablename__ = 'Favorite'
+
+    id = Column(Integer, Identity(start=1), primary_key=True)
+    item_id = Column(Integer, ForeignKey("Item.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
+    
+    user = relationship('User', back_populates='favorites')
+    item = relationship('Item')
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'item_id'),
+    )

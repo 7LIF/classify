@@ -145,7 +145,7 @@
 																	<a href="javascript:void(0)"><i	class="lni lni-map-marker"></i>${item.district.name}</a></p>
 																<ul class="info">
 																	<li class="price">${item.price}€</li>
-																	<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+																	<li class="like add_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
 																</ul>
 															</div>
 														</div>
@@ -172,8 +172,7 @@
 
 									</div>
 
-
-
+									
 									<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
 										<div class="row">
 											<__if__ tal:condition="search or latest_items" tal:omit-tag="True">
@@ -198,7 +197,7 @@
 																			<i class="lni lni-map-marker"></i>${item.district.name}</a></p>
 																		<ul class="info">
 																			<li class="price">${item.price}€</li>
-																			<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+																			<li class="like toggle_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i tal:attributes="class python: ' fa fa-heart favorited' if item.id in favorites else 'fa fa-heart-o'"></i></a></li>
 																		</ul>
 																	</div>
 																</div>

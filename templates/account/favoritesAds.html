@@ -39,110 +39,42 @@
 							</nav>
 
 							<div class="my-items">
+								<div tal:condition="error" class="error-msg"> ${error_msg} </div>
 								<div class="item-list-title">
 									<div class="row align-items-center">
-										<div class="col-lg-5 col-md-5 col-12"><p>Job Title</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Category</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Condition</p></div>
-										<div class="col-lg-3 col-md-3 col-12 align-right"><p>Action</p></div>
+										<div class="col-lg-5 col-md-5 col-12"><p>Anúncios</p></div>
+										<div class="col-lg-2 col-md-2 col-12"><p>Categoria</p></div>
+										<div class="col-lg-2 col-md-2 col-12"><p>Subcategoria</p></div>
+										<!--<div class="col-lg-2 col-md-2 col-12"><p>Condition</p></div>-->
+										<div class="col-lg-3 col-md-3 col-12 align-right"><p>Ações</p></div>
 									</div>
 								</div>
-								<div class="single-item-list">
-									<div class="row align-items-center">
-										<div class="col-lg-5 col-md-5 col-12">
-											<div class="item-image">
-												<img src="/static/assets/images/my-items/my-item1.png" alt="#"/>
-												<div class="content">
-													<h3 class="title">
-														<a href="javascript:void(0)">Brand New Iphone 11 Pro Max</a>
-													</h3>
-													<span class="price">$800</span>
+								<__repeat__ tal:repeat="item items" tal:omit-tag="True">								
+									<div class="single-item-list">
+										<div class="row align-items-center">
+											<div class="col-lg-5 col-md-5 col-12">
+												<div class="item-image">
+													<img src="${items_images_url}\${item.main_image_url}" alt="#"/>
+													<div class="content">
+														<h3 class="title"><a href="javascript:void(0)">${item.title}</a></h3>
+														<span class="price">${item.price}€</span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Electronic</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>New</p></div>
-										<div class="col-lg-3 col-md-3 col-12 align-right">
-											<ul class="action-btn">
-												<li><a href="javascript:void(0)"><i class="lni lni-pencil"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-eye"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="single-item-list">
-									<div class="row align-items-center">
-										<div class="col-lg-5 col-md-5 col-12">
-											<div class="item-image">
-												<img src="/static/assets/images/my-items/my-item2.png" alt="#"/>
-												<div class="content">
-													<h3 class="title">
-														<a href="javascript:void(0)" >New Ferrari F80 Car</a>
-													</h3>
-													<span class="price">$13000</span>
-												</div>
+											<div class="col-lg-2 col-md-2 col-12"><p>${item.subcategory.category.name}</p></div>
+											<div class="col-lg-2 col-md-2 col-12"><p>${item.subcategory.name}</p></div>
+											<!--<div class="col-lg-2 col-md-2 col-12"><p>New</p></div>-->
+											<div class="col-lg-3 col-md-3 col-12 align-right">
+												<ul class="action-btn">
+													<li><a href="/adPost/${item.id}"><i class="lni lni-eye"></i></a></li>
+													<li><a href="/account/remove_favorite?item_id=${item.id}"><i class="fa fa-heart favorited"></i></a></li>
+												</ul>
 											</div>
 										</div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Car</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Vehicle</p></div>
-										<div class="col-lg-3 col-md-3 col-12 align-right">
-											<ul class="action-btn">
-												<li><a href="javascript:void(0)"><i class="lni lni-pencil"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-eye"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-											</ul>
-										</div>
 									</div>
-								</div>
-								<div class="single-item-list">
-									<div class="row align-items-center">
-										<div class="col-lg-5 col-md-5 col-12">
-											<div class="item-image">
-												<img src="/static/assets/images/my-items/my-item3.png" alt="#"/>
-												<div class="content">
-													<h3 class="title">
-														<a href="javascript:void(0)">Rick Morton- Magicius Chase</a>
-													</h3>
-													<span class="price">$500</span>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Electronic</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>New</p></div>
-										<div class="col-lg-3 col-md-3 col-12 align-right">
-											<ul class="action-btn">
-												<li><a href="javascript:void(0)"><i class="lni lni-pencil"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-eye"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="single-item-list">
-									<div class="row align-items-center">
-										<div class="col-lg-5 col-md-5 col-12">
-											<div class="item-image">
-												<img src="/static/assets/images/my-items/my-item4.png" alt="#"/>
-												<div class="content">
-													<h3 class="title">
-														<a href="javascript:void(0)">HP Laptop 6560b core i7</a>
-													</h3>
-													<span class="price">$750</span>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-2 col-md-2 col-12"><p>Electronic</p></div>
-										<div class="col-lg-2 col-md-2 col-12"><p>New</p></div>
-										<div class="col-lg-3 col-md-3 col-12 align-right">
-											<ul class="action-btn">
-												<li><a href="javascript:void(0)"><i class="lni lni-pencil"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-eye"></i></a></li>
-												<li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
+								</__repeat__>
+
+								
 								<div class="pagination left">
 									<ul class="pagination-list">
 										<li><a href="javascript:void(0)">1</a></li>
