@@ -25,7 +25,7 @@ import aiofiles
 from fastapi import UploadFile
 import passlib.hash as passlib_hash
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, aliased
 from config_settings import conf
 from common.common import coalesce, is_valid_email, find_first, is_valid_password #find_in
 from data.database import database_session
@@ -138,9 +138,10 @@ def get_user_by_id(
         db_session: Session | None = None,
 ) -> UserAccount | None:
     with database_session(db_session) as db_session:
+        UserAlias = aliased(User)
         select_stmt = (
             select(UserAccount)
-            .join(User)
+            .join(UserAlias)
             .join(UserLoginData)
             .where(UserAccount.user_id == user_id)
         )

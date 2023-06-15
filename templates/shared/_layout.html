@@ -100,17 +100,16 @@
 										</li>
 										<li class="nav-item">
 											<a tal:condition="not is_logged_in" href="/account/register"><i class="lni lni-user"></i> Registo Gratuito</a>
-											<a class="dd-menu collapsed" data-bs-toggle="collapse" data-bs-target="#submenu-1-5" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" tal:condition="is_logged_in" href="/account">
-												<i class="lni lni-user"></i> $[user.name}
+											<a tal:condition="is_logged_in" href="/account" class="dd-menu collapsed" data-bs-toggle="collapse" data-bs-target="#submenu-1-5" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+												<i class="lni lni-user"></i> ${user.name}
 											</a>
 											<ul class="sub-menu collapse" tal:condition="is_logged_in" id="submenu-1-5" >
-												<li class="nav-item"><a href="/account">Account Overview</a></li>
-												<li class="nav-item"><a href="/account/profileSettings">My Profile</a></li>
-												<li class="nav-item"><a href="/account/myAds">My Ads</a></li>
-												<li class="nav-item"><a href="/account/favoritesAds">Favorite Ads</a></li>
-												<li class="nav-item"><a href="/account/newAdPost">Ad post</a></li>
-												<li class="nav-item"> <a href="/account/messages">Messages</a></li>
-												<li class="nav-item"><a href="/account/deleteAccount">Close account</a></li>
+												<li class="nav-item"><a href="/account">Perfil</a></li>
+												<li class="nav-item"><a href="/account/profileSettings">Editar Perfil</a></li>
+												<li class="nav-item"><a href="/account/myAds">Meus Anúncios</a></li>
+												<li class="nav-item"><a href="/account/favoritesAds">Favoritos</a></li>
+												<li class="nav-item"><a href="/account/newAdPost">Publicar Anúncio</a></li>
+												<li class="nav-item"> <a href="/account/messages">Mensagens</a></li>
 											</ul>
 										</li>
 									</ul>

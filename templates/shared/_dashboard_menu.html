@@ -15,58 +15,37 @@
 					<div class="dashboard-menu">
 						<ul>
 							<li tal:condition="exists: current">
-								<a 
-								  tal:attributes="class 'active' if current == 'account' else ''"
-								  href="/account"
-								>
+								<a tal:attributes="class 'active' if current == 'account' else ''" href="/account">
 								  <i class="lni lni-dashboard"></i> Perfil
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'edit' else ''"
-								  href="/account/profileSettings"
-								>
+								<a tal:attributes="class 'active' if current == 'edit' else ''" href="/account/profileSettings">
 								  <i class="lni lni-pencil-alt"></i> Editar Perfil
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'ads' else ''"
-								  href="/account/myAds"
-								>
-								  <i class="lni lni-pencil-alt"></i>Meus Anúncios
+								<a tal:attributes="class 'active' if current == 'ads' else ''" href="/account/myAds">
+								  <i class="lni lni-pencil-alt"></i> Meus Anúncios
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'fav' else 'dd'"
-								  href="/account/favoritesAds"
-								>
-								  <i class="lni lni-bolt-alt"></i> Favoritos
+								<a tal:attributes="class 'active' if current == 'fav' else 'dd'" href="/account/favoritesAds">
+								  <i class="lni lni-heart"></i> Favoritos
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'new' else 'dd'"
-								  href="/account/newAdPost"
-								>
-								  <i class="lni lni-heart"></i> Postar Anúncios
+								<a tal:attributes="class 'active' if current == 'new' else 'dd'" href="/account/newAdPost">
+								  <i class="lni lni-bolt-alt"></i> Publicar Anúncio
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'msgs' else 'dd'"
-								  href="/account/messages"
-								>
-								  <i class="lni lni-envelope"></i>Mensagens
+								<a tal:attributes="class 'active' if current == 'msgs' else 'dd'" href="/account/messages">
+								  <i class="lni lni-envelope"></i> Mensagens
 								</a>
 							  </li>
 							  <li tal:condition="exists: current">
-								<a
-								  tal:attributes="class 'active' if current == 'close' else 'dd'"
-								  href="/account/deleteAccount"
-								>
+								<a tal:attributes="class 'active' if current == 'close' else 'dd'" href="/account/deleteAccount">
 								  <i class="lni lni-trash"></i> Fechar conta
 								</a>
 							  </li>

@@ -74,13 +74,13 @@ def account_viewmodel():
        
     return ViewModel(
         selected_menu = '',
-        name = user.name,
-        user = userv.get_user_actual_by_id(user.user_id),
-        email_addr = user.email_addr,
+        current = "account",
         items_images_url = conf('ITEMS_IMAGES_URL'),     
         users_images_url = conf('USERS_IMAGES_URL'),
-        list_user_items = userv.list_user_item(user.user_id),
-        current = "account",      
+        user = userv.get_user_actual_by_id(user.user_id),
+        name = user.name,
+        email_addr = user.email_addr,
+        list_user_items = userv.list_user_item(user.user_id),        
     )
         
 

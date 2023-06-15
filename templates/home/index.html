@@ -237,7 +237,7 @@
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
-														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+														<li tal:condition="is_logged_in" class="like add_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
 													</ul>
 												</div>
 											</div>
@@ -268,7 +268,7 @@
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
-														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+														<li tal:condition="is_logged_in" class="like add_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
 													</ul>
 												</div>
 											</div>
@@ -299,7 +299,7 @@
 													</p>
 													<ul class="info">
 														<li class="price">${item.price}€</li>
-														<li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+														<li tal:condition="is_logged_in" class="like add_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
 													</ul>
 												</div>
 											</div>
