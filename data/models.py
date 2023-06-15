@@ -164,7 +164,7 @@ class UserAccount(SqlAlchemyBase, UserAccountStatusMixin):
     @property
     def district_name(self) -> str:
         if self.district:
-            return self.district.name
+           return self.district.name
         return ''
     
 

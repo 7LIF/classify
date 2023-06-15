@@ -1,277 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ClassiGrids - Classified Ads and Listing Website Template.</title>
-    <meta name="description" content="" />
-    <meta content="" name="keywords" />
+<html lang="pt">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Classify - Website de classificados, venda de artigos online.</title>
+		<meta name="description" content="" />
+		<meta content="" name="keywords" />
 
-    <!-- Favicons -->
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="/static/assets/images/favicon.svg"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+		<!-- Favicons -->
+		<link rel="shortcut icon" type="image/x-icon" href="/static/assets/images/favicon.svg"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <!-- Place favicon.ico in the root directory -->
+		<!-- Web Font -->
+		<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"/>
+		<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap"	rel="stylesheet"/>
 
-    <!-- Web Font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
-      rel="stylesheet"
-    />
+		<!-- CSS -->
+		<link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/static/assets/css/LineIcons.2.0.css" />
+		<link rel="stylesheet" href="/static/assets/css/animate.css" />
+		<link rel="stylesheet" href="/static/assets/css/tiny-slider.css" />
+		<link rel="stylesheet" href="/static/assets/css/glightbox.min.css" />
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/static/assets/css/LineIcons.2.0.css" />
-    <link rel="stylesheet" href="/static/assets/css/animate.css" />
-    <link rel="stylesheet" href="/static/assets/css/tiny-slider.css" />
-    <link rel="stylesheet" href="/static/assets/css/glightbox.min.css" />
-    <link rel="stylesheet" href="/static/assets/css/main.css" />
+		<!-- JS -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+		<script src="/static/assets/js/bootstrap.min.js"></script>
+		<script src="/static/assets/js/count-up.min.js"></script>
+		<script src="/static/assets/js/wow.min.js"></script>
+		<script src="/static/assets/js/tiny-slider.js"></script>
+		<script src="/static/assets/js/glightbox.min.js"></script>
+		<script src="/static/assets/js/main.js"></script>
+	</head>
 
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="/static/assets/js/bootstrap.min.js"></script>
-    <script src="/static/assets/js/count-up.min.js"></script>
-    <script src="/static/assets/js/wow.min.js"></script>
-    <script src="/static/assets/js/tiny-slider.js"></script>
-    <script src="/static/assets/js/glightbox.min.js"></script>
-    <script src="/static/assets/js/main.js"></script>
-  </head>
+	<body>
+		<!-- Preloader -->
+		<div class="preloader">
+			<div class="preloader-inner">
+				<div class="preloader-icon">
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+		</div>
+		<!--/ End Preloader -->
 
-  <body>
-    <!-- Preloader -->
-    <div class="preloader">
-      <div class="preloader-inner">
-        <div class="preloader-icon">
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </div>
-    <!--/ End Preloader -->
+		<!-- Start Header Area -->
+		<header class="header navbar-area">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-12">
+						<div class="nav-inner">
+							<nav class="navbar navbar-expand-lg">
+								<a class="navbar-brand" href="/"><img src="/static/assets/images/logo/logo.svg" alt="Logo" /></a>
+								<button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+									<span class="toggler-icon"></span>
+									<span class="toggler-icon"></span>
+									<span class="toggler-icon"></span>
+								</button>
+								<div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+									<ul id="nav" class="navbar-nav ms-auto">
+										<!-- Start NavBar Button Pages -->
+										<li class="nav-item">
+											<a tal:condition="selected_menu == 'home'" tal:attributes="class 'active'" class="dd-menu collapsed" href="/" aria-label="Toggle navigation">Página Inicial</a>
+											<a tal:condition="selected_menu != 'home'" class="dd-menu collapsed" href="/" aria-label="Toggle navigation">Página Inicial</a>
+										</li>
 
-    <!-- Start Header Area -->
-    <header class="header navbar-area">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-12">
-            <div class="nav-inner">
-              <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/">
-                  <img src="/static/assets/images/logo/logo.svg" alt="Logo" />
-                </a>
-                <button
-                  class="navbar-toggler mobile-menu-btn"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span class="toggler-icon"></span>
-                  <span class="toggler-icon"></span>
-                  <span class="toggler-icon"></span>
-                </button>
-                <div
-                  class="collapse navbar-collapse sub-menu-bar"
-                  id="navbarSupportedContent"
-                >
-                  <ul id="nav" class="navbar-nav ms-auto">
-                    <!-- Start NavBar Button Pages -->
-                    <li class="nav-item">
-                      <a
-                        tal:condition="selected_menu == 'home'"
-                        tal:attributes="class 'active'"
-                        class="dd-menu collapsed"
-                        href="/"
-                        aria-label="Toggle navigation"
-                        >Página Inicial</a
-                      >
-                      <a
-                        tal:condition="selected_menu != 'home'"
-                        class="dd-menu collapsed"
-                        href="/"
-                        aria-label="Toggle navigation"
-                        >Página Inicial</a
-                      >
-                    </li>
+										<li class="nav-item">
+											<a tal:condition="selected_menu == 'ads'" tal:attributes="class 'active'" class="dd-menu collapsed"	href="/adPost" aria-label="Toggle navigation">Pesquisar Anúncios</a>
+											<a tal:condition="selected_menu != 'ads'" class="dd-menu collapsed" href="/adPost" aria-label="Toggle navigation">Pesquisar Anúncios</a>
+										</li>
 
-                    <li class="nav-item">
-                      <a
-                        tal:condition="selected_menu == 'ads'"
-                        tal:attributes="class 'active'"
-                        class="dd-menu collapsed"
-                        href="/adPost"
-                        aria-label="Toggle navigation"
-                        >Pesquisar Anúncios
-                      </a>
-                      <a
-                        tal:condition="selected_menu != 'ads'"
-                        class="dd-menu collapsed"
-                        href="/adPost"
-                        aria-label="Toggle navigation"
-                        >Pesquisar Anúncios
-                      </a>
-                    </li>
+										<li class="nav-item">
+											<a tal:condition="selected_menu == 'pages'"	tal:attributes="class 'active'"	class="dd-menu collapsed" href="javascript:void(0)"	data-bs-toggle="collapse" data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Páginas</a>
+											<a tal:condition="selected_menu != 'pages'"	class="dd-menu collapsed" href="javascript:void(0)"	data-bs-toggle="collapse" data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Páginas</a>
+											<ul class="sub-menu collapse" id="submenu-1-4">
+												<li class="nav-item"><a href="/about">About Us</a></li>
+												<li class="nav-item"><a href="/account/register">Sign Up</a></li>
+												<li class="nav-item"><a href="/account/login">Sign In</a></li>
+												<li class="nav-item"><a href="/contact">Contact Us</a></li>
+												<li class="nav-item"><a href="/faq">FAQ</a></li>
+												<li class="nav-item"><a href="/errors/error404">Error Page</a></li>
+												<li class="nav-item"><a href="/account/mailSuccess">Mail Success</a></li>
+											</ul>
+										</li>
+										<!--/ End NavBar Button Pages -->
+									</ul>
+								</div>
 
-                    <li class="nav-item">
-                      <a
-                        tal:condition="selected_menu == 'pages'"
-                        tal:attributes="class 'active'"
-                        class="dd-menu collapsed"
-                        href="javascript:void(0)"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#submenu-1-4"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                        >Páginas
-                      </a>
-                      <a
-                        tal:condition="selected_menu != 'pages'"
-                        class="dd-menu collapsed"
-                        href="javascript:void(0)"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#submenu-1-4"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                        >Páginas
-                      </a>
-                      <ul class="sub-menu collapse" id="submenu-1-4">
-                        <li class="nav-item"><a href="/about">About Us</a></li>
-                        <li class="nav-item">
-                          <a href="/account/register">Sign Up</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/login">Sign In</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/contact">Contact Us</a>
-                        </li>
-                        <li class="nav-item"><a href="/faq">FAQ</a></li>
-                        <li class="nav-item">
-                          <a href="/errors/error404">Error Page</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/mailSuccess">Mail Success</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <!--/ End NavBar Button Pages -->
-                  </ul>
-                </div>
+								<!-- navbar collapse -->
+								<div class="login-button collapse navbar-collapse sub-menu-bar">
+									<ul class="navbar-nav ms-auto">
+										<li id="exit-li" class="nav-item">
+											<a id="btn-exit" tal:condition="not is_logged_in" href="/account/login"><i class="lni lni-enter"></i> Entrar</a>
+											<a id="btn-exit" tal:condition="is_logged_in" href="/account/logout"><i class="lni lni-enter"></i> Sair</a>
+										</li>
+										<li class="nav-item">
+											<a tal:condition="not is_logged_in" href="/account/register"><i class="lni lni-user"></i> Registo Gratuito</a>
+											<a class="dd-menu collapsed" data-bs-toggle="collapse" data-bs-target="#submenu-1-5" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" tal:condition="is_logged_in" href="/account">
+												<i class="lni lni-user"></i> $[user.name}
+											</a>
+											<ul class="sub-menu collapse" tal:condition="is_logged_in" id="submenu-1-5" >
+												<li class="nav-item"><a href="/account">Account Overview</a></li>
+												<li class="nav-item"><a href="/account/profileSettings">My Profile</a></li>
+												<li class="nav-item"><a href="/account/myAds">My Ads</a></li>
+												<li class="nav-item"><a href="/account/favoritesAds">Favorite Ads</a></li>
+												<li class="nav-item"><a href="/account/newAdPost">Ad post</a></li>
+												<li class="nav-item"> <a href="/account/messages">Messages</a></li>
+												<li class="nav-item"><a href="/account/deleteAccount">Close account</a></li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+								<div class="button header-button">
+									<a tal:condition="not is_logged_in"	href="/account/register" class="btn">Publicar Anúncio</a>
+									<a	tal:condition="is_logged_in" href="/account/newAdPost" class="btn">Publicar Anúncio</a>
+								</div>
+							</nav>
+							<!-- navbar -->
 
-                <!-- navbar collapse -->
-                <div class="login-button collapse navbar-collapse sub-menu-bar">
-                  <ul class="navbar-nav ms-auto">
-                    <li id="exit-li" class="nav-item">
-                      <a
-                        id="btn-exit"
-                        tal:condition="not is_logged_in"
-                        href="/account/login"
-                        ><i class="lni lni-enter"></i> Entrar</a
-                      >
-                      <a
-                        id="btn-exit"
-                        tal:condition="is_logged_in"
-                        href="/account/logout"
-                        ><i class="lni lni-enter"></i> Sair</a
-                      >
-                    </li>
-                    <li class="nav-item">
-                      <a
-                        tal:condition="not is_logged_in"
-                        href="/account/register"
-                        ><i class="lni lni-user"></i> Registo Gratuito</a
-                      >
-                      <a
-                        class="dd-menu collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#submenu-1-5"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                        tal:condition="is_logged_in"
-                        href="/account"
-                        ><i class="lni lni-user"></i> $[user.name}</a
-                      >
-                      <ul
-                        class="sub-menu collapse"
-                        tal:condition="is_logged_in"
-                        id="submenu-1-5"
-                      >
-                        <li class="nav-item">
-                          <a href="/account">Account Overview</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/profileSettings">My Profile</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/myAds">My Ads</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/favoritesAds">Favorite Ads</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/newAdPost">Ad post</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/messages">Messages</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/account/deleteAccount">Close account</a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+						</div>
+					</div>
+				</div>
+				<!-- row -->
+			</div>
+			<!-- container -->
+		</header>
+		<!--/ End Header Area -->
 
-                <div class="button header-button">
-                  <a
-                    tal:condition="not is_logged_in"
-                    href="/account/register"
-                    class="btn"
-                    >Publicar Anúncio</a
-                  >
-                  <a
-                    tal:condition="is_logged_in"
-                    href="/account/newAdPost"
-                    class="btn"
-                    >Publicar Anúncio</a
-                  >
-                </div>
-              </nav>
-              <!-- navbar -->
-            </div>
-          </div>
-        </div>
-        <!-- row -->
-      </div>
-      <!-- container -->
-    </header>
-    <!--/ End Header Area -->
+		<div metal:define-slot="content" tal:omit-tag="True">Shared Content</div>
 
-    <div metal:define-slot="content" tal:omit-tag="True">Shared Content</div>
-
-    <!-- Start Newsletter Section 
+		<!-- Start Newsletter Section 
     <div class="newsletter section">
         <div class="container">
             <div class="inner-content">
@@ -299,195 +161,157 @@
     </div>
     <!-/ End Newsletter Section -->
 
-    <!-- Start Footer Area -->
-    <footer class="footer">
-      <!-- Start Footer Top -->
-      <div class="footer-top">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-3 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="single-footer mobile-app">
-                <h3>Mobile Apps</h3>
-                <div class="app-button">
-                  <a href="javascript:void(0)" class="btn">
-                    <i class="lni lni-play-store"></i>
-                    <span class="text">
-                      <span class="small-text">Get It On</span>
-                      Google Play
-                    </span>
-                  </a>
-                  <a href="javascript:void(0)" class="btn">
-                    <i class="lni lni-apple"></i>
-                    <span class="text">
-                      <span class="small-text">Get It On</span>
-                      App Store
-                    </span>
-                  </a>
-                </div>
-              </div>
-              <!-- End Single Widget -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="single-footer f-link">
-                <h3>Sobre Classify</h3>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-12">
-                    <ul>
-                      <li><a href="/about">Sobre Nós</a></li>
-                      <li><a href="/account/login">Login</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- End Single Widget -->
-            </div>
+		<!-- Start Footer Area -->
+		<footer class="footer">
+			<!-- Start Footer Top -->
+			<div class="footer-top">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-12">
+							<!-- Single Widget -->
+							<div class="single-footer mobile-app">
+								<h3>Mobile Apps</h3>
+								<div class="app-button">
+									<a href="javascript:void(0)" class="btn">
+										<i class="lni lni-play-store"></i>
+										<span class="text"><span class="small-text">Get It On</span>Google Play</span>
+									</a>
+									<a href="javascript:void(0)" class="btn">
+										<i class="lni lni-apple"></i>
+										<span class="text"><span class="small-text">Get It On</span>App Store</span>
+									</a>
+								</div>
+							</div>
+							<!-- End Single Widget -->
+						</div>
+						<div class="col-lg-3 col-md-6 col-12">
+							<!-- Single Widget -->
+							<div class="single-footer f-link">
+								<h3>Sobre Classify</h3>
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-12">
+										<ul>
+											<li><a href="/about">Sobre Nós</a></li>
+											<li><a href="/account/login">Login</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- End Single Widget -->
+						</div>
 
-            <div class="col-lg-3 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="single-footer f-link">
-                <h3>Ajuda</h3>
-                <ul>
-                  <li><a href="/howWorks">How It's Works</a></li>
-                  <li><a href="/account/login">Login</a></li>
-                  <li><a href="/account/register">Signup</a></li>
-                  <li><a href="/faq">FAQ</a></li>
-                </ul>
-              </div>
-              <!-- End Single Widget -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="single-footer f-contact">
-                <h3>Contactos</h3>
-                <ul>
-                  <li>
-                    Tel: +(351) 252 056 789 <br />
-                    Email: support@classify.com
-                  </li>
-                </ul>
-                <ul class="footer-social">
-                  <li>
-                    <a href="https://www.facebook.com/"
-                      ><i class="lni lni-facebook-filled"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="https://twitter.com/"
-                      ><i class="lni lni-twitter-original"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="https://www.youtube.com/"
-                      ><i class="lni lni-youtube"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="https://www.linkedin.com/"
-                      ><i class="lni lni-linkedin-original"></i
-                    ></a>
-                  </li>
-                </ul>
-              </div>
-              <!-- End Single Widget -->
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--/ End Footer Top -->
-      <!-- Start Footer Bottom -->
-      <div class="footer-bottom">
-        <div class="container">
-          <div class="inner">
-            <div class="row">
-              <div class="col-12">
-                <div class="content">
-                  <ul class="footer-bottom-links">
-                    <li><a href="javascript:void(0)">Termos de Uso</a></li>
-                    <li>
-                      <a href="javascript:void(0)">Política de Privacidade</a>
-                    </li>
-                    <li><a href="/adPost/adPostSearch">Procura Avançada</a></li>
-                    <li><a href="javascript:void(0)">Mapa do Site</a></li>
-                  </ul>
-                  <p class="copyright-text">
-                    &copy; <strong><span>Classify</span></strong> 2023. Todos os
-                    Direitos Reservados. Adaptado de
-                    <a
-                      href="https://graygrids.com/"
-                      rel="nofollow"
-                      target="_blank"
-                      >GrayGrids</a
-                    >
-                    por
-                    <a
-                      href="https://github.com/7LIF"
-                      rel="nofollow"
-                      target="_blank"
-                      >Mariana Alberto</a
-                    >.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Footer Middle -->
-    </footer>
-    <!--/ End Footer Area -->
+						<div class="col-lg-3 col-md-6 col-12">
+							<!-- Single Widget -->
+							<div class="single-footer f-link">
+								<h3>Ajuda</h3>
+								<ul>
+									<li><a href="/howWorks">How It's Works</a></li>
+									<li><a href="/account/login">Login</a></li>
+									<li><a href="/account/register">Signup</a></li>
+									<li><a href="/faq">FAQ</a></li>
+								</ul>
+							</div>
+							<!-- End Single Widget -->
+						</div>
+						<div class="col-lg-3 col-md-6 col-12">
+							<!-- Single Widget -->
+							<div class="single-footer f-contact">
+								<h3>Contactos</h3>
+								<ul>
+									<li>Tel: +(351) 252 056 789 <br />Email: support@classify.com</li>
+								</ul>
+								<ul class="footer-social">
+									<li><a href="https://www.facebook.com/"><i class="lni lni-facebook-filled"></i></a></li>
+									<li><a href="https://twitter.com/"><i class="lni lni-twitter-original"></i></a></li>
+									<li><a href="https://www.youtube.com/"><i class="lni lni-youtube"></i></a></li>
+									<li><a href="https://www.linkedin.com/"><i class="lni lni-linkedin-original"></i></a></li>
+								</ul>
+							</div>
+							<!-- End Single Widget -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/ End Footer Top -->
+			<!-- Start Footer Bottom -->
+			<div class="footer-bottom">
+				<div class="container">
+					<div class="inner">
+						<div class="row">
+							<div class="col-12">
+								<div class="content">
+									<ul class="footer-bottom-links">
+										<li><a href="javascript:void(0)">Termos de Uso</a></li>
+										<li><a href="javascript:void(0)">Política de Privacidade</a></li>
+										<li><a href="/adPost/adPostSearch">Procura Avançada</a></li>
+										<li><a href="javascript:void(0)">Mapa do Site</a></li>
+									</ul>
+									<p class="copyright-text">
+										&copy; <strong><span>Classify</span></strong> 
+										2023. Todos os Direitos Reservados. Adaptado de
+										<a href="https://graygrids.com/" rel="nofollow" target="_blank">GrayGrids</a>por
+										<a href="https://github.com/7LIF" rel="nofollow" target="_blank">Mariana Alberto</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Footer Middle -->
+		</footer>
+		<!--/ End Footer Area -->
 
-    <!-- ========================= scroll-top ========================= -->
-    <a href="#" class="scroll-top btn-hover">
-      <i class="lni lni-chevron-up"></i>
-    </a>
+		<!-- ========================= scroll-top ========================= -->
+		<a href="#" class="scroll-top btn-hover">
+			<i class="lni lni-chevron-up"></i>
+		</a>
 
-    <!-- ========================= JS here ========================= -->
-    <script>
-      window.onload = function () {
-        window.setTimeout(fadeout, 500);
-      };
+		<!-- ========================= JS here ========================= -->
+		<script>
+			window.onload = function () {
+				window.setTimeout(fadeout, 500);
+			};
 
-      function fadeout() {
-        document.querySelector(".preloader").style.opacity = "0";
-        document.querySelector(".preloader").style.display = "none";
-      }
-    </script>
+			function fadeout() {
+				document.querySelector(".preloader").style.opacity = "0";
+				document.querySelector(".preloader").style.display = "none";
+			}
+		</script>
 
-    <script type="text/javascript">
-      //========= Category Slider
-      tns({
-        container: ".category-slider",
-        items: 3,
-        slideBy: "page",
-        autoplay: false,
-        mouseDrag: true,
-        gutter: 0,
-        nav: false,
-        controls: true,
-        controlsText: [
-          '<i class="lni lni-chevron-left"></i>',
-          '<i class="lni lni-chevron-right"></i>',
-        ],
-        responsive: {
-          0: {
-            items: 1,
-          },
-          540: {
-            items: 2,
-          },
-          768: {
-            items: 4,
-          },
-          992: {
-            items: 5,
-          },
-          1170: {
-            items: 6,
-          },
-        },
-      });
-    </script>
-  </body>
+		<script type="text/javascript">
+			//========= Category Slider
+			tns({
+				container: ".category-slider",
+				items: 3,
+				slideBy: "page",
+				autoplay: false,
+				mouseDrag: true,
+				gutter: 0,
+				nav: false,
+				controls: true,
+				controlsText: [
+					'<i class="lni lni-chevron-left"></i>',
+					'<i class="lni lni-chevron-right"></i>',
+				],
+				responsive: {
+					0: {
+						items: 1,
+					},
+					540: {
+						items: 2,
+					},
+					768: {
+						items: 4,
+					},
+					992: {
+						items: 5,
+					},
+					1170: {
+						items: 6,
+					},
+				},
+			});
+		</script>
+	</body>
 </html>
