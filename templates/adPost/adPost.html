@@ -145,7 +145,7 @@
 																	<a href="javascript:void(0)"><i	class="lni lni-map-marker"></i>${item.district.name}</a></p>
 																<ul class="info">
 																	<li class="price">${item.price}€</li>
-																	<li tal:condition="is_logged_in" class="like add_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a></li>
+																	<li tal:condition="is_logged_in" class="like toggle_favorite" data-id="${item.id}"><a href="javascript:void(0)"><i tal:attributes="class python: ' fa fa-heart favorited' if item.id in favorites else 'fa fa-heart-o'"></i></a></li>
 																</ul>
 															</div>
 														</div>

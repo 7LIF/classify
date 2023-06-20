@@ -67,7 +67,8 @@ async def search_viewmodel(keyword: str | None, category: str | None, district: 
         list_category = setserv.get_accepted_category(),
         items_in_category = setserv.count_items_in_categories(),
         latest_items = '',
-        favorites = favorites
+        user = user,
+        favorites = favorites,
     )
 
     if keyword is None or keyword == '' and category is None and district is None and price is None:
@@ -94,6 +95,7 @@ async def adPostDetails(item_id: int):
     return adPostDetails_viewmodel(item_id)
     
 def adPostDetails_viewmodel(item_id: int) -> ViewModel:
+    user = get_current_user()
     if item := iserv.get_item_by_id(item_id):
         return ViewModel(
             selected_menu = 'ads',
@@ -101,7 +103,8 @@ def adPostDetails_viewmodel(item_id: int) -> ViewModel:
             items_images_url = conf('ITEMS_IMAGES_URL'),
             users_images_url = conf('USERS_IMAGES_URL'),
             url_website = conf('URL_WEBSITE'),
-            user_created = format_date(userv.get_user_by_id(item.user_id).date_created)
+            user_created = format_date(userv.get_user_by_id(item.user_id).date_created),
+            user = user,
         )
     return ViewModel(
         error = True,

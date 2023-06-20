@@ -1,5 +1,6 @@
 "user strict";
 
+var isLiveUpdatePaused = false;
 (function () {
   //===== Prealoder
 
@@ -61,6 +62,9 @@
     });
 })();
 $(document).ready(function () {
+  const messageContainer = document.getElementById("chat_ul");
+  messageContainer.scrollTop = messageContainer.scrollHeight;
+
   $(".img-alt").click(function () {
     $("#current").attr("src", $(this).attr("src"));
   });
@@ -151,4 +155,110 @@ $(document).ready(function () {
       },
     });
   });
+  var chatmessagebutton = $("#chat_message_button");
+  chatmessagebutton.click(sendMessage);
+
+  $("#chat_message").keypress(function (event) {
+    if (event.which === 13) {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  if (chatmessagebutton.length > 0) {
+    live_update_messages();
+  }
 });
+
+function sendMessage() {
+  isLiveUpdatePaused = true;
+
+  var message = $("#chat_message").val();
+  var urlParams = new URLSearchParams(window.location.search);
+  var item = urlParams.get("item");
+  var user2 = urlParams.get("user");
+
+  $.ajax({
+    url: "/account/chatroom",
+    type: "POST",
+    data: JSON.stringify({
+      message: message,
+      item: item,
+      user2: user2,
+    }),
+    contentType: "application/json",
+    success: function (response) {
+      if (response["status"] == "success") {
+        var messageContainer = $("#chat_ul");
+        messageContainer.append(
+          "<li data-msg-id='" +
+            response["id"] +
+            "' class='right'><img src='" +
+            response["image"] +
+            "' alt='#'/><p class='text'>" +
+            response["message"] +
+            "<span class='time'>" +
+            response["time"].replace("T", " ") +
+            "</span></p></li>"
+        );
+        var scrollHeight = messageContainer[0].scrollHeight;
+        messageContainer.scrollTop(scrollHeight);
+        $("#chat_message").val("");
+      } else if (response["status"] == "fail") {
+      }
+      isLiveUpdatePaused = false;
+    },
+    error: function (xhr, status, error) {
+      console.log(error);
+      isLiveUpdatePaused = false;
+    },
+  });
+}
+
+function live_update_messages() {
+  if (isLiveUpdatePaused) {
+    setTimeout(live_update_messages, 2000);
+    return;
+  }
+  var messageContainer = $("#chat_ul");
+  var last_id = messageContainer.children().last().attr("data-msg-id");
+  var urlParams = new URLSearchParams(window.location.search);
+  var item = urlParams.get("item");
+  var user2 = urlParams.get("user");
+  $.ajax({
+    url: "/account/update_messages_live",
+    type: "POST",
+    data: JSON.stringify({
+      last_id: last_id,
+      item: item,
+      user2: user2,
+    }), // Request data in JSON format
+    contentType: "application/json",
+    success: function (response) {
+      if (response[0]["status"] == "success") {
+        var messageContainer = $("#chat_ul");
+        $.each(response, function (index, message) {
+          messageContainer.append(
+            "<li data-msg-id='" +
+              message["id"] +
+              "' class='left'><img src='" +
+              message["image"] +
+              "' alt='#'/><p class='text'>" +
+              message["message"] +
+              "<span class='time'>" +
+              message["time"].replace("T", " ") +
+              "</span></p></li>"
+          );
+        });
+        var scrollHeight = messageContainer[0].scrollHeight;
+        messageContainer.scrollTop(scrollHeight);
+        $("#chat_message").val("");
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log(error);
+    },
+  });
+
+  setTimeout(live_update_messages, 2000);
+}

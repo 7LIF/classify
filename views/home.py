@@ -43,6 +43,11 @@ async def index():
 
 def index_viewmodel() -> ViewModel:
     user = get_current_user()
+    if user is None:
+        favorites = []
+    else:
+        favorites = userv.get_user_favorites_ids(user.user_id)
+    
     return ViewModel(
         selected_menu = 'home',
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
@@ -62,6 +67,7 @@ def index_viewmodel() -> ViewModel:
         popular_items = iserv.most_popular_items(POPULAR_ITEMS_COUNT),
         latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT),
         random_items = iserv.get_random_items(RANDOM_ITEMS_COUNT),
+        favorites = favorites,
     )
 
 

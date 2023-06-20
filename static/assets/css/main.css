@@ -5645,6 +5645,7 @@ blockquote .shape {
   left: 0;
   bottom: 0;
   border-radius: 50%;
+  margin-left: 30px;
 }
 
 .messages-body .chat-list .single-chat-head li.left .text {
@@ -5657,6 +5658,7 @@ blockquote .shape {
   position: relative;
   font-weight: 400;
   font-family: jost, sans-serif;
+  margin-left: 30px;
 }
 
 .messages-body .chat-list .single-chat-head li.left .text::before {
@@ -5702,6 +5704,7 @@ blockquote .shape {
   position: relative;
   font-weight: 400;
   font-family: jost, sans-serif;
+  margin-left: 30px;
 }
 
 .messages-body .chat-list .single-chat-head li.right .text::before {

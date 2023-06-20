@@ -38,7 +38,7 @@ from services import (
     user_service as userv,
     settings_service as setserv,
 )
-from services.user_service import get_user_by_email, update_user_account, user_has_favorite
+from services.user_service import get_msg, get_user_by_email, send_msg, update_user_account, user_has_favorite
 
 
 ################################################################################
@@ -747,6 +747,7 @@ async def create_Ad(request: Request, files1: UploadFile = File(...), files2: Up
     
     return newAdPost_viewmodel(request,error_msg = error_msg) 
 
+
 @router.post("/removeImage")
 async def removeImage(request_data: dict):
     # Process the AJAX request data
@@ -768,6 +769,7 @@ async def removeImage(request_data: dict):
         response_data = "something went wrong"
     return response_data
 
+
 @router.post("/toggle_favorite")
 async def toggle_favorite(request_data: dict):
     # Process the AJAX request data
@@ -782,6 +784,7 @@ async def toggle_favorite(request_data: dict):
     else:
         userv.remove_favorite_item_from_user(user_id=user.user_id,item_id=item_id)
         return "remove"
+    
     
 @router.get("/remove_favorite")
 @template(template_file='account/favoritesAds.html')
@@ -899,9 +902,110 @@ def favoritesAds_viewmodel(error_msg = ''):
 async def messages():
     return messages_viewmodel()
     
-def messages_viewmodel():
-        return ViewModel(
-        error = None,
-        current = "msgs",
+def messages_viewmodel(error_msg = ''):
+    user = get_current_user()
+    assert user is not None
+
+    chatrooms_messages = userv.get_chatrooms(user.user_id)
+    chatrooms={}
+    count =0
+    for message in chatrooms_messages :
+        if message.recipient_id == user.user_id:
+            other_user = userv.get_user_by_id(message.sender_id)
+        else:
+            other_user =  userv.get_user_by_id(message.recipient_id)
+        chatrooms[count] = {}
+        chatrooms[count]["message"] = message
+        chatrooms[count]["item"] = iserv.get_item_by_id(message.item_id)
+        chatrooms[count]["other_user"] = other_user
+        chatrooms[count]["unread"] = userv.unread_count(user.user_id,other_user.user_id,message.item_id)
+        count+=1
+
+    vm = ViewModel(
         selected_menu = '',
+        current = "msgs",
+        users_images_url = conf('USERS_IMAGES_URL'),
+        items_images_url = conf('ITEMS_IMAGES_URL'),
+        user = userv.get_user_actual_by_id(user.user_id),
+        name = user.name,
+        chatrooms = chatrooms
     )
+    if error_msg != '':
+        vm.error, vm.error_msg = True, error_msg
+    return vm
+
+
+@router.get('/chat', dependencies = [Depends(requires_authentication)])
+@template(template_file='account/chat.html')
+async def chat(request: Request):
+    user_2 = userv.get_user_actual_by_id(request.query_params.get('user'))
+    item = request.query_params.get('item')
+    return chat_viewmodel(user_2,item)
+    
+def chat_viewmodel( user_2,item):
+    user = get_current_user()
+    assert user is not None
+    
+    userv.read_messages(user.user_id,user_2.user_id,item)
+    return ViewModel(
+        selected_menu = '',
+        current = "msgs",
+        user = userv.get_user_actual_by_id(user.user_id),
+        users_images_url = conf('USERS_IMAGES_URL'),
+        user_2= user_2,
+        item=iserv.get_item_by_id(item),
+        chat_messages = userv.get_all_chat_msg(user1_id=user.user_id,user2_id= user_2.user_id, item_id=item),
+        name=user.name, 
+    )
+
+
+@router.post("/chatroom")
+async def chatroom(request_data: dict):
+    # Process the AJAX request data
+    # You can access the request data using the `request_data` parameter
+    # Perform necessary operations and return the response
+    user = get_current_user()
+    assert user is not None
+    item_id = request_data['item']
+    user2 = request_data['user2']
+    message = request_data['message']
+    userv.send_msg(user.user_id,user2,item_id,message)
+    new_message = userv.get_msg(user.user_id,user2,item_id,message)
+    return_args = {}
+    if new_message:
+        return_args["status"] = "success"
+        return_args["image"] = conf('USERS_IMAGES_URL')+"/"+userv.get_user_actual_by_id(user.user_id).profile_image
+        return_args["message"] = message
+        return_args["time"] = new_message.date_sent
+        return_args["id"] = new_message.id
+    else:
+        return_args["status"] = "fail"
+
+    return return_args
+
+
+@router.post("/update_messages_live")
+async def update_messages_live(request_data: dict):
+    user = get_current_user()
+    assert user is not None
+    item_id = request_data['item']
+    user2 = request_data['user2']
+    msg_id = request_data['last_id']
+    new_messages = userv.get_new_msgs(user.user_id,user2,item_id,msg_id)
+    return_args = {}
+    count = 0
+    if new_messages:
+        for new_message in new_messages:
+            return_args[count] = {}
+            return_args[count]["status"] = "success"
+            return_args[count]["image"] = conf('USERS_IMAGES_URL')+"/"+userv.get_user_actual_by_id(new_message.sender_id).profile_image
+            return_args[count]["message"] = new_message.message
+            return_args[count]["time"] = new_message.date_sent
+            return_args[count]["id"] = new_message.id
+            count+=1
+    else:        
+        return_args[0] = {}
+        return_args[0]["status"] = "fail"
+
+    return return_args
+

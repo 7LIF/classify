@@ -1,0 +1,71 @@
+<div metal:use-macro="load: ../shared/_layout.html">
+	<__content__ metal:fill-slot="content" tal:omit-tag="True">
+
+
+
+		<div metal:use-macro="load: ../shared/_dashboard_menu.html">
+
+			<__dashboard_header__ metal:fill-slot="dashboard_header" tal:omit-tag="True">
+				<div class="breadcrumbs">
+					<div class="container">
+						<div class="row align-items-center">
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="breadcrumbs-content">
+									<h1 class="page-title">Messages</h1>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<ul class="breadcrumb-nav">
+									<li><a href="/">Home</a></li>
+									<li>Messages</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</__dashboard_header__>
+
+			<__dashboard_content__ metal:fill-slot="dashboard_content" tal:omit-tag="True">
+				<div class="col-lg-9 col-md-8 col-12">
+					<div class="main-content">
+						<div class="dashboard-block mt-0 pb-0">
+							<h3 class="block-title mb-0">Messages</h3>
+							<div class="messages-body">
+								<div class="form-head">
+									<div class="row align-items-center">
+										
+										<div class="col-lg-12 col-12 align-right">
+											<h3 class="username-title">${user_2.name}</h3>
+										</div>
+									</div>
+								</div>
+                                
+								<div class="row">
+                                    <div class="col-lg-12 col-12">
+                                        <div class="chat-list">
+                                            <ul id="chat_ul" class="single-chat-head">
+                                                <__repeat__ tal:repeat="message chat_messages" tal:omit-tag="True">	
+                                                    <li data-msg-id="${message.id}" tal:attributes="class 'right' if message.sender_id == user.user_id else 'left'">
+                                                        <img tal:attributes="src python: f'{users_images_url}/{user.profile_image}' if message.sender_id == user.user_id else f'{users_images_url}/{user_2.profile_image}'" alt="#"/><p class="text">
+                                                            ${message.message}
+                                                            <span class="time">${message.date_sent}</span>
+                                                        </p>
+                                                    </li>
+                                                </__repeat__>
+                                                
+                                            </ul>
+                                            <div class="reply-block">                                                
+                                                <input id="chat_message" name="reply" type="text" placeholder="Type your message here..."/>
+                                                <button id="chat_message_button" class="reply-btn"><img src="/static/assets/images/messages/send.svg" alt="#"/></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </__dashboard_content__>
+        </div>
+    </__content__>
+</div>

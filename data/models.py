@@ -329,6 +329,27 @@ class Favorite(SqlAlchemyBase):
     )
 
 
+
+class Message(SqlAlchemyBase):
+    __tablename__ = 'Message'
+
+    id = Column(Integer, Identity(start=1), primary_key=True)
+    sender_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
+    recipient_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
+    item_id = Column(Integer, ForeignKey("Item.id"), nullable=False)
+    message = Column(String(2000), nullable=False)
+    date_sent = Column(DateTime, nullable=False, server_default=func.current_timestamp())
+    is_read = Column(Boolean, nullable=False, server_default='0')                              # 0 = not read
+
+    sender = relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    recipient = relationship('User', foreign_keys=[recipient_id], backref='received_messages')
+    item = relationship('Item', backref='messages')
+
+
+
+
+
+
 ################################################################################
 ##      METADATA: Populate tables with initial metadata
 ################################################################################

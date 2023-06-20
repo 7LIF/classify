@@ -17,6 +17,8 @@ __all__ = (
     'add_profile_image',
     'create_testimonial',
     'get_testimonials',
+    'send_msg',
+    
 )
 
 
@@ -24,7 +26,7 @@ from typing import List
 import aiofiles
 from fastapi import UploadFile
 import passlib.hash as passlib_hash
-from sqlalchemy import func, select
+from sqlalchemy import and_, case, func, or_, select, update
 from sqlalchemy.orm import Session, joinedload, aliased
 from config_settings import conf
 from common.common import coalesce, is_valid_email, find_first, is_valid_password #find_in
@@ -39,6 +41,7 @@ from data.models import (
     Favorite,
     User,
     Item,
+    Message,
     Testimonial,
     UserLoginData,
     UserAccountStatusEnum,
@@ -462,38 +465,6 @@ def get_testimonials(
         return scalar_results.fetchmany(count) if count > 0 else scalar_results.all()
 
 
-#def is_favorite_item(
-#        user: User,
-#        item: Item,
-#        db_session: Session | None = None,
-#) -> bool:
-#    with database_session(db_session) as db_session:
-#        select_stmt = (
-#            select(Favorite)
-#            .where(Favorite.user_id == user.user_id)
-#            .where(Favorite.item_id == item.id)
-#        )
-#        return bool(db_session.execute(select_stmt).scalar_one_or_none())
-
-
-#def favorite_in_item(
-#        user: User,
-#        item: Item,
-#        db_session: Session | None = None,
-#) -> Favorite:
-#    with database_session(db_session) as db_session:
-#        if is_favorite_item(user, item, db_session):
-#            raise AlreadyFavorite('item {item.id} already is favorite')
-        
-
-#        favorite = Favorite()
-#        favorite.item = item
-#        user.item.append(favorite)
-#        db_session.add(favorite)
-#        db_session.commit()
-#        return favorite
-
-
 def list_user_item (
     user_id: int, 
     db_session: Session | None = None,
@@ -574,3 +545,179 @@ def get_user_favorites(
             all()
 
         return [favorite.item for favorite in favorites]
+    
+def get_msg(
+    user1_id: int, 
+    user2_id: int, 
+    item_id: int,
+    message: str, 
+    db_session: Session | None = None 
+ ):
+    with database_session(db_session) as db_session:
+        return (
+            db_session.query(Message)
+            .filter(
+               and_(
+                    Message.sender_id.in_([user1_id, user2_id]),
+                    Message.recipient_id.in_([user1_id, user2_id]),
+                    Message.item_id == item_id,
+                    Message.message == message
+                )
+            )
+        .first()
+    )
+    
+def send_msg(
+    user1_id: int, 
+    user2_id: int, 
+    item_id: int,
+    message: str, 
+    db_session: Session | None = None
+):
+    with database_session(db_session) as db_session:
+        new_message = Message(
+            sender_id=user1_id,
+            recipient_id=user2_id,
+            item_id=item_id,
+            message=message,
+        )
+    db_session.add(new_message)
+    db_session.commit()
+    return new_message
+
+
+
+def get_all_chat_msg(
+    user1_id: int, 
+    user2_id: int, 
+    item_id: int,
+    db_session: Session | None = None,
+) -> List[Message]:
+    with database_session(db_session) as db_session:
+        return (
+            db_session.query(Message)
+            .filter(
+                Message.sender_id.in_([user1_id, user2_id]),  # Use in instead of in
+                Message.recipient_id.in_([user1_id, user2_id]),  # Use in instead of in
+                Message.item_id == item_id
+            )
+            .order_by(Message.date_sent.asc())
+            .all()
+        )
+
+
+def last_chat_msg(    
+    user1_id: int, 
+    user2_id: int, 
+    item_id: int,
+    db_session: Session | None = None,
+) -> Message:
+    with database_session(db_session) as db_session:
+        return (
+            db_session.query(Message)
+            .filter(
+                Message.sender_id.in_([user1_id, user2_id])
+                and Message.recipient_id.in_([user1_id, user2_id])
+                and Message.item_id == item_id
+            )
+        .order_by(Message.date_sent.desc())
+        .first()
+    )
+
+def read_messages(
+    user: int, 
+    other_user: int, 
+    item_id: int,
+    db_session: Session | None = None,
+) -> None:
+    
+    with database_session(db_session) as db_session:
+        message_table = Message.__table__
+        update_stmt = (
+            update(message_table)
+            .values(is_read=True)
+            .where(
+                (message_table.c.sender_id == other_user)
+                & (message_table.c.recipient_id == user)
+                & (message_table.c.item_id == item_id)
+            )
+        )
+
+        db_session.execute(update_stmt)
+        db_session.commit()
+
+
+def unread_count(
+    user: int, 
+    other_user: int, 
+    item_id: int,
+    db_session: Session | None = None,
+) -> int:
+    with database_session(db_session) as db_session:
+        return (
+            db_session.query(func.count(Message.id))
+            .filter(
+                Message.sender_id == other_user,
+                Message.recipient_id == user,
+                Message.item_id == item_id,
+                Message.is_read == False
+            )
+            .scalar()
+        )
+
+def get_chatrooms(user_id: int, db_session: Session | None = None) -> List[Message]:
+    with database_session(db_session) as db_session:
+        subquery = (
+            db_session.query(
+                func.max(Message.id).label("max_id"),
+                case(
+                    [(Message.sender_id < Message.recipient_id, Message.sender_id)],
+                    else_=Message.recipient_id
+                ).label("sorted_id1"),
+                case(
+                    [(Message.sender_id < Message.recipient_id, Message.recipient_id)],
+                    else_=Message.sender_id
+                ).label("sorted_id2"),
+                Message.item_id.label("item_id")
+            )
+            .group_by("sorted_id1", "sorted_id2", Message.item_id)
+            .subquery("subquery")
+        )
+
+        query = (
+            db_session.query(Message)
+            .join(subquery, and_(subquery.c.max_id == Message.id,
+                                 subquery.c.sorted_id1 == case(
+                                     [(Message.sender_id < Message.recipient_id, Message.sender_id)],
+                                     else_=Message.recipient_id
+                                 ),
+                                 subquery.c.sorted_id2 == case(
+                                     [(Message.sender_id < Message.recipient_id, Message.recipient_id)],
+                                     else_=Message.sender_id
+                                 ),
+                                 subquery.c.item_id == Message.item_id))
+            .filter(or_(Message.sender_id == user_id, Message.recipient_id == user_id))
+            .order_by(Message.date_sent.desc())
+            .all()
+        )
+
+        return query
+    
+def get_new_msgs(
+        user: int, 
+        other_user: int, 
+        item_id: int,
+        last_id: int,
+        db_session: Session | None = None,
+)->List[Message]:
+    with database_session(db_session) as db_session:
+        messages = db_session.query(Message).filter(
+            and_(
+                Message.sender_id.in_([user, other_user]),
+                Message.recipient_id.in_([user, other_user]),
+                Message.item_id == item_id,
+                Message.id > last_id
+            )
+        ).order_by(Message.date_sent.asc()).all()
+
+        return messages

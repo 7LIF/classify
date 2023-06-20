@@ -70,6 +70,7 @@ def populate_database():
     insert_categories()
     insert_subcategories()
     insert_items()
+    insert_msgs()
 
 
 ############################################################################
@@ -697,7 +698,7 @@ def insert_items():
                 'user_id': user('Beatriz Batista').user_id,
             },
             {
-                'title': '2012 BMW 5 Series Gran Turismo 535i RWD',
+                'title': 'BMW 5 Series Gran Turismo 535i RWD',
                 'description':  'BMW 5 Series Gran Turismo 535i RWD de 2012. Apenas teve 1 proprietário. Quilometragem: 149.413km; Tração: Tração traseira; Cor exterior: Azul; Cor interior: Bege; Motor: Motor de 3L I6 com 300 cavalos de potência; Consumo de combustível: 9.41 L/100km; Tipo de combustível: Gasolina; Transmissão: Automática de 8 velocidades.',
                 'main_image_url': 'item_id4_img_main.jpeg',
                 'image1_url': 'item_id4_img1.jpeg',
@@ -712,7 +713,7 @@ def insert_items():
                 'user_id': user('Carlos Carvalho').user_id,
             },
             {
-                'title': ' Xiaomi Mi Home Security Camera Basic 1080p',
+                'title': 'Xiaomi Mi Home Security Camera Basic 1080p',
                 'description':  'A Xiaomi Mi Home Security Camera Basic 1080p é uma camera de segurança doméstica com recursos avançados. Algumas de suas características incluem: resolução 1080p, visão noturna, detenção de movimento, áudio bidirecional, armazenamento em nuvem, conectividade Wi-Fi, panorâmica e inclinação, e configurações de privacidade. A camera oferece qualidade de vídeo nítida e clara; permite visualização noturna; deteta movimentos e envia notificações; possui áudio bidirecional; armazena vídeos na nuvem; permite acesso remoto via Wi-Fi; possui funcionalidade de panorâmica e inclinação; e oferece recursos de privacidade para proteger dados e privacidade.',
                 'main_image_url': 'item_id5_img_main.jpg',
                 'image1_url': 'item_id5_img1.jpg',
@@ -833,6 +834,37 @@ def insert_items():
             },
         ),
     )
+    
+    
+def insert_msgs():
+    insert_rows(
+        label = 'MSG',
+        summary = lambda msg: f"Created msg id: {msg.id}",
+        insert_function = send_msg,
+        rows = (
+            {
+                'user1_id': user('Eva Esteves').user_id,
+                'user2_id': user('Carlos Carvalho').user_id,
+                'item_id': item('BMW 5 Series Gran Turismo 535i RWD').id,
+                'message': 'Boa tarde. O carro ainda está para venda?',
+            },
+            {
+                'user1_id': user('Carlos Carvalho').user_id,
+                'user2_id': user('Eva Esteves').user_id,
+                'item_id': item('BMW 5 Series Gran Turismo 535i RWD').id,
+                'message': 'Boa tarde. Sim, ainda está. Quer agendar para vê-lo?',
+            },
+            {
+                'user1_id': user('Eva Esteves').user_id,
+                'user2_id': user('Carlos Carvalho').user_id,
+                'item_id': item('BMW 5 Series Gran Turismo 535i RWD').id,
+                'message': 'Tenho disponibilidade para vê-lo no próximo fim de semana.',
+            },
+        ),
+    )  
+      
+    
+    
 
 
 ############################################################################
