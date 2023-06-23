@@ -5,7 +5,8 @@ from sqlalchemy import Float, select, or_, and_, func
 from sqlalchemy.orm import Session
 from data.database import database_session
 from data.models import Category, Item, ItemStatusEnum, District, Subcategory
-
+from common.common import ITEMS_PER_PAGE
+from math import ceil
 
 __all__ = (
     'item_count',
@@ -187,19 +188,7 @@ def get_district_name_from_item(
             return district_name
     return None
 
-#def get_district_name_from_item(
-#    item_id: int,
-#    session: Session | None = None, 
-#) -> str | None:
-#    if session is None:
-#        session = Session()
-#    item = session.query(Item).get(item_id)
-#    if item is not None:
-#        user = item.user
-#        district = user.district
-#        return district.name
-#    else:
-#        return None
+
 
 
 
@@ -208,10 +197,11 @@ def search_item(
     category: str | None = None,
     district: str | None = None,
     price: str | None = None,
+    page: int | None = None,
     db_session: Session | None = None
-) -> list[Item] | None:
+) -> tuple[list[Item], int] | None:
     with database_session(db_session) as db_session:
-        
+        items_per_page = int(ITEMS_PER_PAGE)
         query = db_session.query(Item).join(Subcategory).join(Category).join(District).filter(
             Item.status_id == ItemStatusEnum.Active.id
         )
@@ -224,8 +214,14 @@ def search_item(
             query = query.filter(District.name == district)
         if price and price != 'none':
             query = query.filter(func.cast(Item.price, Float) <= float(price))
-            
-        return query.all()
+        
+        total_items = query.count()
+        total_pages = ceil(total_items / items_per_page)
+        
+        query = query.limit(items_per_page).offset((page - 1) * items_per_page)
+        items = query.all()
+
+        return items, total_pages
     
     
     

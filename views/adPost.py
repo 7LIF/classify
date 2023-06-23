@@ -4,6 +4,7 @@
 import decimal as dec
 from fastapi import APIRouter, Request
 from fastapi_chameleon import template
+from flask import request
 from common.auth import get_current_user
 from common.common import format_date
 from common.viewmodel import ViewModel
@@ -42,21 +43,25 @@ async def search(request: Request):
     category = request.query_params.get('category')
     district = request.query_params.get('location')
     price = request.query_params.get('price')
-    vm = await search_viewmodel(keyword, category, district, price)
+    page = request.query_params.get('page', '1')
+    vm = await search_viewmodel(keyword, category, district, price, page)
 
     return vm
     
     
 
-async def search_viewmodel(keyword: str | None, category: str | None, district: str | None,  price: str | None) -> ViewModel:
+async def search_viewmodel(keyword: str | None, category: str | None, district: str | None,  price: str | None, page: str | None) -> ViewModel:
+    
+    search=iserv.search_item(keyword, category, district, price, int(page))
     
     user = get_current_user()
     if user is None:
         favorites = []
     else:
         favorites = userv.get_user_favorites_ids(user.user_id)
+    
     vm = ViewModel(
-        search=iserv.search_item(keyword, category, district, price),
+        search=search[0],
         selected_menu = 'ads',
         categories_images_url = conf('CATEGORIES_IMAGES_URL'),
         districts_images_url = conf('DISTRICTS_IMAGES_URL'),
@@ -69,10 +74,14 @@ async def search_viewmodel(keyword: str | None, category: str | None, district: 
         latest_items = '',
         user = user,
         favorites = favorites,
+        pagination_html = '',
+        num_pages = search[1],
+        current_page = page,
     )
 
     if keyword is None or keyword == '' and category is None and district is None and price is None:
         vm.latest_items = iserv.get_latest_items(LATEST_ITEMS_COUNT)
+        
     elif vm.search == []:
         vm.error, vm.error_msg = True, 'Não foram encontrados anúncios para a pesquisa!'
     else:

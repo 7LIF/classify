@@ -3,12 +3,13 @@
 ################################################################################
 
 from random import sample
+from flask import request
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 from data.database import database_session
 from data.enum_tables import ItemStatusEnum
 from data.models import District, Category, Item, Subcategory, ExternalProvider
-
+from common.common import ITEMS_PER_PAGE
 
 __all__ = (
     'accept_district',
@@ -22,6 +23,7 @@ __all__ = (
     'get_external_auth_providers',
     'get_external_provider_by_id',
     'get_external_provider_by_name',
+    'count_pages',
 )
 
 
@@ -49,8 +51,6 @@ def get_accepted_district(
         return db_session.execute(select_stmt).scalars().all()
     
     
-    
-    
 def get_random_districts_with_items(
     count: int,
     db_session: Session | None = None
@@ -69,14 +69,11 @@ def get_random_districts_with_items(
         return sample(districts_with_items, count)
 
 
-
-
 # a função seguinte retorna um dicionário {'Veículos': 1, 'Eletrónicos': 5, 'Mobiliário': 2, 'Vestuário': 0, 'Acessórios': 0, 'Livros': 2, 'Outros': 2}
 def count_items_in_categories(db_session: Session | None = None) -> dict[str, int]:
     with database_session(db_session) as db_session:
         stmt = (select(Category).options(selectinload(Category.subcategories)))
         categories = db_session.execute(stmt).scalars().all()
-
         items_per_category = {}
 
         for category in categories:
@@ -95,7 +92,6 @@ def count_items_in_categories(db_session: Session | None = None) -> dict[str, in
         return items_per_category
 
 
-
 def count_items_in_districts(db_session: Session | None = None) -> dict[str, int]:
     with database_session(db_session) as db_session:
         stmt = select(District)
@@ -109,12 +105,9 @@ def count_items_in_districts(db_session: Session | None = None) -> dict[str, int
                 .filter(Item.district_id == district.id)
                 .count()
             )
-
             items_per_district[district.name] = district_items
-
+            
         return items_per_district
-
-
 
 
 def get_random_districts_with_items(
@@ -133,7 +126,6 @@ def get_random_districts_with_items(
         if len(districts_with_items) <= count:
             return districts_with_items
         return sample(districts_with_items, count)
-
 
 
 def create_category(
@@ -155,8 +147,6 @@ def create_category(
         return cat
 
 
-
-
 def get_accepted_category(
         db_session: Session | None = None,
 ) -> list[Category]:
@@ -165,16 +155,9 @@ def get_accepted_category(
         return db_session.execute(select_stmt).scalars().all()
 
 
-
 def count_accepted_categories() -> int:
     accepted_categories = get_accepted_category()
     return len(accepted_categories)
-
-
-
-
-
-
 
 
 def create_subcategory(
@@ -208,7 +191,6 @@ def get_accepted_subcategory(
     with database_session(db_session) as db_session:
         select_stmt = select(Subcategory)
         return db_session.execute(select_stmt).scalars().all()
-
 
 
 def accept_external_auth_provider(
@@ -260,3 +242,11 @@ def get_external_provider_by_name(
             .where(ExternalProvider.active == True)
         )
         return db_session.execute(select_stmt).scalar_one_or_none()
+
+
+
+def count_pages(search_items, latest_items) -> int:
+    items_per_page = ITEMS_PER_PAGE
+    num_items = len(search_items or latest_items)
+    num_pages = num_items // items_per_page + 1
+    return num_pages

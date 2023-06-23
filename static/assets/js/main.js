@@ -62,6 +62,27 @@ var isLiveUpdatePaused = false;
     });
 })();
 $(document).ready(function () {
+  var urlParams = new URLSearchParams(window.location.search);
+  var view = urlParams.get("view");
+  $('.pagination-link').each(function() {
+    var pageValue = $(this).data('page');
+    var viewValue = $(this).data('view');
+    var urlParams = new URLSearchParams(window.location.search);
+    
+    // Add a new parameter to the existing URL parameters
+    urlParams.set('page', pageValue);
+    urlParams.set('view', viewValue);
+
+    // Get the modified URL
+    var modifiedUrl = window.location.pathname + '?' + urlParams.toString();
+
+    // Set the modified URL as the href attribute
+    $(this).attr('href', modifiedUrl);
+  });
+
+  if (view=="grid"){
+    $("#nav-grid-tab").click();
+  }
   const messageContainer = document.getElementById("chat_ul");
   messageContainer.scrollTop = messageContainer.scrollHeight;
 

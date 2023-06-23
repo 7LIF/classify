@@ -48,6 +48,7 @@ import common.viewmodel
  
  
 MIN_DATE = date.fromisoformat('1920-01-01')
+ITEMS_PER_PAGE = 9
  
  
  

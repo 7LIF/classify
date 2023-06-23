@@ -26,6 +26,7 @@
 					<form action="/adPost" >
 						<div class="category-sidebar">
 							<div class="single-widget search">
+								
 								<h3>Procurar Anúncios</h3>
 									<input id="search-bar" name="keyword" type="text" placeholder="Procure aqui..." />
 								</div>
@@ -109,9 +110,6 @@
 								<div class="category-grid-topbar">
 									<div class="row align-items-center">
 										<div class="col-lg-6 col-md-6 col-12">
-											<h3 class="title">Showing 1-12 of 21 ads found</h3>
-										</div>
-										<div class="col-lg-6 col-md-6 col-12">
 											<nav>
 												<div class="nav nav-tabs" id="nav-tab" role="tablist">
 													<button class="nav-link active" id="nav-list-tab" data-bs-toggle="tab" data-bs-target="#nav-list" type="button" role="tab" aria-controls="nav-list" aria-selected="true"><i	class="lni lni-list"></i></button>
@@ -154,17 +152,16 @@
 												<!--/ End Repeat search or Latest Ads (Loop For) -->
 											</__if__>		
 										</div>
-
 										<div class="row">
 											<div class="col-12">
 												<div class="pagination left">
 													<ul class="pagination-list">
-														<li><a href="javascript:void(0)">1</a></li>
-														<li class="active"><a href="javascript:void(0)">2</a></li>
-														<li><a href="javascript:void(0)">3</a></li>
-														<li><a href="javascript:void(0)">4</a></li>
-														<li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-													</ul>
+														<__if__ tal:condition="search or latest_items" tal:omit-tag="True">
+															<__repeat__ tal:repeat="page range(num_pages)" tal:omit-tag="True">
+																<li tal:attributes="class python: 'active' if (page+1)==int(current_page) else ''"><a class="pagination-link" data-page="${page+1}" data-view="grid" href="?page=${page+1}&view=grid">${page+1}</a></li>
+															</__repeat__>
+														</__if__>
+													</ul>													
 												</div>
 
 											</div>
@@ -208,21 +205,21 @@
 												<!--/ End Repeat search or Latest Ads (Loop For) -->
 											</__if__>					
 										</div>
-
+										
+										
 										<div class="row">
 											<div class="col-12">
 												<div class="pagination left">
 													<ul class="pagination-list">
-														<li><a href="javascript:void(0)">1</a></li>
-														<li class="active"><a href="javascript:void(0)">2</a></li>
-														<li><a href="javascript:void(0)">3</a></li>
-														<li><a href="javascript:void(0)">4</a></li>
-														<li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
+														<__if__ tal:condition="search or latest_items" tal:omit-tag="True">
+															<__repeat__ tal:repeat="page range(num_pages)" tal:omit-tag="True">
+																<li tal:attributes="class python: 'active' if (page+1)==int(current_page) else ''"><a class="pagination-link" data-page="${page+1}" data-view="list" href="?page=${page+1}&view=grid">${page+1}</a></li>
+															</__repeat__>
+														</__if__>
 													</ul>
 												</div>
 											</div>
-										</div>
-										
+										</div>									
 									</div>
 								</div>
 							</div>
